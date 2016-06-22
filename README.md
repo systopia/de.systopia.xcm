@@ -1,2 +1,3 @@
-# de.systopia.xcm
-CiviCRM Extended Contact Matcher
+# CiviCRM Extended Contact Matcher (XCM)
+
+TODO: documentation
