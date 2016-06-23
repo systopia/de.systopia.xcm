@@ -65,12 +65,13 @@ class CRM_Xcm_MatchingEngine {
     $rules = $this->getMatchingRules();
     foreach ($rules as $rule) {
       $result = $rule->matchContact($contact_data);
-      
-      # code...
+      if (!empty($result['contact_id'])) {
+        return $result;
+      }
     }
 
-    // TODO: implement
-
+    // if we get here, there was no match
+    return array();
   }
 
   /**

@@ -61,4 +61,39 @@ abstract class CRM_Xcm_MatchingRule {
     $data_type = $this->getContactType($contact_data);
     return ($data_type == $contact_type);
   }
+
+  /**
+   * will pick one of the contact_id candidates
+   * according to the policy
+   *
+   * @param $contact_ids  array of contact IDs
+   * @return contact_id or NULL
+   */
+  protected function pickContact($contact_ids) {
+    // TODO: setting
+    return min($contact_ids);
+  }
+
+  /**
+   * generate a valid reply with the given contact ID and confidence
+   */
+  protected function createResultMatched($contact_id, $confidence = 1.0) {
+    if (empty($contact_id)) {
+      return $this->createResultUnmatched();
+    } else {
+      return array(
+        'contact_id' => $contact_id,
+        'confidence' => $confidence
+        );      
+    }
+  }
+
+  /**
+   * generate a valid negative reply
+   */
+  protected function createResultUnmatched($message = 'not matched') {
+    return array(
+      'message' => $message,
+      );
+  }
 }

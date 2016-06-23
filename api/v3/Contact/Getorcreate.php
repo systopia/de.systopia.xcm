@@ -28,7 +28,7 @@ function civicrm_api3_contact_getorcreate($params) {
     return civicrm_api3_create_error("Unknown matching error.");
   } else {
     $reply = array('contact_id' => $result['contact_id']);
-    return civicrm_api3_create_success($reply);
+    return civicrm_api3_create_success(array($result['contact_id'] => $reply));
   }
 }
 
