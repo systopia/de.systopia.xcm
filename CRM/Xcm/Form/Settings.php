@@ -82,6 +82,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
     $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
 
+    if ($rules==NULL) $rules = array();
+    if ($postprocessing==NULL) $postprocessing = array();
+
     return $rules + $postprocessing;
   }
 
@@ -90,7 +93,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
   public function postProcess() {
     $values = $this->exportValues();
-      
+        
     // store the rules
     $rules = array();
     for ($i=1; isset($values["rule_$i"]); $i++) { 

@@ -62,6 +62,13 @@ class CRM_Xcm_MatchingEngine {
    * @todo document
    */
   public function matchContact(&$contact_data) {
+    $rules = $this->getMatchingRules();
+    foreach ($rules as $rule) {
+      $result = $rule->matchContact($contact_data);
+      
+      # code...
+    }
+
     // TODO: implement
 
   }
@@ -79,8 +86,25 @@ class CRM_Xcm_MatchingEngine {
    * @todo document
    */
   protected function getMatchingRules() {
-    // TODO: implement
+    $rules = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
+    $rule_instances = array();
 
+    foreach ($rules as $rule_name) {
+      if (empty($rule_name)) {
+        continue;
+
+      } elseif ('DEDUPE_' == substr($rule_name, 0, 7)) {
+        // this is a dedupe rule
+        $rule_instances[] = new CRM_Xcm_Matcher_DedupeRule(substr($rule_name, 7));
+
+      } else {
+        // this should be a class name
+        // TODO: error handling
+        $rule_instances[] = new $rule_name();
+      }
+    }
+
+    return $rule_instances;
   }
 
   /**
