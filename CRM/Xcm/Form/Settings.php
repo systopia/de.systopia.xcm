@@ -16,7 +16,7 @@
 require_once 'CRM/Core/Form.php';
 
 
-define('XCM_MAX_RULE_COUNT', 3);
+define('XCM_MAX_RULE_COUNT', 4);
 
 /**
  * XCM Settings form controller
@@ -29,10 +29,18 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   public function buildQuickForm() {
     // add general options
     $this->addElement('select', 
-                      "picker",
+                      'picker',
                       ts('Of multiple matches, pick:', array('domain' => 'de.systopia.xcm')),
                       $this->getPickers(),
                       array('class' => 'crm-select2'));
+
+    $this->addElement('select', 
+                      'diff_activity',
+                      ts('Generate Diff Activity', array('domain' => 'de.systopia.xcm')),
+                      $this->getActivities(),
+                      array('class' => 'crm-select2'));
+
+
 
     // add the rule selectors
     for ($i=1; $i <= XCM_MAX_RULE_COUNT; $i++) {
@@ -101,7 +109,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // store options
     $options = array(
-      'picker' => CRM_Utils_Array::value('picker', $values)
+      'picker'        => CRM_Utils_Array::value('picker', $values)
+      'diff_activity' => CRM_Utils_Array::value('diff_activity', $values)
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 

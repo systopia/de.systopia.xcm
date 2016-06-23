@@ -134,6 +134,7 @@ class CRM_Xcm_MatchingEngine {
    */
   protected function postProcessContactMatch(&$result, &$contact_data) {
     $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
 
     if (!empty($postprocessing['matched_add_group'])) {
       $this->addContactToGroup($result['contact_id'], $postprocessing['matched_add_group']);
@@ -145,6 +146,10 @@ class CRM_Xcm_MatchingEngine {
 
     if (!empty($postprocessing['matched_add_activity'])) {
       $this->addActivityToContact($result['contact_id'], $postprocessing['matched_add_activity'], $contact_data);
+    }
+
+    if (!empty($options['diff_activity'])) {
+      $this->createDiffActivity($result['contact_id'], $options['diff_activity'], $contact_data);
     }
   }
 
@@ -161,5 +166,9 @@ class CRM_Xcm_MatchingEngine {
 
   protected function addActivityToContact($contact_id, $activity_type_id, &$contact_data) {
     // TODO: implement    
+  }
+
+  protected function createDiffActivity($contact_id, $activity_type_id, &$contact_data) {
+    // TODO: implement
   }
 }

@@ -19,6 +19,11 @@
     <div class="content">{$form.picker.html}</div>
     <div class="clear"></div>
   </div>
+  <div class="crm-section">
+    <div class="label">{$form.diff_activity.label}</div>
+    <div class="content">{$form.diff_activity.html}</div>
+    <div class="clear"></div>
+  </div>
 </div>  
 
 <div>
