@@ -22,6 +22,7 @@ abstract class CRM_Xcm_MatchingRule {
    * This is the core matching function
    * 
    * @param $contact_data  an array of all information we have on the contact, e.g. first_name, street_address, etc...
+   * @param $params        additional parameters
    * @return array result: mandatory entries:
    *                         contact_id   -  matched contact ID or NULL if not matched
    *                       recommended entries:
@@ -29,6 +30,35 @@ abstract class CRM_Xcm_MatchingRule {
    *                       other entries:
    *                         ...fee free to return whatever you think might be interesting
    */ 
-  abstract public function matchContact($contact_data);
+  abstract public function matchContact($contact_data, $params = NULL);
 
+
+  /**
+   * try to return/guess the contact_type.
+   * Default/Fallback is 'Individual'
+   */
+  protected function getContactType(&$contact_data) {
+    // contact_type set -> all is well
+    if (!empty($contact_data['contact_type'])) {
+      return $contact_data['contact_type'];
+    }
+
+    // if not, start guessing
+    if (!empty($contact_data['organization_name'])) {
+      return 'Organization';
+    } elseif (!empty($contact_data['household_name'])) {
+      return 'Household';
+    } else {
+      return 'Individual';
+    }
+  }
+
+  /**
+   * try to return/guess the contact_type.
+   * Default/Fallback is 'Individual'
+   */
+  protected function isContactType($contact_type, &$contact_data) {
+    $data_type = $this->getContactType($contact_data);
+    return ($data_type == $contact_type);
+  }
 }

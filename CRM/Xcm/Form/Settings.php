@@ -118,10 +118,20 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
 
   protected function getRuleOptions($i) {
-    // TODO:
-    return array(
-      0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')),
-    );    
+    // compile list
+    if ($i > 1) {
+      $none_option = array(0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')));
+    } else {
+      $none_option = array();
+    }
+
+    // TOOD: add option group rules
+    $rules = array();
+
+    // get the dedupe rules
+    $dedupe_rules = CRM_Xcm_Matcher_DedupeRule::getRuleList();
+
+    return $none_option + $rules + $dedupe_rules;
   }
 
   protected function getActivities() {
