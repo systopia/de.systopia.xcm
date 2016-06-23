@@ -70,6 +70,17 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                         ts('Add activity', array('domain' => 'de.systopia.xcm')),
                         $this->getActivities(),
                         array('class' => 'crm-select2'));
+
+      $this->addElement('text', 
+                        "{$mode}_add_activity_subject",
+                        ts('Subject', array('domain' => 'de.systopia.xcm')));
+
+      $this->addElement('select', 
+                        "{$mode}_add_activity_template",
+                        ts('Template', array('domain' => 'de.systopia.xcm')),
+                        $this->getActivities(), //$this->getTemplates(),
+                        array('class' => 'crm-select2'));
+
     }
 
     $this->addButtons(array(
@@ -109,8 +120,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // store options
     $options = array(
-      'picker'        => CRM_Utils_Array::value('picker', $values)
-      'diff_activity' => CRM_Utils_Array::value('diff_activity', $values)
+      'picker'        => CRM_Utils_Array::value('picker', $values),
+      'diff_activity' => CRM_Utils_Array::value('diff_activity', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 
