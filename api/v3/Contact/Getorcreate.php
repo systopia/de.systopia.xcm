@@ -38,6 +38,6 @@ function civicrm_api3_contact_getorcreate($params) {
  * @todo implement properly
  */
 function _civicrm_api3_contact_getorcreate_spec(&$params) {
-  $params['contact_type']['api.required'] = 1;
+  // $params['contact_type']['api.required'] = 1;
 }
 
