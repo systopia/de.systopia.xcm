@@ -40,6 +40,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       $this->getActivities(),
                       array('class' => 'crm-select2'));
 
+      $this->addElement('text', 
+                        "diff_activity_subject",
+                        ts('Subject', array('domain' => 'de.systopia.xcm')));
+
 
 
     // add the rule selectors
@@ -120,8 +124,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // store options
     $options = array(
-      'picker'        => CRM_Utils_Array::value('picker', $values),
-      'diff_activity' => CRM_Utils_Array::value('diff_activity', $values),
+      'picker'                => CRM_Utils_Array::value('picker', $values),
+      'diff_activity'         => CRM_Utils_Array::value('diff_activity', $values),
+      'diff_activity_subject' => CRM_Utils_Array::value('diff_activity_subject', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 

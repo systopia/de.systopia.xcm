@@ -157,7 +157,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     if (!empty($options['diff_activity'])) {
-      $this->createDiffActivity($result['contact_id'], $options['diff_activity'], $contact_data);
+      $this->createDiffActivity($result['contact_id'], $options['diff_activity'], $options['diff_activity_subject'], $contact_data);
     }
   }
 
@@ -177,7 +177,7 @@ class CRM_Xcm_MatchingEngine {
         'activity_type_id'   => $activity_type_id,
         'subject'            => $subject,
         'status_id'          => 1, // pending
-        'activity_date_time' => date("Ymdhis"),
+        'activity_date_time' => date("YmdHis"),
         'target_contact_id'  => (int) $contact_id,
         'source_contact_id'  => (int) $contact_id,
         'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
@@ -193,8 +193,59 @@ class CRM_Xcm_MatchingEngine {
 
 
 
-  protected function createDiffActivity($contact_id, $activity_type_id, &$contact_data) {
-    // TODO: implement
+  protected function createDiffActivity($contact_id, $activity_type_id, $subject, &$contact_data) {
+    // load the contact
+    $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+
+    // look up some fields (e.g. prefix, ...)
+    // TODO
+
+    // create diff
+    $differing_attributes = array();
+    $all_attributes = array_keys($contact) + array_keys($contact_data);
+    foreach ($all_attributes as $attribute) {
+      if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
+        if ($contact[$attribute] != $contact_data[$attribute]) {
+          $differing_attributes[] = $attribute;
+        }        
+      }
+    }
+
+    // if there is one address attribute, add all (so the user can later compile a full address)
+    $address_parameters = array('street_address', 'country', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2');
+    if (array_intersect($address_parameters, $differing_attributes)) {
+      foreach ($address_parameters as $attribute) {
+        if (!in_array($attribute, $differing_attributes) && isset($contact[$attribute]) && isset($contact_data[$attribute])) {
+          $differing_attributes[] = $attribute;
+        }
+      }
+    }
+
+    // special case for phones
+    
+    // filter attributes
+    // TODO:
+
+    if (!empty($differing_attributes)) {
+      // create activity
+      $data = array(
+        'differing_attributes' => $differing_attributes,
+        'existing_contact'     => $contact,
+        'submitted_data'       => $contact_data
+        );
+
+      $activity_data = array(
+          'activity_type_id'   => $activity_type_id,
+          'subject'            => $subject,
+          'status_id'          => 1, // pending
+          'activity_date_time' => date("YmdHis"),
+          'target_contact_id'  => (int) $contact_id,
+          'source_contact_id'  => (int) $contact_id,
+          'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
+          'details'            => $this->renderTemplate('activity/diff.tpl', $data),
+      );
+      $activity = CRM_Activity_BAO_Activity::create($activity_data);      
+    }
   }
 
 

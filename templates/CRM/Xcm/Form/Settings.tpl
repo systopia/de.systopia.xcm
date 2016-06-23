@@ -23,6 +23,11 @@
     <div class="label">{$form.diff_activity.label}</div>
     <div class="content">{$form.diff_activity.html}</div>
     <div class="clear"></div>
+    <div id="diff_activity_details">
+      <div class="label">{$form.diff_activity_subject.label}</div>
+      <div class="content">{$form.diff_activity_subject.html}</div>      
+      <div class="clear"></div>
+    </div>
   </div>
 </div>  
 
@@ -103,10 +108,16 @@ cj("#matched_add_activity").change(function() {
   xcm_show_or_hide("#matched_add_activity", "#matched_add_activity_details", 500);
 });
 xcm_show_or_hide("#matched_add_activity", "#matched_add_activity_details", 0);
+
 cj("#created_add_activity").change(function() {
   xcm_show_or_hide("#created_add_activity", "#created_add_activity_details", 500);
 });
 xcm_show_or_hide("#created_add_activity", "#created_add_activity_details", 0);
+
+cj("#diff_activity").change(function() {
+  xcm_show_or_hide("#diff_activity", "#diff_activity_details", 500);
+});
+xcm_show_or_hide("#diff_activity", "#diff_activity_details", 0);
 
 function xcm_show_or_hide(value_selector, div_selector, delay) {
   var value = cj(value_selector).val();
