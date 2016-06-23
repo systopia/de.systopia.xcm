@@ -5,5 +5,8 @@
     <page_callback>CRM_Xcm_Form_Settings</page_callback>
     <title>XCM Settings</title>
     <access_arguments>administer CiviCRM</access_arguments>
+    <desc>Configure the settings of your Xtended Contact Matcher</desc>
+    <adminGroup>CiviContribute</adminGroup>
+    <icon>admin/duplicate_matching.png</icon>
   </item>
 </menu>

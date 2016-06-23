@@ -37,7 +37,7 @@ abstract class CRM_Xcm_MatchingRule {
    * try to return/guess the contact_type.
    * Default/Fallback is 'Individual'
    */
-  protected function getContactType(&$contact_data) {
+  public static function getContactType(&$contact_data) {
     // contact_type set -> all is well
     if (!empty($contact_data['contact_type'])) {
       return $contact_data['contact_type'];
@@ -58,7 +58,7 @@ abstract class CRM_Xcm_MatchingRule {
    * Default/Fallback is 'Individual'
    */
   protected function isContactType($contact_type, &$contact_data) {
-    $data_type = $this->getContactType($contact_data);
+    $data_type = self::getContactType($contact_data);
     return ($data_type == $contact_type);
   }
 
@@ -70,6 +70,8 @@ abstract class CRM_Xcm_MatchingRule {
    * @return contact_id or NULL
    */
   protected function pickContact($contact_ids) {
+    if (empty($contact_ids)) return NULL;
+    
     $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
     $picker  = CRM_Utils_Array::value('picker', $options, 'min');
 

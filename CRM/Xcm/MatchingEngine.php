@@ -77,9 +77,11 @@ class CRM_Xcm_MatchingEngine {
   /**
    * @todo document
    */
-  protected function createContact($contact_data) {
-    // TODO: implement
-
+  protected function createContact(&$contact_data) {
+    // TODO: handle extra data?
+    $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
+    $new_contact  = civicrm_api3('Contact', 'create', $contact_data);
+    return $new_contact;
   }
 
 
@@ -111,16 +113,53 @@ class CRM_Xcm_MatchingEngine {
   /**
    * @todo document
    */
-  protected function postProcessNewContact($new_contact, $contact_data) {
-    // TODO: implement
+  protected function postProcessNewContact(&$new_contact, &$contact_data) {
+    $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
 
+    if (!empty($postprocessing['created_add_group'])) {
+      $this->addContactToGroup($new_contact['id'], $postprocessing['created_add_group']);
+    }
+
+    if (!empty($postprocessing['created_add_tag'])) {
+      $this->addContactToTag($new_contact['id'], $postprocessing['created_add_tag']);
+    }
+
+    if (!empty($postprocessing['created_add_activity'])) {
+      $this->addActivityToContact($new_contact['id'], $postprocessing['created_add_activity'], $contact_data);
+    }
   }
 
   /**
    * @todo document
    */
-  protected function postProcessContactMatch($result, $contact_data) {
-    // TODO: implement
-    
+  protected function postProcessContactMatch(&$result, &$contact_data) {
+    $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+
+    if (!empty($postprocessing['matched_add_group'])) {
+      $this->addContactToGroup($result['contact_id'], $postprocessing['matched_add_group']);
+    }
+
+    if (!empty($postprocessing['matched_add_tag'])) {
+      $this->addContactToTag($result['contact_id'], $postprocessing['matched_add_tag']);
+    }
+
+    if (!empty($postprocessing['matched_add_activity'])) {
+      $this->addActivityToContact($result['contact_id'], $postprocessing['matched_add_activity'], $contact_data);
+    }
+  }
+
+
+  protected function addContactToGroup($contact_id, $group_id) {
+    // TODO: error handling
+    civicrm_api3('GroupContact', 'create', array('contact_id' => $contact_id, 'group_id' => $group_id));
+  }
+
+  protected function addContactToTag($contact_id, $tag_id) {
+    // TODO: error handling
+    civicrm_api3('EntityTag', 'create', array('entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact'));
+  }
+
+  protected function addActivityToContact($contact_id, $activity_type_id, &$contact_data) {
+    // TODO: implement    
   }
 }
