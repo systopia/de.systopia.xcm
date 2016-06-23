@@ -60,6 +60,19 @@ function xcm_civicrm_uninstall() {
  */
 function xcm_civicrm_enable() {
   _xcm_civix_civicrm_enable();
+
+  // make sure the rule group exists
+  $option_group = civicrm_api3('OptionGroup', 'get', array('name' => 'xcm_matching_rules'));
+  if (empty($option_group['id'])) {
+    $option_group = civicrm_api3('OptionGroup', 'create', array(
+      'name'        => 'xcm_matching_rules',
+      'title'       => ts('XCM Matching Rules', array('domain' => 'de.systopia.xcm')),
+      'is_active'   => 1,
+      'is_reserved' => 0
+      ));
+  }
+
+  // TODO: add built-in rules if they don't exist
 }
 
 /**

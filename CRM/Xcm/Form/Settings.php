@@ -141,6 +141,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // TOOD: add option group rules
     $rules = array();
+    $option_values = civicrm_api3('OptionValue', 'get', array('option_group_id' => 'xcm_matching_rules', 'is_active' => 1));
+    foreach ($option_values['values'] as $option_value) {
+      $rules[$option_value['value']] = $option_value['label'];
+    }
+
 
     // get the dedupe rules
     $dedupe_rules = CRM_Xcm_Matcher_DedupeRule::getRuleList();
