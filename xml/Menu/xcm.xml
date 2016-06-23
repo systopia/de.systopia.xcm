@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/setting/xcm</path>
+    <page_callback>CRM_Xcm_Form_Settings</page_callback>
+    <title>XCM Settings</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
