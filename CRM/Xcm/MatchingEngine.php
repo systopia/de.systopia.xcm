@@ -19,17 +19,27 @@
  */
 class CRM_Xcm_MatchingEngine {
 
-  
-  public static function getSingleton() {
+  /** singleton instance of the engine */
+  protected static $_singleton = NULL;
 
+  /**
+   * get the singleton instance of the engine
+   */
+  public static function getSingleton() {
+    if (self::$_singleton===NULL) {
+      self::$_singleton = new CRM_Xcm_MatchingEngine();
+    }
+    return self::$_singleton;
   }
 
   /**
    * Try to find/match the contact with the given data.
    * If that fails, a new contact will be created with that data
+   *
+   * @throws exception  if anything goes wrong during matching/contact creation
    */
   public function getOrCreateContact(&$contact_data) {
-    $result = $this->resultContact();
+    $result = $this->matchContact($contact_data);
     if (empty($result['contact_id'])) {
       // the matching failed
       $new_contact = $this->createContact($contact_data);

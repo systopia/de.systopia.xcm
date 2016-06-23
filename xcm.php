@@ -137,32 +137,3 @@ function xcm_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _xcm_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-/**
- * Functions below this ship commented out. Uncomment as required.
- *
-
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function xcm_civicrm_preProcess($formName, &$form) {
-
-} // */
-
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function xcm_civicrm_navigationMenu(&$menu) {
-  _xcm_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => ts('The Page', array('domain' => 'de.systopia.xcm')),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _xcm_civix_navigationMenu($menu);
-} // */
