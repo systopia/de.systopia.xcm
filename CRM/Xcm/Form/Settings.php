@@ -78,7 +78,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       $this->addElement('select', 
                         "{$mode}_add_activity_template",
                         ts('Template', array('domain' => 'de.systopia.xcm')),
-                        $this->getActivities(), //$this->getTemplates(),
+                        $this->getTemplates(),
                         array('class' => 'crm-select2'));
 
     }
@@ -135,7 +135,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // store the postprocessing
     $postprocessing = array();
     foreach (array('matched', 'created') as $mode) {
-      foreach (array('group', 'tag', 'activity') as $type) {
+      foreach (array('group', 'tag', 'activity', 'activity_subject', 'activity_template') as $type) {
         $key = "{$mode}_add_{$type}";
         $postprocessing[$key] = CRM_Utils_Array::value($key, $values);
       }
@@ -192,6 +192,16 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       $tag_list[$tag['id']] = $tag['name'];
     }
     return $tag_list;
+  }
+
+  protected function getTemplates() {
+    $template_list = array(0 => ts('No content', array('domain' => 'de.systopia.xcm')));
+
+    $templates = civicrm_api3('MessageTemplate', 'get', array('is_active' => 1, 'is_reserved' => 0, 'option.limit' => 9999));
+    foreach ($templates['values'] as $template) {
+      $template_list[$template['id']] = $template['msg_title'];
+    }
+    return $template_list;
   }
 
   protected function getGroups() {

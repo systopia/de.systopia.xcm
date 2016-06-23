@@ -80,12 +80,12 @@
   <div class="crm-section">
     <div class="label">{$form.created_add_activity.label}</div>
     <div class="content">{$form.created_add_activity.html}</div>
-    <div id="matched_created_activity_details">
-      <div class="label">{$form.matched_created_activity_subject.label}</div>
-      <div class="content">{$form.matched_created_activity_subject.html}</div>      
+    <div id="created_add_activity_details">
+      <div class="label">{$form.created_add_activity_subject.label}</div>
+      <div class="content">{$form.created_add_activity_subject.html}</div>      
       <div class="clear"></div>
-      <div class="label">{$form.matched_created_activity_template.label}</div>
-      <div class="content">{$form.matched_created_activity_template.html}</div>      
+      <div class="label">{$form.created_add_activity_template.label}</div>
+      <div class="content">{$form.created_add_activity_template.html}</div>      
     </div>
     <div class="clear"></div>
   </div>
@@ -97,6 +97,24 @@
 </div>
 
 
+{literal}
 <script type="text/javascript">
-cj("#matched_add_activity_details").hide();
+cj("#matched_add_activity").change(function() {
+  xcm_show_or_hide("#matched_add_activity", "#matched_add_activity_details", 500);
+});
+xcm_show_or_hide("#matched_add_activity", "#matched_add_activity_details", 0);
+cj("#created_add_activity").change(function() {
+  xcm_show_or_hide("#created_add_activity", "#created_add_activity_details", 500);
+});
+xcm_show_or_hide("#created_add_activity", "#created_add_activity_details", 0);
+
+function xcm_show_or_hide(value_selector, div_selector, delay) {
+  var value = cj(value_selector).val();
+  if (parseInt(value)) {
+    cj(div_selector).show(delay);
+  } else {
+    cj(div_selector).hide(delay);
+  }
+}
 </script>
+{/literal}

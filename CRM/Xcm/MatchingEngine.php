@@ -125,7 +125,11 @@ class CRM_Xcm_MatchingEngine {
     }
 
     if (!empty($postprocessing['created_add_activity'])) {
-      $this->addActivityToContact($new_contact['id'], $postprocessing['created_add_activity'], $contact_data);
+      $this->addActivityToContact($result['contact_id'],
+                                  $postprocessing['created_add_activity'],
+                                  $postprocessing['created_add_activity_subject'],
+                                  $postprocessing['created_add_activity_template'],
+                                  $contact_data);
     }
   }
 
@@ -145,7 +149,11 @@ class CRM_Xcm_MatchingEngine {
     }
 
     if (!empty($postprocessing['matched_add_activity'])) {
-      $this->addActivityToContact($result['contact_id'], $postprocessing['matched_add_activity'], $contact_data);
+      $this->addActivityToContact($result['contact_id'],
+                                  $postprocessing['matched_add_activity'],
+                                  $postprocessing['matched_add_activity_subject'],
+                                  $postprocessing['matched_add_activity_template'],
+                                  $contact_data);
     }
 
     if (!empty($options['diff_activity'])) {
@@ -164,11 +172,65 @@ class CRM_Xcm_MatchingEngine {
     civicrm_api3('EntityTag', 'create', array('entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact'));
   }
 
-  protected function addActivityToContact($contact_id, $activity_type_id, &$contact_data) {
-    // TODO: implement    
+  protected function addActivityToContact($contact_id, $activity_type_id, $subject, $template_id, &$contact_data) {
+    $activity_data = array(
+        'activity_type_id'   => $activity_type_id,
+        'subject'            => $subject,
+        'status_id'          => 1, // pending
+        'activity_date_time' => date("Ymdhis"),
+        'target_contact_id'  => (int) $contact_id,
+        'source_contact_id'  => (int) $contact_id,
+        'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
+    );
+
+    if ($template_id) {
+      $template = civicrm_api3('MessageTemplate', 'getsingle', array('id' => $template_id));
+      $activity_data['details'] = $this->renderTemplate('string:' . $template['msg_text'], $contact_data);
+    }
+
+    $activity = CRM_Activity_BAO_Activity::create($activity_data);
   }
+
+
 
   protected function createDiffActivity($contact_id, $activity_type_id, &$contact_data) {
     // TODO: implement
+  }
+
+
+
+
+  /**
+   * uses SMARTY to render a template
+   *
+   * @return string 
+   */
+  protected function renderTemplate($template_path, $vars) {
+    $smarty = CRM_Core_Smarty::singleton();
+
+    // first backup original variables, since smarty instance is a singleton
+    $oldVars = $smarty->get_template_vars();
+    $backupFrame = array();
+    foreach ($vars as $key => $value) {
+      $key = str_replace(' ', '_', $key);
+      $backupFrame[$key] = isset($oldVars[$key]) ? $oldVars[$key] : NULL;
+    }
+
+    // then assign new variables
+    foreach ($vars as $key => $value) {
+      $key = str_replace(' ', '_', $key);
+      $smarty->assign($key, $value);
+    }
+
+    // create result
+    $result =  $smarty->fetch($template_path);
+
+    // reset smarty variables
+    foreach ($backupFrame as $key => $value) {
+      $key = str_replace(' ', '_', $key);
+      $smarty->assign($key, $value);
+    }
+
+    return $result;
   }
 }
