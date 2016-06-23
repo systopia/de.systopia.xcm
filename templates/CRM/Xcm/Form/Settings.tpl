@@ -13,6 +13,15 @@
 +-------------------------------------------------------*}
 
 <div>
+  <h3>{ts domain="de.systopia.xcm"}General Options{/ts}</h3>
+  <div class="crm-section">
+    <div class="label">{$form.picker.label}</div>
+    <div class="content">{$form.picker.html}</div>
+    <div class="clear"></div>
+  </div>
+</div>  
+
+<div>
   <h3>{ts domain="de.systopia.xcm"}Matching Rules{/ts}</h3>
   {foreach from=$rule_idxs item=rule_idx}
     {capture assign=dropdown_name}rule_{$rule_idx}{/capture}

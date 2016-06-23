@@ -70,8 +70,17 @@ abstract class CRM_Xcm_MatchingRule {
    * @return contact_id or NULL
    */
   protected function pickContact($contact_ids) {
-    // TODO: setting
-    return min($contact_ids);
+    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $picker  = CRM_Utils_Array::value('picker', $options, 'min');
+
+    switch ($picker) {
+      case 'max':
+        return max($contact_ids);
+      
+      default:
+      case 'min':
+        return min($contact_ids);
+    }
   }
 
   /**

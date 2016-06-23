@@ -27,6 +27,12 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * build form
    */
   public function buildQuickForm() {
+    // add general options
+    $this->addElement('select', 
+                      "picker",
+                      ts('Of multiple matches, pick:', array('domain' => 'de.systopia.xcm')),
+                      $this->getPickers(),
+                      array('class' => 'crm-select2'));
 
     // add the rule selectors
     for ($i=1; $i <= XCM_MAX_RULE_COUNT; $i++) {
@@ -36,7 +42,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                         $this->getRuleOptions($i),
                         array('class' => 'crm-select2'));
     }
-
 
     // add stuff for matched/created postprocessing
     foreach (array('matched', 'created') as $mode) {
@@ -79,21 +84,27 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * @return array
    */
   public function setDefaultValues() {
+    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'options');
     $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
     $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
 
-    if ($rules==NULL) $rules = array();
+    if ($options==NULL)        $options = array();
+    if ($rules==NULL)          $rules = array();
     if ($postprocessing==NULL) $postprocessing = array();
 
-    return $rules + $postprocessing;
+    return $options + $rules + $postprocessing;
   }
-
-
 
 
   public function postProcess() {
     $values = $this->exportValues();
-        
+
+    // store options
+    $options = array(
+      'picker' => CRM_Utils_Array::value('picker', $values)
+      );
+    CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
+
     // store the rules
     $rules = array();
     for ($i=1; isset($values["rule_$i"]); $i++) { 
@@ -169,4 +180,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     return $group_list;
   }
 
+  protected function getPickers() {
+    return array(
+      'min' => ts('the oldest contact', array('domain' => 'de.systopia.xcm')),
+      'max' => ts('the newest contact', array('domain' => 'de.systopia.xcm')),
+      );
+  }
 }
