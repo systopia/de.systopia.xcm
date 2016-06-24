@@ -150,3 +150,95 @@ function xcm_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _xcm_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
+/**
+ * Implementation of hook_civicrm_buildForm:
+ *   Inject modification tpl snippets, where required
+ */
+function xcm_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Activity_Form_Activity'
+        && CRM_Core_Permission::check('edit all contacts')) {
+
+    // look up activity type id and status_id
+    $elem_status_id = $form->getElement('status_id');
+    $current_status_id = $elem_status_id->getValue()[0];
+    $current_activity_type_id = $form->getVar('_activityTypeId');
+
+    // look up activity type id by label
+    $activity_type_id = (int) CRM_Core_OptionGroup::getValue('activity_type', 'Adressprüfung', 'label');
+
+    // look up status id for label "Scheduled"
+    $activity_status_id = (int) CRM_Core_OptionGroup::getValue('activity_status', 'Scheduled', 'name');
+
+    // only inject javascript if current activity is of type "Adressprüfung"
+    // and its current status is "Scheduled"
+    if($current_activity_type_id == $activity_type_id &&
+              $current_status_id == $activity_status_id) {
+
+      // WARN if contact is tagged with certain tags
+      $contact_id = $form->getVar('_currentlyViewedContactId');
+      if ($contact_id) {
+        $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
+        if (in_array("Unvollständige Adresse", $tags)) {
+          CRM_Core_Session::setStatus("Achtung! Der Kontakte ist mit 'Unvollständige Adresse' markiert!", "Warnung", 'warning');
+        }
+        if (in_array("Unbekannt verzogen", $tags)) {
+          CRM_Core_Session::setStatus("Achtung! Der Kontakte ist mit 'Unbekannt verzogen' markiert!", "Warnung", 'warning');
+        }
+      } else {
+        CRM_Core_Session::setStatus("Die Tags des Kontakts konnten nicht ausgelesen werden!", "Fehler", 'error');
+      }
+
+      // lookup pseudo-constants
+      $location_type_private_address = "Privat";
+      $location_type_old_address     = "alteAdresse";
+      $phone_type_phone              = "Phone";
+      $phone_type_mobile             = "Mobile";
+
+      $constants = array('targetActivityId' => $form->getVar('_activityId'));
+
+      $result = civicrm_api3('LocationType', 'getsingle', array(
+                              'sequential' => 1,
+                              'name' => $location_type_private_address,
+                            ));
+      $constants['location_type_private_address'] = $result['id'];
+
+      $result = civicrm_api3('LocationType', 'getsingle', array(
+                              'sequential' => 1,
+                              'name' => $location_type_old_address,
+                            ));
+      $constants['location_type_old_address'] = $result['id'];
+
+      $result = civicrm_api3('OptionValue', 'getsingle', array(
+                              'sequential' => 1,
+                              'option_group_id' => "phone_type",
+                              'name' => $phone_type_phone,
+                            ));
+      $constants['phone_type_phone_value'] = $result['value'];
+
+      $result = civicrm_api3('OptionValue', 'getsingle', array(
+                              'sequential' => 1,
+                              'option_group_id' => "phone_type",
+                              'name' => $phone_type_mobile,
+                            ));
+      $constants['phone_type_mobile_value'] = $result['value'];
+
+      // add prefix_ids
+      $constants['prefix_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'prefix_id');
+      $constants['prefix_names'] = array_flip($constants['prefix_ids']);
+
+      // add gender_ids
+      $constants['gender_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
+      $constants['gender_names'] = array_flip($constants['gender_ids']);
+      
+      // add countries
+      $constants['country_ids']   = CRM_Core_PseudoConstant::country(FALSE, FALSE);
+      $constants['country_names'] = array_flip($constants['country_ids']);
+
+      CRM_Core_Resources::singleton()->addVars('org.muslimehelfen.uimods', $constants);
+
+      CRM_Core_Region::instance('form-body')->add(array(
+          'script' => file_get_contents(__DIR__ . '/js/process_diff.js')
+      ));
+    }
+  }
+}
