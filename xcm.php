@@ -156,18 +156,19 @@ function xcm_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  */
 function xcm_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Activity_Form_Activity'
-        && CRM_Core_Permission::check('edit all contacts')) {
+        && CRM_Core_Permission::check('edit all contacts')
+        && CRM_Xcm_Configuration::diffActivity()) {
 
     // look up activity type id and status_id
-    $elem_status_id = $form->getElement('status_id');
-    $current_status_id = $elem_status_id->getValue()[0];
+    $elem_status_id           = $form->getElement('status_id');
+    $current_status_id        = $elem_status_id->getValue()[0];
     $current_activity_type_id = $form->getVar('_activityTypeId');
 
     // look up activity type id by label
-    $activity_type_id = (int) CRM_Core_OptionGroup::getValue('activity_type', 'Adressprüfung', 'label');
+    $activity_type_id = CRM_Xcm_Configuration::diffActivity();
 
     // look up status id for label "Scheduled"
-    $activity_status_id = (int) CRM_Core_OptionGroup::getValue('activity_status', 'Scheduled', 'name');
+    $activity_status_id = CRM_Xcm_Configuration::defaultActivityStatus();
 
     // only inject javascript if current activity is of type "Adressprüfung"
     // and its current status is "Scheduled"
@@ -175,52 +176,31 @@ function xcm_civicrm_buildForm($formName, &$form) {
               $current_status_id == $activity_status_id) {
 
       // WARN if contact is tagged with certain tags
-      $contact_id = $form->getVar('_currentlyViewedContactId');
-      if ($contact_id) {
-        $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
-        if (in_array("Unvollständige Adresse", $tags)) {
-          CRM_Core_Session::setStatus("Achtung! Der Kontakte ist mit 'Unvollständige Adresse' markiert!", "Warnung", 'warning');
+      $warnOnTags = CRM_Xcm_Configuration::diffProcess_warnOnTags();
+      if (!empty($warnOnTags)) {
+        $contact_id = $form->getVar('_currentlyViewedContactId');
+        if ($contact_id) {
+          $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
+          foreach ($warnOnTags as $tagName) {
+            if (in_array($tagName, $tags)) {
+              CRM_Core_Session::setStatus(
+                ts("Warning! This contact is tagged '%1'.", array(1=>$tagName, 'domain'=>'de.systopia.xcm')), 
+                ts("Warning", array('domain'=>'de.systopia.xcm')), 'warning');
+            }
+          }
+        } else {
+          CRM_Core_Session::setStatus(
+            ts("Warning! The tags couldn't be read.", array('domain'=>'de.systopia.xcm')), 
+            ts("Warning", array('domain'=>'de.systopia.xcm')), 'error');
         }
-        if (in_array("Unbekannt verzogen", $tags)) {
-          CRM_Core_Session::setStatus("Achtung! Der Kontakte ist mit 'Unbekannt verzogen' markiert!", "Warnung", 'warning');
-        }
-      } else {
-        CRM_Core_Session::setStatus("Die Tags des Kontakts konnten nicht ausgelesen werden!", "Fehler", 'error');
       }
 
-      // lookup pseudo-constants
-      $location_type_private_address = "Privat";
-      $location_type_old_address     = "alteAdresse";
-      $phone_type_phone              = "Phone";
-      $phone_type_mobile             = "Mobile";
-
-      $constants = array('targetActivityId' => $form->getVar('_activityId'));
-
-      $result = civicrm_api3('LocationType', 'getsingle', array(
-                              'sequential' => 1,
-                              'name' => $location_type_private_address,
-                            ));
-      $constants['location_type_private_address'] = $result['id'];
-
-      $result = civicrm_api3('LocationType', 'getsingle', array(
-                              'sequential' => 1,
-                              'name' => $location_type_old_address,
-                            ));
-      $constants['location_type_old_address'] = $result['id'];
-
-      $result = civicrm_api3('OptionValue', 'getsingle', array(
-                              'sequential' => 1,
-                              'option_group_id' => "phone_type",
-                              'name' => $phone_type_phone,
-                            ));
-      $constants['phone_type_phone_value'] = $result['value'];
-
-      $result = civicrm_api3('OptionValue', 'getsingle', array(
-                              'sequential' => 1,
-                              'option_group_id' => "phone_type",
-                              'name' => $phone_type_mobile,
-                            ));
-      $constants['phone_type_mobile_value'] = $result['value'];
+      // build constants array for JS
+      $constants['targetActivityId']              = $form->getVar('_activityId');
+      $constants['location_type_current_address'] = CRM_Xcm_Configuration::currentLocationType();
+      $constants['location_type_old_address']     = CRM_Xcm_Configuration::oldLocationType();      
+      $constants['phone_type_phone_value']        = CRM_Xcm_Configuration::phoneType();
+      $constants['phone_type_mobile_value']       = CRM_Xcm_Configuration::mobileType();
 
       // add prefix_ids
       $constants['prefix_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'prefix_id');
@@ -234,7 +214,7 @@ function xcm_civicrm_buildForm($formName, &$form) {
       $constants['country_ids']   = CRM_Core_PseudoConstant::country(FALSE, FALSE);
       $constants['country_names'] = array_flip($constants['country_ids']);
 
-      CRM_Core_Resources::singleton()->addVars('org.muslimehelfen.uimods', $constants);
+      CRM_Core_Resources::singleton()->addVars('de.systopia.xcm', $constants);
 
       CRM_Core_Region::instance('form-body')->add(array(
           'script' => file_get_contents(__DIR__ . '/js/process_diff.js')

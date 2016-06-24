@@ -176,7 +176,7 @@ class CRM_Xcm_MatchingEngine {
     $activity_data = array(
         'activity_type_id'   => $activity_type_id,
         'subject'            => $subject,
-        'status_id'          => 1, // pending
+        'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
         'activity_date_time' => date("YmdHis"),
         'target_contact_id'  => (int) $contact_id,
         'source_contact_id'  => (int) $contact_id,
@@ -222,7 +222,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // special case for phones
-    
+
     // filter attributes
     // TODO:
 
@@ -237,7 +237,7 @@ class CRM_Xcm_MatchingEngine {
       $activity_data = array(
           'activity_type_id'   => $activity_type_id,
           'subject'            => $subject,
-          'status_id'          => 1, // pending
+          'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
           'target_contact_id'  => (int) $contact_id,
           'source_contact_id'  => (int) $contact_id,

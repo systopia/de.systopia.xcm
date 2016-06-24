@@ -2,6 +2,7 @@
 | Extended Contact Matcher XCM                           |
 | Copyright (C) 2016 SYSTOPIA                            |
 | Author: B. Endres (endres@systopia.de)                 |
+|         N. Bochan (bochan@systopia.de)                 |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
 | Affero GPL license. You can redistribute it and/or     |
@@ -30,7 +31,7 @@ CRM.$(function() {
     var tr = CRM.$(this);
     var column_exists      = (tr.find('#mh_field_' + i).length > 0);
     var faulty_template    = (tr.find('[id^="mh_field_"]').length > 1);
-    var contains_response  = (['überschrieben', 'hinzugefügt'].indexOf(tr.find('#mh_field_' + i).text()) > -1);
+    var contains_response  = (['updated', 'added'].indexOf(tr.find('#mh_field_' + i).text()) > -1);
     var contains_old_value = (tr.children(':nth-child(2)').text().length > 0);
     var contains_new_value = (tr.children(':nth-child(3)').text().length > 0);
     var attribute          = tr.children(':nth-child(1)').text();
@@ -57,14 +58,14 @@ CRM.$(function() {
           || (attribute_class == 'address' && contains_new_value && contains_old_value)) 
       {
         // FIXME: l10n
-        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ov_button" id="mh_ov_btn_' + i + '">Überschreiben</button>');
+        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ov_button" id="mh_ov_btn_' + i + '">' + ts('Adopt', {'domain': 'de.systopia.xcm'}) + '</button>');
       }
 
       // add ADD button
       if (   (attribute_class == 'phone'   && contains_new_value))
       {
         // FIXME: l10n
-        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ad_button" id="mh_ad_btn_' + i + '">Hinzufügen</button>');
+        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ad_button" id="mh_ad_btn_' + i + '">' + ts('Add', {'domain': 'de.systopia.xcm'}) + '</button>');
       }
     }
   });
@@ -73,7 +74,7 @@ CRM.$(function() {
   var address_data = getAddressData('new', true);
   if (address_data) {
     address_table.find('thead').append(
-      '<button type="button" class="mh_ad_address_btn">Neue Adresse hinzufügen</button>'
+      '<button type="button" class="mh_ad_address_btn">' + ts('Add new address', {'domain': 'de.systopia.xcm'}) + '</button>'
     );    
   }
 
@@ -146,14 +147,14 @@ CRM.$(function() {
   function completeActivity() {
     // save changes
     CRM.api3('Activity', 'create', {
-      'id': CRM.vars['org.muslimehelfen.uimods'].targetActivityId,
+      'id': CRM.vars['de.systopia.xcm'].targetActivityId,
       'status_id': 2 // Complete
     }).done(
       function(result) {
         if (result.is_error) {
           onError(result.error_message, null);
         } else {
-          var activity_id = CRM.vars['org.muslimehelfen.uimods'].targetActivityId;
+          var activity_id = CRM.vars['de.systopia.xcm'].targetActivityId;
           cj("#rowid" + activity_id + " td:nth-child(8)").text("Abgeschlossen");
           cj("button[data-identifier=_qf_Activity_cancel]").click();
         }
@@ -178,10 +179,10 @@ CRM.$(function() {
     }
 
     // get type ids
-    var location_type_id = CRM.vars['org.muslimehelfen.uimods'].location_type_private_address;
+    var location_type_id = CRM.vars['de.systopia.xcm'].location_type_current_address;
     var phone_type_id    = ((data['attribute'] == 'phone') ?
-      CRM.vars['org.muslimehelfen.uimods'].phone_type_phone_value :
-      CRM.vars['org.muslimehelfen.uimods'].phone_type_mobile_value);
+      CRM.vars['de.systopia.xcm'].phone_type_phone_value :
+      CRM.vars['de.systopia.xcm'].phone_type_mobile_value);
 
     // lookup phone with the old phone number
     CRM.api3('Phone', 'getsingle', {
@@ -191,7 +192,7 @@ CRM.$(function() {
       'location_type_id': location_type_id,
     }).done(function(result) {
       if (result.is_error) {
-        return onError("Die alte Telefonnummer konnte nicht gefunden werden, vermutlich wurde sie zwischenzeitlich geändert oder gelöscht. Automatisches Überschreiben leider nicht möglich.", null);
+        return onError(ts("The previous phone number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the phone number not possible.", {'domain': 'de.systopia.xcm'}), null);
       } else {
         // hand the result to the update handler
         updatePhone(data, result);
@@ -205,10 +206,10 @@ CRM.$(function() {
    */
   function addPhone(data) {
     // pseudo-constants
-    var location_type_id = CRM.vars['org.muslimehelfen.uimods'].location_type_private_address;
+    var location_type_id = CRM.vars['de.systopia.xcm'].location_type_current_address;
     var phone_type_id    = ((data['attribute'] == 'phone') ?
-      CRM.vars['org.muslimehelfen.uimods'].phone_type_phone_value :
-      CRM.vars['org.muslimehelfen.uimods'].phone_type_mobile_value);
+      CRM.vars['de.systopia.xcm'].phone_type_phone_value :
+      CRM.vars['de.systopia.xcm'].phone_type_mobile_value);
 
     // aggregate the gathered data
     var phone_data = {};
@@ -257,7 +258,7 @@ CRM.$(function() {
     // lookup address with the old data
     CRM.api3('Address', 'getsingle', address_data).done(function(result) {
       if (result.is_error) {
-        return onError("Die alte Addresse konnte nicht gefunden werden, vermutlich wurde sie zwischenzeitlich geändert oder gelöscht. Automatisches Überschreiben leider nicht möglich.", null);
+        return onError(ts("The previous address number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible.", {'domain': 'de.systopia.xcm'}), null);
       } else {
         // hand the result to the update handler
         updateAddress(data, result);
@@ -271,12 +272,11 @@ CRM.$(function() {
   function addAddress(data) {
     address_data = getAddressData('new', true);
     if (!address_data) {
-      onError('Die Adressdaten sind nicht ausreichend für das Anlegen einer neuen Adresse.', null);
-      return;
+      return onError(ts("The address data submitted here is insufficient for the creation of a new address.", {'domain': 'de.systopia.xcm'}), null);
     }
 
     // create address request
-    address_data['location_type_id'] = CRM.vars['org.muslimehelfen.uimods'].location_type_private_address;
+    address_data['location_type_id'] = CRM.vars['de.systopia.xcm'].location_type_current_address;
     address_data['contact_id'] = ACTIVITY_TARGET_CONTACT_ID;
     address_data['is_primary'] = 1;
 
@@ -304,13 +304,13 @@ CRM.$(function() {
     
     } else {
       // find the old address
-      // address_data['location_type_id'] = CRM.vars['org.muslimehelfen.uimods'].location_type_private_address;
+      // address_data['location_type_id'] = CRM.vars['de.systopia.xcm'].location_type_current_address;
       address_data['contact_id'] = ACTIVITY_TARGET_CONTACT_ID;
 
       // lookup address with the old data
       CRM.api3('Address', 'getsingle', address_data).done(function(result) {
         if (result.is_error) {
-          return onError("Die bisherige Primär-Addresse konnte nicht indentifiziert werden, vermutlich wurde sie zwischenzeitlich geändert oder gelöscht. Automatische Markierung als 'alt' leider nicht möglich.", null);
+          return onError(ts("The current primary address couldn't be identified, contact was probably modified in the meantime. Automatic processing not possible.", {'domain': 'de.systopia.xcm'}), null);
         } else {
           // next step is to add the new address
           demoteOldAddress(data, result);
@@ -327,10 +327,10 @@ CRM.$(function() {
     CRM.api3('Address', 'create', {
       'id': address_data.id,
       'is_primary': 0,
-      'location_type_id': CRM.vars['org.muslimehelfen.uimods'].location_type_old_address
+      'location_type_id': CRM.vars['de.systopia.xcm'].location_type_old_address
     }).done(function(result) {
       if (result.is_error) {
-        return onError("Die alte Adresse konnte nicht automatisch als 'alt' markiert werden.", null);
+        return onError(ts("The previously used primary address couldn't be demoted.", {'domain': 'de.systopia.xcm'}), null);
       } else {
         // next step is to add the new address
         data['attributes'] = ['street_address', 'city', 'postal_code', 'country'];
@@ -364,10 +364,10 @@ CRM.$(function() {
    */
   function updateActivity(data) {
     // FIXME: l10n
-    var title = ((data['modus'] == 'edit') ? 'überschrieben' : 'hinzugefügt');
+    var title = ((data['modus'] == 'edit') ? 'updated' : 'added');
 
 
-    // remove buttons and store result ("überschrieben" or "hinzugefügt")
+    // remove buttons and store result ("updated" or "added")
     address_table.find('tr').each(function(i) {
       var row = CRM.$(this);
       var attribute = row.children(':nth-child(1)').text();
@@ -386,7 +386,7 @@ CRM.$(function() {
 
     // prepare object
     var patch = {};
-    patch['id'] = CRM.vars['org.muslimehelfen.uimods'].targetActivityId;
+    patch['id'] = CRM.vars['de.systopia.xcm'].targetActivityId;
     patch['details'] = divContent;
 
     // save changes
@@ -395,7 +395,8 @@ CRM.$(function() {
         if (result.is_error) {
           onError(result.error_message, null);
         } else {
-          CRM.alert('Wert gespeichert', 'Erfolg', 'success');
+
+          CRM.alert(ts("Attribute updated.", {'domain': 'de.systopia.xcm'}), ts("Success.", {'domain': 'de.systopia.xcm'}), 'success');
         }
       }
     );
@@ -468,13 +469,13 @@ CRM.$(function() {
 
   /*
    * Clears html content of an element if it contains anything except
-   * valid response values ("überschrieben"/"hinzugefügt")
+   * valid response values ("updated"/"added")
    */
   function clean() {
     var td = CRM.$(this);
     var is_occupied = (td.length > 0);
     // TODO: l10n
-    var contains_response = (['überschrieben', 'hinzugefügt'].indexOf(td.text()) > -1);
+    var contains_response = (['updated', 'added'].indexOf(td.text()) > -1);
     if (is_occupied && !contains_response) {
       td.empty();
     }
@@ -490,16 +491,16 @@ CRM.$(function() {
         // legacy: sometimes, it's still the gender_id
         return {'gender_id': parseInt(value, 10)};
       } else {
-        var gender_map = CRM.vars['org.muslimehelfen.uimods'].gender_names;
+        var gender_map = CRM.vars['de.systopia.xcm'].gender_names;
         return {'gender_id': gender_map[value]};        
       }
     
     } else if (name == 'prefix') {
-      var prefix_map = CRM.vars['org.muslimehelfen.uimods'].prefix_names;
+      var prefix_map = CRM.vars['de.systopia.xcm'].prefix_names;
       return {'prefix_id': prefix_map[value]};
     
     } else if (name == 'country') {
-      var country_map = CRM.vars['org.muslimehelfen.uimods'].country_names;
+      var country_map = CRM.vars['de.systopia.xcm'].country_names;
       return {'country_id': country_map[value]};
     
     } else {
@@ -530,7 +531,7 @@ CRM.$(function() {
         } else if (mode == 'current') {
           // now this depends on whether this attribute was already updated
           // FIXME: l10n
-          if ('überschrieben' == row.children('td.mh_btn_row').text()) {
+          if ('updated' == row.children('td.mh_btn_row').text()) {
             address_data[attribute] = new_value;
           } else {
             address_data[attribute] = old_value;
