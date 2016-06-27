@@ -34,15 +34,32 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       $this->getPickers(),
                       array('class' => 'crm-select2'));
 
+    // diff activity options
+    $activites = $this->getActivities();
+    $activites[0] = ts("Don't generate", array('domain' => 'de.systopia.xcm'));
     $this->addElement('select', 
                       'diff_activity',
                       ts('Generate Diff Activity', array('domain' => 'de.systopia.xcm')),
-                      $this->getActivities(),
+                      $activites,
                       array('class' => 'crm-select2'));
 
-      $this->addElement('text', 
-                        "diff_activity_subject",
-                        ts('Subject', array('domain' => 'de.systopia.xcm')));
+    $this->addElement('text', 
+                      "diff_activity_subject",
+                      ts('Subject', array('domain' => 'de.systopia.xcm')));
+
+    $locationTypes = $this->getLocationTypes();
+    $this->addElement('select',
+                      'diff_current_location_type',
+                      ts('Location Type', array('domain' => 'de.systopia.xcm')),
+                      $locationTypes,
+                      array('class' => 'crm-select2'));
+
+    $this->addElement('select',
+                      'diff_old_location_type',
+                      ts('Bump existing address to', array('domain' => 'de.systopia.xcm')),
+                      array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes, 
+                      array('class' => 'crm-select2'));
+
 
 
 
@@ -124,9 +141,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // store options
     $options = array(
-      'picker'                => CRM_Utils_Array::value('picker', $values),
-      'diff_activity'         => CRM_Utils_Array::value('diff_activity', $values),
-      'diff_activity_subject' => CRM_Utils_Array::value('diff_activity_subject', $values),
+      'picker'                     => CRM_Utils_Array::value('picker', $values),
+      'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
+      'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
+      'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
+      'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 
@@ -176,6 +195,15 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $dedupe_rules = CRM_Xcm_Matcher_DedupeRule::getRuleList();
 
     return $none_option + $rules + $dedupe_rules;
+  }
+
+  protected function getLocationTypes() {
+    $types = array();
+    $result = civicrm_api3('LocationType', 'get', array('is_active' => 1));
+    foreach ($result['values'] as $type) {
+      $types[$type['id']] = $type['display_name'];
+    }
+    return $types;
   }
 
   protected function getActivities() {

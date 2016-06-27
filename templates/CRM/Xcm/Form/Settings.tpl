@@ -19,16 +19,6 @@
     <div class="content">{$form.picker.html}</div>
     <div class="clear"></div>
   </div>
-  <div class="crm-section">
-    <div class="label">{$form.diff_activity.label}</div>
-    <div class="content">{$form.diff_activity.html}</div>
-    <div class="clear"></div>
-    <div id="diff_activity_details">
-      <div class="label">{$form.diff_activity_subject.label}</div>
-      <div class="content">{$form.diff_activity_subject.html}</div>      
-      <div class="clear"></div>
-    </div>
-  </div>
 </div>  
 
 <div>
@@ -95,6 +85,27 @@
     <div class="clear"></div>
   </div>
 </div>
+
+<div>
+  <h3>{ts domain="de.systopia.xcm"}"Data Changed" Activity{/ts}</h3>
+  <div class="crm-section">
+    <div class="label">{$form.diff_activity.label}</div>
+    <div class="content">{$form.diff_activity.html}</div>
+    <div class="clear"></div>
+    <div id="diff_activity_details">
+      <div class="label">{$form.diff_activity_subject.label}</div>
+      <div class="content">{$form.diff_activity_subject.html}</div>      
+      <div class="clear"></div>
+      <div class="label">{$form.diff_current_location_type.label}</div>
+      <div class="content">{$form.diff_current_location_type.html}</div>      
+      <div class="clear"></div>
+      <div class="label">{$form.diff_old_location_type.label}</div>
+      <div class="content">{$form.diff_old_location_type.html}</div>      
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>  
+
 
 {* FOOTER *}
 <div class="crm-submit-buttons">
