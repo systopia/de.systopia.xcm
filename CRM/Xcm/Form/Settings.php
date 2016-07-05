@@ -52,7 +52,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                         "rule_$i",
                         ts('Matching Rule #%1', array(1 => $i, 'domain' => 'de.systopia.xcm')),
                         $this->getRuleOptions($i),
-                        array('class' => 'crm-select2'));
+                        array('class' => 'crm-select2', 'style' => 'width: 400px'));
     }
 
     // add stuff for matched/created postprocessing
