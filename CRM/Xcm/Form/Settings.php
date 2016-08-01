@@ -40,10 +40,18 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       $this->getActivities(),
                       array('class' => 'crm-select2'));
 
-      $this->addElement('text', 
-                        "diff_activity_subject",
-                        ts('Subject', array('domain' => 'de.systopia.xcm')));
+    $this->addElement('text', 
+                      "diff_activity_subject",
+                      ts('Subject', array('domain' => 'de.systopia.xcm')));
 
+
+    $this->addElement('select',
+                      'custom_fields', 
+                      ts('Contact Custom Fields', array('domain' => 'de.systopia.xcm')),
+                      $this->getCustomFields(),
+                      array(// 'style'    => 'width:450px; height:100%;',
+                            'multiple' => 'multiple',
+                            'class'    => 'crm-select2'));
 
 
     // add the rule selectors
@@ -107,7 +115,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * @return array
    */
   public function setDefaultValues() {
-    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'options');
+    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
     $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
     $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
 
@@ -127,6 +135,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'picker'                => CRM_Utils_Array::value('picker', $values),
       'diff_activity'         => CRM_Utils_Array::value('diff_activity', $values),
       'diff_activity_subject' => CRM_Utils_Array::value('diff_activity_subject', $values),
+      'custom_fields'         => CRM_Utils_Array::value('custom_fields', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 
@@ -225,5 +234,38 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'min' => ts('the oldest contact', array('domain' => 'de.systopia.xcm')),
       'max' => ts('the newest contact', array('domain' => 'de.systopia.xcm')),
       );
+  }
+
+  /**
+   * get a list of custom fields eligible for submission.
+   * those are all custom fields that belong to a contact in general
+   */
+  protected function getCustomFields() {
+    $custom_fields = array();
+
+    $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
+      'extends'      => 'Contact', 
+      'is_active'    => 1,
+      'option.limit' => 9999,
+      'is_multiple'  => 0,
+      'is_reserved'  => 0,
+      'return'       => 'id'));
+    $custom_group_ids   = array();
+    foreach ($custom_group_query['values'] as $custom_group) {
+      $custom_group_ids[] = (int) $custom_group['id'];
+    }
+
+    if (!empty($custom_group_ids)) {
+      $custom_field_query = civicrm_api3('CustomField', 'get', array(
+        'custom_group_id'  => array('IN' => $custom_group_ids),
+        'is_active'        => 1,
+        'option.limit'     => 9999,
+        'return'           => 'id,label'));
+      foreach ($custom_field_query['values'] as $custom_field) {
+        $custom_fields[$custom_field['id']] = "{$custom_field['label']} [{$custom_field['id']}]";
+      }
+    }
+    
+    return $custom_fields;
   }
 }

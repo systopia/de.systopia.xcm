@@ -19,6 +19,7 @@
     <div class="content">{$form.picker.html}</div>
     <div class="clear"></div>
   </div>
+
   <div class="crm-section">
     <div class="label">{$form.diff_activity.label}</div>
     <div class="content">{$form.diff_activity.html}</div>
@@ -28,6 +29,12 @@
       <div class="content">{$form.diff_activity_subject.html}</div>      
       <div class="clear"></div>
     </div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.custom_fields.label}</div>
+    <div class="content">{$form.custom_fields.html}</div>
+    <div class="clear"></div>
   </div>
 </div>  
 
