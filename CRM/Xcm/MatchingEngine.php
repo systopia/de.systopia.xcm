@@ -199,7 +199,8 @@ class CRM_Xcm_MatchingEngine {
     foreach ($key_set as $key) {
       if (preg_match('/^custom_\d+$/', $key)) {
         // this is a custom field...
-        $custom_field_id = substr($key, 8);
+        $custom_field_id = substr($key, 7);
+
         if ($options['custom_fields'] == NULL || !in_array($custom_field_id, $options['custom_fields'])) {
           unset($contact_data[$key]);
         }
@@ -208,6 +209,18 @@ class CRM_Xcm_MatchingEngine {
 
     // load the contact
     $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+    if (is_array($options['custom_fields'])) {
+      // load custom fields
+      $custom_value_query = array('entity_table' => 'civicrm_contact', 'entity_id' => $contact_id);
+      foreach ($options['custom_fields'] as $custom_field_id) {
+        $custom_value_query["return.custom_{$custom_field_id}"] = 1;
+      }
+      $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
+      foreach ($custom_value_query_result['values'] as $entry) {
+        if (empty($entry['id'])) continue;
+        $contact["custom_{$entry['id']}"] = $entry['latest'];
+      }
+    }
 
     // look up some fields (e.g. prefix, ...)
     // TODO
