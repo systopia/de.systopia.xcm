@@ -157,7 +157,7 @@ function xcm_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function xcm_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Activity_Form_Activity'
         && CRM_Core_Permission::check('edit all contacts')
-        && CRM_Xcm_Configuration::diffActivity()) {
+        && CRM_Xcm_Configuration::diffProcessing()) {
 
     // look up activity type id and status_id
     $elem_status_id           = $form->getElement('status_id');

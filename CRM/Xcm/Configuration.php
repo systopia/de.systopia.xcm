@@ -54,6 +54,15 @@ class CRM_Xcm_Configuration {
   }
 
   /**
+   * See if the enhances (JS) diff processing is enabled
+   */
+  public static function diffProcessing() {
+    $options = self::getOptions();
+    return (int) CRM_Utils_Array::value('diff_processing', $options);
+  }
+
+
+  /**
    * Get location type to be used for new addresses
    */
   public static function currentLocationType() {

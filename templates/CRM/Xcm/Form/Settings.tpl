@@ -104,6 +104,12 @@
       <div class="clear"></div>
     </div>
   </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.diff_processing.label}</div>
+    <div class="content">{$form.diff_processing.html}</div>
+    <div class="clear"></div>
+  </div>
 </div>  
 
 

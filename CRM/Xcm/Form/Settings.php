@@ -47,6 +47,14 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       "diff_activity_subject",
                       ts('Subject', array('domain' => 'de.systopia.xcm')));
 
+    $this->addElement('select', 
+                      'diff_processing',
+                      ts('Diff Processing Helper', array('domain' => 'de.systopia.xcm')),
+                      array(0 => ts('No', array('domain' => 'de.systopia.xcm')),
+                            1 => ts('Yes (beta)',  array('domain' => 'de.systopia.xcm'))),
+                      array('class' => 'crm-select2'));
+
+
     $locationTypes = $this->getLocationTypes();
     $this->addElement('select',
                       'diff_current_location_type',
@@ -144,6 +152,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
       'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
+      'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
       'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
       'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
       );
