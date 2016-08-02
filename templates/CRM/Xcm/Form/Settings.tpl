@@ -19,6 +19,13 @@
     <div class="content">{$form.picker.html}</div>
     <div class="clear"></div>
   </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.custom_fields.label}</div>
+    <div class="content">{$form.custom_fields.html}</div>
+    <div class="clear"></div>
+  </div>
+
 </div>  
 
 <div>
@@ -104,7 +111,7 @@
       <div class="clear"></div>
     </div>
   </div>
-
+  
   <div class="crm-section">
     <div class="label">{$form.diff_processing.label}</div>
     <div class="content">{$form.diff_processing.html}</div>

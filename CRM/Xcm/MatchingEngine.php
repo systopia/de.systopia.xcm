@@ -157,7 +157,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     if (!empty($options['diff_activity'])) {
-      $this->createDiffActivity($result['contact_id'], $options['diff_activity'], $options['diff_activity_subject'], $contact_data);
+      $this->createDiffActivity($result['contact_id'], $options, $options['diff_activity_subject'], $contact_data);
     }
   }
 
@@ -193,9 +193,34 @@ class CRM_Xcm_MatchingEngine {
 
 
 
-  protected function createDiffActivity($contact_id, $activity_type_id, $subject, &$contact_data) {
+  protected function createDiffActivity($contact_id, $options, $subject, &$contact_data) {
+    // remove all non-whitelisted custom fields
+    $key_set = array_keys($contact_data);
+    foreach ($key_set as $key) {
+      if (preg_match('/^custom_\d+$/', $key)) {
+        // this is a custom field...
+        $custom_field_id = substr($key, 7);
+
+        if ($options['custom_fields'] == NULL || !in_array($custom_field_id, $options['custom_fields'])) {
+          unset($contact_data[$key]);
+        }
+      }
+    }
+
     // load the contact
     $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+    if (is_array($options['custom_fields'])) {
+      // load custom fields
+      $custom_value_query = array('entity_table' => 'civicrm_contact', 'entity_id' => $contact_id);
+      foreach ($options['custom_fields'] as $custom_field_id) {
+        $custom_value_query["return.custom_{$custom_field_id}"] = 1;
+      }
+      $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
+      foreach ($custom_value_query_result['values'] as $entry) {
+        if (empty($entry['id'])) continue;
+        $contact["custom_{$entry['id']}"] = $entry['latest'];
+      }
+    }
 
     // look up some fields (e.g. prefix, ...)
     // TODO
@@ -235,7 +260,7 @@ class CRM_Xcm_MatchingEngine {
         );
 
       $activity_data = array(
-          'activity_type_id'   => $activity_type_id,
+          'activity_type_id'   => $options['activity_type_id'],
           'subject'            => $subject,
           'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
