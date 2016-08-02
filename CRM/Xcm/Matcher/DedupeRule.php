@@ -40,7 +40,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
       $dupes = CRM_Dedupe_Finder::dupesByParams(
           $dedupeParams, 
           $contact_type,
-          'Unsupervised',
+          NULL,
           array(),
           $this->dedupe_group_bao->id);
       
@@ -59,12 +59,12 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
    */
   public static function getRuleList() {
     $dao = new CRM_Dedupe_DAO_RuleGroup();
-    $dao->used = 'Unsupervised';
+    // $dao->used = 'Unsupervised';
 
     $dao->find();
     $list = array();
     while ($dao->fetch()) {
-      $list["DEDUPE_{$dao->id}"] = "[{$dao->contact_type}] {$dao->title}";
+      $list["DEDUPE_{$dao->id}"] = "[{$dao->contact_type}|{$dao->used}] {$dao->title}";
     }
     return $list;
   }
