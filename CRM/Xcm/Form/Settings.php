@@ -68,11 +68,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes, 
                       array('class' => 'crm-select2'));
 
-    $this->addElement('text', 
-                      "diff_activity_subject",
-                      ts('Subject', array('domain' => 'de.systopia.xcm')));
-
-
     $this->addElement('select',
                       'custom_fields', 
                       ts('Contact Custom Fields', array('domain' => 'de.systopia.xcm')),

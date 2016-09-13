@@ -260,7 +260,7 @@ class CRM_Xcm_MatchingEngine {
         );
 
       $activity_data = array(
-          'activity_type_id'   => $options['activity_type_id'],
+          'activity_type_id'   => $options['diff_activity'],
           'subject'            => $subject,
           'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
