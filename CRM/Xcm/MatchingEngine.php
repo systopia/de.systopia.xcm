@@ -125,7 +125,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     if (!empty($postprocessing['created_add_activity'])) {
-      $this->addActivityToContact($result['contact_id'],
+      $this->addActivityToContact($new_contact['id'],
                                   $postprocessing['created_add_activity'],
                                   $postprocessing['created_add_activity_subject'],
                                   $postprocessing['created_add_activity_template'],
