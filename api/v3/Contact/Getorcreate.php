@@ -17,6 +17,7 @@
  * Get or create a contact for the given data
  *
  * @param $params any kind of contact related information: base data, address data, phone data, email, etc.
+ *        Nb. One of first_name, last_name, email, display_name is mandatory.
  * @return api3 reply with contact_id  or  ERROR
  */
 function civicrm_api3_contact_getorcreate($params) {
