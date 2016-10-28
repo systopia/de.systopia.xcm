@@ -82,7 +82,7 @@ CRM.$(function() {
   cj.ajax({
     context: document.body,
     success: function(){
-      cj("div.ui-dialog-buttonset").append('<button id="mh_uimods_complete" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" type="button" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-check"></span><span class="ui-button-text">Abschließen</span></button>');
+      cj("div.ui-dialog-buttonset").append('<button id="mh_uimods_complete" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" type="button" role="button"><span class="ui-button-icon-primary ui-icon ui-icon-check"></span><span class="ui-button-text">Finish</span></button>');
       cj('#mh_uimods_complete').click(completeActivity);
     }
   });
