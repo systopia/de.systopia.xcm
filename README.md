@@ -15,13 +15,12 @@ The settings page offers lots of options such as:
 
 ## Installation
 
-Install in the usual way (e.g. clone this repository into your CiviCRM
-extensions directory, then go to Administer » System Settings » Extensions,
+Install in the usual way (e.g. download the [latest release](https://github.com/systopia/de.systopia.xcm/releases) 
+or clone this repository into your CiviCRM extensions directory, then go to Administer » System Settings » Extensions,
 click Refresh then it should show up and you can click Install.)
 
-Then visit /civicrm/admin/setting/xcm to configure it.
-**At the very least you need to visit that settings page and click Save or the
-extension will always create new contacts.**
+Then go to Administer » Adminstration Console » Xtended Contact Matcher Settings (/civicrm/admin/setting/xcm) to 
+visit the settings panel. **At the very least you need to visit that settings page and add a rule, or the extension will always create new contacts.**
 
 ## Usage
 
