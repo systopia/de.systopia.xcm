@@ -90,7 +90,7 @@ class CRM_Xcm_Configuration {
       return (int) CRM_Core_OptionGroup::getValue('phone_type', 'Phone', 'name');
     }
   }
-      
+
   /**
    * Get mobile phone type
    */
@@ -100,6 +100,75 @@ class CRM_Xcm_Configuration {
       return (int) $options['diff_mobile_type'];
     } else {
       return (int) CRM_Core_OptionGroup::getValue('phone_type', 'Mobile', 'name');
+    }
+  }
+
+  /*********************************************************
+   **               Custom Field Logic                    **
+   *********************************************************
+
+  /** caches custom field data, indexed by group name */
+  protected static $custom_group_cache = array();
+
+  /**
+   * internal function to replace "<custom_group_name>.<custom_field_name>"
+   * in the data array with the custom_XX notation.
+   */
+  public static function resolveCustomFields(&$data) {
+    // first: find out which ones to cache
+    $customgroups_used = array();
+    foreach ($data as $key => $value) {
+      if (preg_match('/^(?P<group_name>\w+)[.](?P<field_name>\w+)$/', $key, $match)) {
+        $customgroups_used[$match['group_name']] = 1;
+      }
+    }
+
+    // cache the groups used
+    self::cacheCustomGroups(array_keys($customgroups_used));
+
+    // now: replace stuff
+    foreach (array_keys($data) as $key) {
+      if (preg_match('/^(?P<group_name>\w+)[.](?P<field_name>\w+)$/', $key, $match)) {
+        if (isset(self::$custom_group_cache[$match['group_name']][$match['field_name']])) {
+          $custom_field = self::$custom_group_cache[$match['group_name']][$match['field_name']];
+          $custom_key = 'custom_' . $custom_field['id'];
+          $data[$custom_key] = $data[$key];
+          unset($data[$key]);
+        } else {
+          // TODO: unknown data field $match['group_name'] . $match['field_name']
+        }
+      }
+    }
+  }
+
+  /**
+  * Get CustomField entity (cached)
+  */
+  public static function getCustomField($custom_group_name, $custom_field_name) {
+    self::cacheCustomGroups(array($custom_group_name));
+
+    if (isset(self::$custom_group_cache[$custom_group_name][$custom_field_name])) {
+      return self::$custom_group_cache[$custom_group_name][$custom_field_name];
+    } else {
+      return NULL;
+    }
+  }
+
+  /**
+  * Get CustomField entity (cached)
+  */
+  public static function cacheCustomGroups($custom_group_names) {
+    foreach ($custom_group_names as $custom_group_name) {
+      if (!isset(self::$custom_group_cache[$custom_group_name])) {
+        // set to empty array to indicate our intentions
+        self::$custom_group_cache[$custom_group_name] = array();
+        $fields = civicrm_api3('CustomField', 'get', array(
+          'custom_group_id' => $custom_group_name,
+          'option.limit'    => 0));
+        foreach ($fields['values'] as $field) {
+          self::$custom_group_cache[$custom_group_name][$field['name']] = $field;
+        }
+      }
     }
   }
 }

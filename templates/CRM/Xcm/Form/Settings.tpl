@@ -21,8 +21,8 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.custom_fields.label}</div>
-    <div class="content">{$form.custom_fields.html}</div>
+    <div class="label">{$form.fill_fields.label}</div>
+    <div class="content">{$form.fill_fields.html}</div>
     <div class="clear"></div>
   </div>
 

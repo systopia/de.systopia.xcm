@@ -39,6 +39,10 @@ class CRM_Xcm_MatchingEngine {
    * @throws exception  if anything goes wrong during matching/contact creation
    */
   public function getOrCreateContact(&$contact_data) {
+    // first: resolve custom fields to custom_xx notation
+    CRM_Xcm_Configuration::resolveCustomFields($contact_data);
+
+    // then: match
     $result = $this->matchContact($contact_data);
     if (empty($result['contact_id'])) {
       // the matching failed
@@ -48,12 +52,12 @@ class CRM_Xcm_MatchingEngine {
 
       // do the post-processing
       $this->postProcessNewContact($new_contact, $contact_data);
-    
+
     } else {
       // the matching was successful
       $this->postProcessContactMatch($result, $contact_data);
     }
-    
+
     return $result;
   }
 
@@ -134,9 +138,9 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
-   * @todo document
+   * Perform all the post processing the configuration imposes
    */
-  protected function postProcessContactMatch(&$result, &$contact_data) {
+  protected function postProcessContactMatch(&$result, &$submitted_contact_data) {
     $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
     $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
 
@@ -153,12 +157,27 @@ class CRM_Xcm_MatchingEngine {
                                   $postprocessing['matched_add_activity'],
                                   $postprocessing['matched_add_activity_subject'],
                                   $postprocessing['matched_add_activity_template'],
-                                  $contact_data);
+                                  $submitted_contact_data);
     }
 
-    if (!empty($options['diff_activity'])) {
-      $this->createDiffActivity($result['contact_id'], $options, $options['diff_activity_subject'], $contact_data);
+    // actions that require the current contact data:
+    if (!empty($options['fill_fields']) || !empty($options['diff_activity'])) {
+      // load contact
+      $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
+
+      if (!empty($options['fill_fields'])) {
+        // FILL CURRENT CONTACT DATA
+        //  caution: will set the overwritten fields in $current_contact_data
+        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields']);
+      }
+
+      if (!empty($options['diff_activity'])) {
+        // CREATE DIFF ACTIVITY
+        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $contact_data);
+      }
+
     }
+
   }
 
 
@@ -191,36 +210,62 @@ class CRM_Xcm_MatchingEngine {
     $activity = CRM_Activity_BAO_Activity::create($activity_data);
   }
 
-
-
-  protected function createDiffActivity($contact_id, $options, $subject, &$contact_data) {
-    // remove all non-whitelisted custom fields
-    $key_set = array_keys($contact_data);
-    foreach ($key_set as $key) {
-      if (preg_match('/^custom_\d+$/', $key)) {
-        // this is a custom field...
-        $custom_field_id = substr($key, 7);
-
-        if ($options['custom_fields'] == NULL || !in_array($custom_field_id, $options['custom_fields'])) {
-          unset($contact_data[$key]);
+  /**
+   * Load the matched contact with all data, including the
+   * custom fields in the submitted data
+   */
+  protected function loadCurrentContactData($contact_id, $submitted_data) {
+    // load the contact
+    $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+    // load the custom fields
+    $custom_value_query = array();
+    foreach ($submitted_data as $key => $value) {
+      if (!isset($contact[$key])) { // i.e. not loaded yet
+        if (preg_match('/^custom_\d+$/', $key)) {
+          // this is a custom field...
+          $custom_field_id = substr($key, 7);
+          $custom_value_query["return.custom_{$custom_field_id}"] = 1;
         }
       }
     }
-
-    // load the contact
-    $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
-    if (is_array($options['custom_fields'])) {
-      // load custom fields
-      $custom_value_query = array('entity_table' => 'civicrm_contact', 'entity_id' => $contact_id);
-      foreach ($options['custom_fields'] as $custom_field_id) {
-        $custom_value_query["return.custom_{$custom_field_id}"] = 1;
-      }
+    if (!empty($custom_value_query)) {
+      // i.e. there are fields that need to be looked up separately
+      $custom_value_query['entity_table'] = 'civicrm_contact';
+      $custom_value_query['entity_id']    = $contact_id;
       $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
       foreach ($custom_value_query_result['values'] as $entry) {
         if (empty($entry['id'])) continue;
         $contact["custom_{$entry['id']}"] = $entry['latest'];
       }
     }
+
+    return $contact;
+  }
+
+  /**
+   * Will fill (e.g. set if not set yet) the given fields in the database
+   *  and update the $current_contact_data accordingly
+   */
+  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+    $update_query = array();
+    foreach ($fields as $key) {
+      if (    isset($submitted_contact_data[$key])
+           && (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='')) {
+        $update_query[$key] = $submitted_contact_data[$key];
+        $current_contact_data[$key] = $submitted_contact_data[$key];
+      }
+    }
+    if (!empty($update_query)) {
+      $update_query['id'] = $current_contact_data['id'];
+      civicrm_api3('Contact', 'create', $update_query);
+    }
+  }
+
+  /**
+   * Create an activity listing all differences between the matched contact
+   * and the data submitted
+   */
+  protected function createDiffActivity($contact, $options, $subject, &$contact_data) {
 
     // look up some fields (e.g. prefix, ...)
     // TODO
@@ -232,7 +277,7 @@ class CRM_Xcm_MatchingEngine {
       if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
         if ($contact[$attribute] != $contact_data[$attribute]) {
           $differing_attributes[] = $attribute;
-        }        
+        }
       }
     }
 

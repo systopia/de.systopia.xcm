@@ -65,13 +65,13 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->addElement('select',
                       'diff_old_location_type',
                       ts('Bump existing address to', array('domain' => 'de.systopia.xcm')),
-                      array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes, 
+                      array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes,
                       array('class' => 'crm-select2'));
 
     $this->addElement('select',
-                      'custom_fields', 
-                      ts('Contact Custom Fields', array('domain' => 'de.systopia.xcm')),
-                      $this->getCustomFields(),
+                      'fill_fields',
+                      ts('Fill Fields', array('domain' => 'de.systopia.xcm')),
+                      $this->getContactFields() + $this->getCustomFields(),
                       array(// 'style'    => 'width:450px; height:100%;',
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2'));
@@ -79,7 +79,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // add the rule selectors
     for ($i=1; $i <= XCM_MAX_RULE_COUNT; $i++) {
-      $this->addElement('select', 
+      $this->addElement('select',
                         "rule_$i",
                         ts('Matching Rule #%1', array(1 => $i, 'domain' => 'de.systopia.xcm')),
                         $this->getRuleOptions($i),
@@ -88,29 +88,29 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // add stuff for matched/created postprocessing
     foreach (array('matched', 'created') as $mode) {
-      $this->addElement('select', 
+      $this->addElement('select',
                         "{$mode}_add_group",
                         ts('Add to group', array('domain' => 'de.systopia.xcm')),
                         $this->getGroups(),
                         array('class' => 'crm-select2'));
-      
-      $this->addElement('select', 
+
+      $this->addElement('select',
                         "{$mode}_add_tag",
                         ts('Add to tag', array('domain' => 'de.systopia.xcm')),
                         $this->getTags(),
                         array('class' => 'crm-select2'));
 
-      $this->addElement('select', 
+      $this->addElement('select',
                         "{$mode}_add_activity",
                         ts('Add activity', array('domain' => 'de.systopia.xcm')),
                         $this->getActivities(),
                         array('class' => 'crm-select2'));
 
-      $this->addElement('text', 
+      $this->addElement('text',
                         "{$mode}_add_activity_subject",
                         ts('Subject', array('domain' => 'de.systopia.xcm')));
 
-      $this->addElement('select', 
+      $this->addElement('select',
                         "{$mode}_add_activity_template",
                         ts('Template', array('domain' => 'de.systopia.xcm')),
                         $this->getTemplates(),
@@ -161,13 +161,13 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
       'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
       'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
-      'custom_fields'              => CRM_Utils_Array::value('custom_fields', $values),
+      'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 
     // store the rules
     $rules = array();
-    for ($i=1; isset($values["rule_$i"]); $i++) { 
+    for ($i=1; isset($values["rule_$i"]); $i++) {
       $rules["rule_$i"] = $values["rule_$i"];
     }
     CRM_Core_BAO_Setting::setItem($rules, 'de.systopia.xcm', 'rules');
@@ -297,10 +297,43 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
         'option.limit'     => 9999,
         'return'           => 'id,label'));
       foreach ($custom_field_query['values'] as $custom_field) {
-        $custom_fields[$custom_field['id']] = "{$custom_field['label']} [{$custom_field['id']}]";
+        $custom_fields["custom_{$custom_field['id']}"] = "{$custom_field['label']} [{$custom_field['id']}]";
       }
     }
-    
+
     return $custom_fields;
+  }
+
+  /**
+   * get a list of custom fields eligible for submission.
+   * those are all custom fields that belong to a contact in general
+   */
+  protected function getContactFields() {
+    return array(
+      'display_name'                   => ts("Display Name", array('domain' => 'de.systopia.xcm')),
+      'household_name'                 => ts("Household Name", array('domain' => 'de.systopia.xcm')),
+      'organization_name'              => ts("Organization Name", array('domain' => 'de.systopia.xcm')),
+      'first_name'                     => ts("First Name", array('domain' => 'de.systopia.xcm')),
+      'last_name'                      => ts("Last Name", array('domain' => 'de.systopia.xcm')),
+      'middle_name'                    => ts("Middle Name", array('domain' => 'de.systopia.xcm')),
+      'display_name'                   => ts("Display Name", array('domain' => 'de.systopia.xcm')),
+      'nick_name'                      => ts("Nick Name", array('domain' => 'de.systopia.xcm')),
+      'legal_name'                     => ts("Legal Name", array('domain' => 'de.systopia.xcm')),
+      'prefix_id'                      => ts("Prefix", array('domain' => 'de.systopia.xcm')),
+      'suffix_id'                      => ts("Suffix", array('domain' => 'de.systopia.xcm')),
+      'birth_date'                     => ts("Birth Date", array('domain' => 'de.systopia.xcm')),
+      'gender_id'                      => ts("Gender", array('domain' => 'de.systopia.xcm')),
+      'formal_title'                   => ts("Formal Title", array('domain' => 'de.systopia.xcm')),
+      'job_title'                      => ts("Job Title", array('domain' => 'de.systopia.xcm')),
+      'do_not_email'                   => ts("Do not Email", array('domain' => 'de.systopia.xcm')),
+      'do_not_phone'                   => ts("Do not Phone", array('domain' => 'de.systopia.xcm')),
+      'do_not_sms'                     => ts("Do not SMS", array('domain' => 'de.systopia.xcm')),
+      'do_not_trade'                   => ts("Do not Trade", array('domain' => 'de.systopia.xcm')),
+      'is_opt_out'                     => ts("Opt-Out", array('domain' => 'de.systopia.xcm')),
+      'preferred_language'             => ts("Preferred Language", array('domain' => 'de.systopia.xcm')),
+      'preferred_communication_method' => ts("Preferred Communication Method", array('domain' => 'de.systopia.xcm')),
+      'legal_identifier'               => ts("Legal Identifier", array('domain' => 'de.systopia.xcm')),
+      'external_identifier'            => ts("External Identifier", array('domain' => 'de.systopia.xcm')),
+    );
   }
 }
