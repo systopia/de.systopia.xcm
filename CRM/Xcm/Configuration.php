@@ -34,7 +34,7 @@ class CRM_Xcm_Configuration {
   public static function defaultActivityStatus() {
     return (int) CRM_Core_OptionGroup::getValue('activity_status', 'Scheduled', 'name');
   }
-  
+
   /**
    * returns a list of tag names to warn on if processing diffs
    *
@@ -42,6 +42,44 @@ class CRM_Xcm_Configuration {
    */
   public static function diffProcess_warnOnTags() {
     return array();
+  }
+
+  /**
+   * return all address fields
+   */
+  public static function getAddressFields() {
+    return array(
+      'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3',
+      'street_address', 'city', 'country_id', 'state_province_id', 'postal_code',
+      'is_billing', 'geo_code_1', 'geo_code_2');
+  }
+
+  /**
+   * extract and return only the address data
+   */
+  public static function extractAddressData($data) {
+    $fields = self::getAddressFields();
+    $address_data = array();
+    foreach ($fields as $field_name) {
+      if (isset($data[$field_name])) {
+        $address_data[$field_name] = $data[$field_name];
+      }
+    }
+    return $address_data;
+  }
+
+  /**
+   * extract and return everything but the address data
+   */
+  public static function stripAddressData($data) {
+    $fields = self::getAddressFields();
+    $remaining_data = array();
+    foreach ($data as $field_name => $value) {
+      if (!in_array($field_name, $fields)) {
+        $remaining_data[$field_name] = $value;
+      }
+    }
+    return $remaining_data;
   }
 
   /**

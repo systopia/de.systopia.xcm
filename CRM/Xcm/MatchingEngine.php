@@ -88,8 +88,19 @@ class CRM_Xcm_MatchingEngine {
    */
   protected function createContact(&$contact_data) {
     // TODO: handle extra data?
+
+    // create contact
     $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
-    $new_contact  = civicrm_api3('Contact', 'create', $contact_data);
+    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Configuration::stripAddressData($contact_data));
+
+    // create address separately (see https://github.com/systopia/de.systopia.xcm/issues/6)
+    $address_data = CRM_Xcm_Configuration::extractAddressData($contact_data);
+    if (!empty($address_data)) {
+      $address_data['contact_id'] = $new_contact['id'];
+      $address_data['location_type_id'] = CRM_Xcm_Configuration::currentLocationType();
+      civicrm_api3('Address', 'create', $address_data);
+    }
+
     return $new_contact;
   }
 
