@@ -61,18 +61,9 @@ function xcm_civicrm_uninstall() {
 function xcm_civicrm_enable() {
   _xcm_civix_civicrm_enable();
 
-  // make sure the rule group exists
-  $option_group = civicrm_api3('OptionGroup', 'get', array('name' => 'xcm_matching_rules'));
-  if (empty($option_group['id'])) {
-    $option_group = civicrm_api3('OptionGroup', 'create', array(
-      'name'        => 'xcm_matching_rules',
-      'title'       => ts('XCM Matching Rules', array('domain' => 'de.systopia.xcm')),
-      'is_active'   => 1,
-      'is_reserved' => 0
-      ));
-  }
-
-  // TODO: add built-in rules if they don't exist
+  require_once 'CRM/Contract/CustomData.php';
+  $customData = new CRM_Xcm_CustomData('de.systopia.xcm');
+  $customData->syncOptionGroup(__DIR__ . '/resources/rules_option_group.json');
 }
 
 /**
@@ -185,13 +176,13 @@ function xcm_civicrm_buildForm($formName, &$form) {
           foreach ($warnOnTags as $tagName) {
             if (in_array($tagName, $tags)) {
               CRM_Core_Session::setStatus(
-                ts("Warning! This contact is tagged '%1'.", array(1=>$tagName, 'domain'=>'de.systopia.xcm')), 
+                ts("Warning! This contact is tagged '%1'.", array(1=>$tagName, 'domain'=>'de.systopia.xcm')),
                 ts("Warning", array('domain'=>'de.systopia.xcm')), 'warning');
             }
           }
         } else {
           CRM_Core_Session::setStatus(
-            ts("Warning! The tags couldn't be read.", array('domain'=>'de.systopia.xcm')), 
+            ts("Warning! The tags couldn't be read.", array('domain'=>'de.systopia.xcm')),
             ts("Warning", array('domain'=>'de.systopia.xcm')), 'error');
         }
       }
@@ -199,7 +190,7 @@ function xcm_civicrm_buildForm($formName, &$form) {
       // build constants array for JS
       $constants['targetActivityId']              = $form->getVar('_activityId');
       $constants['location_type_current_address'] = CRM_Xcm_Configuration::currentLocationType();
-      $constants['location_type_old_address']     = CRM_Xcm_Configuration::oldLocationType();      
+      $constants['location_type_old_address']     = CRM_Xcm_Configuration::oldLocationType();
       $constants['phone_type_phone_value']        = CRM_Xcm_Configuration::phoneType();
       $constants['phone_type_mobile_value']       = CRM_Xcm_Configuration::mobileType();
 
@@ -210,7 +201,7 @@ function xcm_civicrm_buildForm($formName, &$form) {
       // add gender_ids
       $constants['gender_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
       $constants['gender_names'] = array_flip($constants['gender_ids']);
-      
+
       // add countries
       $constants['country_ids']   = CRM_Core_PseudoConstant::country(FALSE, FALSE);
       $constants['country_names'] = array_flip($constants['country_ids']);

@@ -1,0 +1,38 @@
+{
+  "_lookup": ["name"],
+  "_translate": ["title"],
+  "name": "xcm_matching_rules",
+  "title": "XCM Matching Rules",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_EmailMatcher",
+      "value": "CRM_Xcm_Matcher_EmailMatcher",
+      "label": "Email only (any email)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_EmailFirstnameMatcher",
+      "value": "CRM_Xcm_Matcher_EmailFirstnameMatcher",
+      "label": "First name and (any) email",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_EmailLastnameMatcher",
+      "value": "CRM_Xcm_Matcher_EmailLastnameMatcher",
+      "label": "Last name and (any) email",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    }
+  ]
+}

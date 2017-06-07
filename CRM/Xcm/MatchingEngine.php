@@ -42,6 +42,11 @@ class CRM_Xcm_MatchingEngine {
     // first: resolve custom fields to custom_xx notation
     CRM_Xcm_Configuration::resolveCustomFields($contact_data);
 
+    // set defaults
+    if (empty($contact_data['contact_type'])) {
+      $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
+    }
+
     // then: match
     $result = $this->matchContact($contact_data);
     if (empty($result['contact_id'])) {
@@ -110,7 +115,6 @@ class CRM_Xcm_MatchingEngine {
         $rule_instances[] = new $rule_name();
       }
     }
-
     return $rule_instances;
   }
 
@@ -314,7 +318,7 @@ class CRM_Xcm_MatchingEngine {
           'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
           'details'            => $this->renderTemplate('activity/diff.tpl', $data),
       );
-      $activity = CRM_Activity_BAO_Activity::create($activity_data);      
+      $activity = CRM_Activity_BAO_Activity::create($activity_data);
     }
   }
 
@@ -324,7 +328,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * uses SMARTY to render a template
    *
-   * @return string 
+   * @return string
    */
   protected function renderTemplate($template_path, $vars) {
     $smarty = CRM_Core_Smarty::singleton();
