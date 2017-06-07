@@ -40,7 +40,6 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
    * 3) check the other_contact_fields
    */
   public function matchContact($contact_data, $params = NULL) {
-    error_log(json_encode($contact_data));
     if (empty($contact_data['email'])) {
       return $this->createResultUnmatched();
     }
@@ -57,7 +56,6 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     $email_query['email'] = $contact_data['email'];
     $email_query['return'] = 'contact_id';
     $email_query['option.limit'] = 0;
-    error_log("EMAIL SEARCH" . json_encode($email_query));
     $emails_found = civicrm_api3('Email', 'get', $email_query);
     $email_contact_ids = array();
     foreach ($emails_found['values'] as $email) {
@@ -73,7 +71,6 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     foreach ($this->other_contact_fields as $field_name) {
       $contact_search[$field_name] = $contact_data[$field_name];
     }
-    error_log("CONTACT SEARCH" . json_encode($contact_search));
     $contacts = civicrm_api3('Contact', 'get', $contact_search);
     $contact_matches = array();
     foreach ($contacts['values'] as $contact) {
