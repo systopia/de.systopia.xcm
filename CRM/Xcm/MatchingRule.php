@@ -71,14 +71,29 @@ abstract class CRM_Xcm_MatchingRule {
    */
   protected function pickContact($contact_ids) {
     if (empty($contact_ids)) return NULL;
-    
-    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
-    $picker  = CRM_Utils_Array::value('picker', $options, 'min');
 
+    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+
+    // create activity for duplicates if requested
+    try {
+      if (count($contact_ids) > 1 && !empty($options['duplicates_activity'])) {
+        civicrm_api3('Activity', 'create', array(
+            'activity_type_id'   => $options['duplicates_activity'],
+            'subject'            => $options['duplicates_subject'],
+            'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
+            'activity_date_time' => date("YmdHis"),
+            'target_id'          => $contact_ids,
+        ));
+      }
+    } catch (Exception $e) {
+      CRM_Core_Error::debug_log_message("de.systopia.xcm: Failed to create duplicates activity, check your settings! Error was " . $e->getMessage());
+    }
+
+    $picker  = CRM_Utils_Array::value('picker', $options, 'min');
     switch ($picker) {
       case 'max':
         return max($contact_ids);
-      
+
       default:
       case 'min':
         return min($contact_ids);

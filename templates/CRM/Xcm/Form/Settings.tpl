@@ -84,12 +84,26 @@
     <div class="content">{$form.created_add_activity.html}</div>
     <div id="created_add_activity_details">
       <div class="label">{$form.created_add_activity_subject.label}</div>
-      <div class="content">{$form.created_add_activity_subject.html}</div>      
+      <div class="content">{$form.created_add_activity_subject.html}</div>
       <div class="clear"></div>
       <div class="label">{$form.created_add_activity_template.label}</div>
-      <div class="content">{$form.created_add_activity_template.html}</div>      
+      <div class="content">{$form.created_add_activity_template.html}</div>
     </div>
     <div class="clear"></div>
+  </div>
+</div>
+
+<div>
+  <h3>{ts domain="de.systopia.xcm"}Duplicates Activity{/ts}</h3>
+  <div class="crm-section">
+    <div class="label">{$form.duplicates_activity.label}</div>
+    <div class="content">{$form.duplicates_activity.html}</div>
+    <div class="clear"></div>
+    <div id="duplicates_activity_details">
+      <div class="label">{$form.duplicates_subject.label}</div>
+      <div class="content">{$form.duplicates_subject.html}</div>
+      <div class="clear"></div>
+    </div>
   </div>
 </div>
 
@@ -101,23 +115,23 @@
     <div class="clear"></div>
     <div id="diff_activity_details">
       <div class="label">{$form.diff_activity_subject.label}</div>
-      <div class="content">{$form.diff_activity_subject.html}</div>      
+      <div class="content">{$form.diff_activity_subject.html}</div>
       <div class="clear"></div>
       <div class="label">{$form.diff_current_location_type.label}</div>
-      <div class="content">{$form.diff_current_location_type.html}</div>      
+      <div class="content">{$form.diff_current_location_type.html}</div>
       <div class="clear"></div>
       <div class="label">{$form.diff_old_location_type.label}</div>
-      <div class="content">{$form.diff_old_location_type.html}</div>      
+      <div class="content">{$form.diff_old_location_type.html}</div>
       <div class="clear"></div>
     </div>
   </div>
-  
+
   <div class="crm-section">
     <div class="label">{$form.diff_processing.label}</div>
     <div class="content">{$form.diff_processing.html}</div>
     <div class="clear"></div>
   </div>
-</div>  
+</div>
 
 
 {* FOOTER *}
@@ -142,6 +156,11 @@ cj("#diff_activity").change(function() {
   xcm_show_or_hide("#diff_activity", "#diff_activity_details", 500);
 });
 xcm_show_or_hide("#diff_activity", "#diff_activity_details", 0);
+
+cj("#duplicates_activity").change(function() {
+  xcm_show_or_hide("#duplicates_activity", "#duplicates_activity_details", 500);
+});
+xcm_show_or_hide("#duplicates_activity", "#diff_activity_details", 0);
 
 function xcm_show_or_hide(value_selector, div_selector, delay) {
   var value = cj(value_selector).val();

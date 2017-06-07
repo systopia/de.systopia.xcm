@@ -115,8 +115,18 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                         ts('Template', array('domain' => 'de.systopia.xcm')),
                         $this->getTemplates(),
                         array('class' => 'crm-select2'));
-
     }
+
+    // generate duplicate activity
+    $this->addElement('select',
+                      'duplicates_activity',
+                      ts('Generate Duplicates Activity', array('domain' => 'de.systopia.xcm')),
+                      $this->getActivities(),
+                      array('class' => 'crm-select2'));
+
+    $this->addElement('text',
+                      'duplicates_subject',
+                      ts('Activity Subject', array('domain' => 'de.systopia.xcm')));
 
     $this->addButtons(array(
       array(
@@ -125,7 +135,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
-    
+
     // pass params to smarty
     $this->assign('rule_idxs', range(1, XCM_MAX_RULE_COUNT));
 
@@ -156,6 +166,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // store options
     $options = array(
       'picker'                     => CRM_Utils_Array::value('picker', $values),
+      'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
+      'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
       'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
       'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
       'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
