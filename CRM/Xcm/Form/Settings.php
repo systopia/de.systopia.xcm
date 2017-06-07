@@ -16,7 +16,7 @@
 require_once 'CRM/Core/Form.php';
 
 
-define('XCM_MAX_RULE_COUNT', 4);
+define('XCM_MAX_RULE_COUNT', 9);
 
 /**
  * XCM Settings form controller
