@@ -324,12 +324,18 @@ class CRM_Xcm_MatchingEngine {
           'subject'            => $subject,
           'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
-          'target_contact_id'  => (int) $contact_id,
-          'source_contact_id'  => (int) $contact_id,
+          'target_contact_id'  => (int) $contact['id'],
+          'source_contact_id'  => (int) $contact['id'],
           'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
           'details'            => $this->renderTemplate('activity/diff.tpl', $data),
       );
-      $activity = CRM_Activity_BAO_Activity::create($activity_data);
+
+      try {
+        $activity = CRM_Activity_BAO_Activity::create($activity_data);
+      } catch (Exception $e) {
+        // some problem with the creation
+        error_log("de.systopia.xcm: error when trying to create diff activity: " . $e->getMessage());
+      }
     }
   }
 
