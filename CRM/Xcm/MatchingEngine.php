@@ -188,7 +188,7 @@ class CRM_Xcm_MatchingEngine {
 
       if (!empty($options['diff_activity'])) {
         // CREATE DIFF ACTIVITY
-        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $contact_data);
+        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data);
       }
 
     }
