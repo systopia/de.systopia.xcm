@@ -61,7 +61,7 @@ function xcm_civicrm_uninstall() {
 function xcm_civicrm_enable() {
   _xcm_civix_civicrm_enable();
 
-  require_once 'CRM/Contract/CustomData.php';
+  require_once 'CRM/Xcm/CustomData.php';
   $customData = new CRM_Xcm_CustomData('de.systopia.xcm');
   $customData->syncOptionGroup(__DIR__ . '/resources/rules_option_group.json');
 }
