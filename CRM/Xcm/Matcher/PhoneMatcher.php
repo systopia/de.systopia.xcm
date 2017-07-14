@@ -17,9 +17,9 @@
  * This will execute a matching process based on the configuration,
  * employing various matching rules
  */
-class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
+class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
 
-  /** fields to match in addition to the email address */
+  /** fields to match in addition to the phone number */
   protected $other_contact_fields = NULL;
 
   // restrictions for search, e.g. array('is_billing' => '0')
@@ -35,12 +35,12 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
 
   /**
    * simply
-   * 1) find emails
+   * 1) find phones
    * 2) load the attached contacts
    * 3) check the other_contact_fields
    */
   public function matchContact($contact_data, $params = NULL) {
-    if (empty($contact_data['email'])) {
+    if (empty($contact_data['phone'])) {
       return $this->createResultUnmatched();
     }
 
@@ -51,20 +51,20 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
       }
     }
 
-    // find emails
-    $email_query = $this->restrictions;
-    $email_query['email'] = $contact_data['email'];
-    $email_query['return'] = 'contact_id';
-    $email_query['option.limit'] = 0;
-    $emails_found = civicrm_api3('Email', 'get', $email_query);
-    $email_contact_ids = array();
-    foreach ($emails_found['values'] as $email) {
-      $email_contact_ids[] = $email['contact_id'];
+    // find phones
+    $phone_query = $this->restrictions;
+    $phone_query['phone'] = $contact_data['phone'];
+    $phone_query['return'] = 'contact_id';
+    $phone_query['option.limit'] = 0;
+    $phones_found = civicrm_api3('Phone', 'get', $phone_query);
+    $phone_contact_ids = array();
+    foreach ($phones_found['values'] as $phone) {
+      $phone_contact_ids[] = $phone['contact_id'];
     }
 
     // now: find contacts
     $contact_search = array(
-      'id'           => array('IN' => $email_contact_ids),
+      'id'           => array('IN' => $phone_contact_ids),
       'is_deleted'   => 0,
       'option.limit' => 0,
       'return'       => 'id');
@@ -86,12 +86,12 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
         return $this->createResultMatched(reset($contact_matches));
 
       default:
-        $contact_id = $this->pickContact($contact_matches);
-        if ($contact_id) {
-          return $this->createResultMatched($contact_id);
-        } else {
-          return $this->createResultUnmatched();
-        }
+          $contact_id = $this->pickContact($contact_matches);
+          if ($contact_id) {
+            return $this->createResultMatched($contact_id);
+          } else {
+            return $this->createResultUnmatched();
+          }
     }
   }
 }

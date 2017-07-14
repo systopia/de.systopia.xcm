@@ -28,7 +28,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   public function buildQuickForm() {
     // add general options
-    $this->addElement('select', 
+    $this->addElement('select',
                       'picker',
                       ts('Of multiple matches, pick:', array('domain' => 'de.systopia.xcm')),
                       $this->getPickers(),
@@ -37,17 +37,17 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // diff activity options
     $activites = $this->getActivities();
     $activites[0] = ts("Don't generate", array('domain' => 'de.systopia.xcm'));
-    $this->addElement('select', 
+    $this->addElement('select',
                       'diff_activity',
                       ts('Generate Diff Activity', array('domain' => 'de.systopia.xcm')),
                       $activites,
                       array('class' => 'crm-select2'));
 
-    $this->addElement('text', 
+    $this->addElement('text',
                       "diff_activity_subject",
                       ts('Subject', array('domain' => 'de.systopia.xcm')));
 
-    $this->addElement('select', 
+    $this->addElement('select',
                       'diff_processing',
                       ts('Diff Processing Helper', array('domain' => 'de.systopia.xcm')),
                       array(0 => ts('No', array('domain' => 'de.systopia.xcm')),
@@ -278,8 +278,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
   protected function getPickers() {
     return array(
-      'min' => ts('the oldest contact', array('domain' => 'de.systopia.xcm')),
-      'max' => ts('the newest contact', array('domain' => 'de.systopia.xcm')),
+      'min'  => ts('the oldest contact', array('domain' => 'de.systopia.xcm')),
+      'max'  => ts('the newest contact', array('domain' => 'de.systopia.xcm')),
+      'none' => ts('none (create new contact)', array('domain' => 'de.systopia.xcm')),
       );
   }
 
@@ -291,7 +292,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $custom_fields = array();
 
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
-      'extends'      => 'Contact', 
+      'extends'      => 'Contact',
       'is_active'    => 1,
       'option.limit' => 9999,
       'is_multiple'  => 0,

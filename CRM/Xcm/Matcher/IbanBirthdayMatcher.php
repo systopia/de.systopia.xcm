@@ -105,7 +105,11 @@ class CRM_Xcm_Matcher_IbanBirthdayMatcher extends CRM_Xcm_MatchingRule {
 
         default:
           $contact_id = $this->pickContact($contact_matches);
-          return $this->createResultMatched($contact_id);
+          if ($contact_id) {
+            return $this->createResultMatched($contact_id);
+          } else {
+            return $this->createResultUnmatched();
+          }
       }
     }
 
