@@ -150,11 +150,16 @@ function xcm_civicrm_buildForm($formName, &$form) {
         && CRM_Core_Permission::check('edit all contacts')
         && CRM_Xcm_Configuration::diffProcessing()) {
 
-    // look up activity type id and status_id
-    $elem_status_id           = $form->getElement('status_id');
-    $current_status_value     = $elem_status_id->getValue();
-    $current_status_id        = $current_status_value[0];
-    $current_activity_type_id = $form->getVar('_activityTypeId');
+    try {
+      // look up activity type id and status_id
+      $elem_status_id           = $form->getElement('status_id');
+      $current_status_value     = $elem_status_id->getValue();
+      $current_status_id        = $current_status_value[0];
+      $current_activity_type_id = $form->getVar('_activityTypeId');
+    } catch (Exception $e) {
+      // something went wrong there, but that probably means it's not our form...
+      return;
+    }
 
     // look up activity type id by label
     $activity_type_id = CRM_Xcm_Configuration::diffActivity();
