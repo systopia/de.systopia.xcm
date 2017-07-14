@@ -20,7 +20,7 @@ abstract class CRM_Xcm_MatchingRule {
 
   /**
    * This is the core matching function
-   * 
+   *
    * @param $contact_data  an array of all information we have on the contact, e.g. first_name, street_address, etc...
    * @param $params        additional parameters
    * @return array result: mandatory entries:
@@ -29,7 +29,7 @@ abstract class CRM_Xcm_MatchingRule {
    *                         confidence   - float [0..1] defining the likelihood of the match
    *                       other entries:
    *                         ...fee free to return whatever you think might be interesting
-   */ 
+   */
   abstract public function matchContact($contact_data, $params = NULL);
 
 
@@ -71,14 +71,17 @@ abstract class CRM_Xcm_MatchingRule {
    */
   protected function pickContact($contact_ids) {
     if (empty($contact_ids)) return NULL;
-    
+
     $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
     $picker  = CRM_Utils_Array::value('picker', $options, 'min');
 
     switch ($picker) {
+      case 'none':
+        return NULL;
+
       case 'max':
         return max($contact_ids);
-      
+
       default:
       case 'min':
         return min($contact_ids);
@@ -95,7 +98,7 @@ abstract class CRM_Xcm_MatchingRule {
       return array(
         'contact_id' => $contact_id,
         'confidence' => $confidence
-        );      
+        );
     }
   }
 

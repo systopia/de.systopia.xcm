@@ -86,8 +86,12 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
         return $this->createResultMatched(reset($contact_matches));
 
       default:
-        $contact_id = $this->pickContact($contact_matches);
-        return $this->createResultMatched($contact_id);
+          $contact_id = $this->pickContact($contact_matches);
+          if ($contact_id) {
+            return $this->createResultMatched($contact_id);
+          } else {
+            return $this->createResultUnmatched();
+          }
     }
   }
 }
