@@ -62,6 +62,11 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
       $email_contact_ids[] = $email['contact_id'];
     }
 
+    // make sure not to query w/o contact ids
+    if (empty($email_contact_ids)) {
+      return $this->createResultUnmatched();
+    }
+
     // now: find contacts
     $contact_search = array(
       'id'           => array('IN' => $email_contact_ids),
