@@ -63,7 +63,7 @@ abstract class CRM_Xcm_MatchingRule {
   }
 
   /**
-   * will pick one of the contact_id candidates
+   * will pick one (or none) of the contact_id candidates
    * according to the policy
    *
    * @param $contact_ids  array of contact IDs

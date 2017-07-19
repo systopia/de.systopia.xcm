@@ -62,6 +62,11 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
       $phone_contact_ids[] = $phone['contact_id'];
     }
 
+    // make sure not to query w/o contact ids
+    if (empty($phone_contact_ids)) {
+      return $this->createResultUnmatched();
+    }
+
     // now: find contacts
     $contact_search = array(
       'id'           => array('IN' => $phone_contact_ids),
