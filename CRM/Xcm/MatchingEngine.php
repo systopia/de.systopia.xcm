@@ -42,6 +42,9 @@ class CRM_Xcm_MatchingEngine {
     // first: resolve custom fields to custom_xx notation
     CRM_Xcm_Configuration::resolveCustomFields($contact_data);
 
+    // also: do some sanitation and formatting
+    $this->sanitiseData($contact_data);
+
     // set defaults
     if (empty($contact_data['contact_type'])) {
       $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
@@ -179,6 +182,7 @@ class CRM_Xcm_MatchingEngine {
     if (!empty($options['fill_fields']) || !empty($options['diff_activity'])) {
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
+      $this->sanitiseData($current_contact_data);
 
       if (!empty($options['fill_fields'])) {
         // FILL CURRENT CONTACT DATA
@@ -340,7 +344,24 @@ class CRM_Xcm_MatchingEngine {
   }
 
 
+  /**
+   * sanitise/format input
+   */
+  protected function sanitiseData(&$contact_data) {
+    // strip whitespaces
+    foreach ($contact_data as $key => $value) {
+      if (is_string($value)) {
+        $contact_data[$key] = trim($value);
+      }
+    }
 
+    // format birth_date
+    if (!empty($contact_data['birth_date'])) {
+      $contact_data['birth_date'] = date('Y-m-d', strtotime($contact_data['birth_date']));
+    }
+
+    // TODO: more?
+  }
 
   /**
    * uses SMARTY to render a template
