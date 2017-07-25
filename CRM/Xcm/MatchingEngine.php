@@ -329,7 +329,7 @@ class CRM_Xcm_MatchingEngine {
           'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
           'target_contact_id'  => (int) $contact['id'],
-          'source_contact_id'  => (int) $contact['id'],
+          'source_contact_id'  => CRM_Xcm_Configuration::getCurrentUserID($contact['id']),
           'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
           'details'            => $this->renderTemplate('activity/diff.tpl', $data),
       );
