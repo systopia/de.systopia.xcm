@@ -21,12 +21,18 @@
   </div>
 
   <div class="crm-section">
+    <div class="label">{$form.case_sensitive.label}</div>
+    <div class="content">{$form.case_sensitive.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
     <div class="label">{$form.fill_fields.label}</div>
     <div class="content">{$form.fill_fields.html}</div>
     <div class="clear"></div>
   </div>
 
-</div>  
+</div>
 
 <div>
   <h3>{ts domain="de.systopia.xcm"}Matching Rules{/ts}</h3>
@@ -58,10 +64,10 @@
     <div class="content">{$form.matched_add_activity.html}</div>
     <div id="matched_add_activity_details">
       <div class="label">{$form.matched_add_activity_subject.label}</div>
-      <div class="content">{$form.matched_add_activity_subject.html}</div>      
+      <div class="content">{$form.matched_add_activity_subject.html}</div>
       <div class="clear"></div>
       <div class="label">{$form.matched_add_activity_template.label}</div>
-      <div class="content">{$form.matched_add_activity_template.html}</div>      
+      <div class="content">{$form.matched_add_activity_template.html}</div>
     </div>
     <div class="clear"></div>
   </div>
