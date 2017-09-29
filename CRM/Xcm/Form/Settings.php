@@ -27,12 +27,48 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * build form
    */
   public function buildQuickForm() {
+    $locationTypes = $this->getLocationTypes();
+
     // add general options
     $this->addElement('select',
                       'picker',
                       ts('Of multiple matches, pick:', array('domain' => 'de.systopia.xcm')),
                       $this->getPickers(),
-                      array('class' => 'crm-select2'));
+                      array('class' => 'crm-select2 huge'));
+
+    $this->addElement('select',
+                      'default_location_type',
+                      ts('Default Location Type', array('domain' => 'de.systopia.xcm')),
+                      $locationTypes,
+                      array('class' => 'crm-select2 huge'));
+
+    $this->addElement('select',
+                      'fill_fields',
+                      ts('Fill Fields', array('domain' => 'de.systopia.xcm')),
+                      $this->getContactFields() + $this->getCustomFields(),
+                      array(// 'style'    => 'width:450px; height:100%;',
+                            'multiple' => 'multiple',
+                            'class'    => 'crm-select2 huge'));
+
+    $this->addElement('select',
+                      'fill_details',
+                      ts('Fill Details', array('domain' => 'de.systopia.xcm')),
+                      array(
+                        'email'   => ts('Email', array('domain' => 'de.systopia.xcm')),
+                        'phone'   => ts('Phone', array('domain' => 'de.systopia.xcm')),
+                        'website' => ts('Website', array('domain' => 'de.systopia.xcm'))),
+                      array(// 'style'    => 'width:450px; height:100%;',
+                            'multiple' => 'multiple',
+                            'class'    => 'crm-select2 huge'));
+
+    $this->addElement('select',
+                      'fill_address',
+                      ts('Fill Address', array('domain' => 'de.systopia.xcm')),
+                      array(0 => ts('Never', array('domain' => 'de.systopia.xcm')),
+                            1 => ts('If contact has no address', array('domain' => 'de.systopia.xcm')),
+                            2 => ts('If contact has no address of that type', array('domain' => 'de.systopia.xcm'))),
+                      array('class' => 'crm-select2 huge'));
+
 
     // diff activity options
     $activites = $this->getActivities();
@@ -55,7 +91,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       array('class' => 'crm-select2'));
 
 
-    $locationTypes = $this->getLocationTypes();
     $this->addElement('select',
                       'diff_current_location_type',
                       ts('Location Type', array('domain' => 'de.systopia.xcm')),
@@ -67,14 +102,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       ts('Bump existing address to', array('domain' => 'de.systopia.xcm')),
                       array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes,
                       array('class' => 'crm-select2'));
-
-    $this->addElement('select',
-                      'fill_fields',
-                      ts('Fill Fields', array('domain' => 'de.systopia.xcm')),
-                      $this->getContactFields() + $this->getCustomFields(),
-                      array(// 'style'    => 'width:450px; height:100%;',
-                            'multiple' => 'multiple',
-                            'class'    => 'crm-select2'));
 
 
     // add the rule selectors
@@ -165,6 +192,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // store options
     $options = array(
+      'fill_address'               => CRM_Utils_Array::value('fill_address', $values),
+      'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
+      'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
       'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),

@@ -100,7 +100,9 @@ class CRM_Xcm_MatchingEngine {
     $address_data = CRM_Xcm_Configuration::extractAddressData($contact_data);
     if (!empty($address_data)) {
       $address_data['contact_id'] = $new_contact['id'];
-      $address_data['location_type_id'] = CRM_Xcm_Configuration::currentLocationType();
+      if (empty($address_data['location_type_id'])) {
+        $address_data['location_type_id'] = CRM_Xcm_Configuration::defaultLocationType();
+      }
       civicrm_api3('Address', 'create', $address_data);
     }
 
@@ -178,20 +180,92 @@ class CRM_Xcm_MatchingEngine {
                                   $submitted_contact_data);
     }
 
-    // actions that require the current contact data:
-    if (!empty($options['fill_fields']) || !empty($options['diff_activity'])) {
+    // FILL/DIFF ACTIONS (require the current contact data):
+    if (   !empty($options['fill_fields'])
+        || !empty($options['diff_activity'])
+        || !empty($options['fill_address'])
+        || !empty($options['fill_details'])) {
+
+      // sort out location type
+      if (empty($submitted_contact_data['location_type_id'])) {
+        $location_type_id = CRM_Xcm_Configuration::defaultLocationType();
+      } else {
+        $location_type_id = $submitted_contact_data['location_type_id'];
+      }
+
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
       $this->sanitiseData($current_contact_data);
 
+      // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
-        // FILL CURRENT CONTACT DATA
         //  caution: will set the overwritten fields in $current_contact_data
         $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields']);
       }
 
+      // FILL CURRENT CONTACT DETAILS
+      if (!empty($options['fill_details'])) {
+        foreach ($options['fill_details'] as $entity) {
+          if (!empty($submitted_contact_data[$entity])) {
+            // some value was submitted -> check if there is already an existing one
+            $existing_entity = civicrm_api3($entity, 'get', array(
+              $entity        => $submitted_contact_data[$entity],
+              'contact_id'   => $result['contact_id'],
+              'option.sort'  => 'is_primary desc',
+              'option.limit' => 1));
+            if (empty($existing_entity['count'])) {
+              // there is none -> create
+              civicrm_api3($entity, 'create', array(
+                $entity            => $submitted_contact_data[$entity],
+                'contact_id'       => $result['contact_id'],
+                'location_type_id' => $location_type_id));
+
+              // add to data to avoid diff activity
+              $current_contact_data[$entity] = $submitted_contact_data[$entity];
+            }
+          }
+        }
+      }
+
+      // FILL CURRENT CONTACT ADDRESS
+      if (!empty($options['fill_address'])) {
+        $address_data = CRM_Xcm_Configuration::extractAddressData($submitted_contact_data);
+        if (!empty($address_data)) {
+          $address_data['location_type_id'] = $location_type_id;
+
+          // see if contact alread has an address
+          $address_query = array(
+            'contact_id'   => $result['contact_id'],
+            'option.sort'  => 'is_primary desc',
+            'option.limit' => 1);
+          if ($options['fill_address'] == 2) {
+            // 2 = only if no address of the same _type_ exists
+            $address_query['location_type_id'] = $address_data['location_type_id'];
+          }
+          $addresses = civicrm_api3('Address', 'get', $address_query);
+          if (empty($addresses['count'])) {
+            // there is NO address -> create one!
+            $address_data['contact_id'] = $result['contact_id'];
+            civicrm_api3('Address', 'create', $address_data);
+
+            // also add to 'submitted data' to avoid diff activity
+            foreach ($address_data as $key => $value) {
+              $submitted_contact_data[$key] = $value;
+            }
+
+          } else {
+            // address found -> add to current_contact_data for diff activity
+            $existing_address = reset($addresses['values']);
+            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address);
+            foreach ($existing_address_data as $key => $value) {
+              $current_contact_data[$key] = $value;
+            }
+          }
+        }
+      }
+
+      // CREATE DIFF ACTIVITY
       if (!empty($options['diff_activity'])) {
-        // CREATE DIFF ACTIVITY
         $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data);
       }
 

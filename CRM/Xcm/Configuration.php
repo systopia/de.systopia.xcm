@@ -99,6 +99,14 @@ class CRM_Xcm_Configuration {
     return (int) CRM_Utils_Array::value('diff_processing', $options);
   }
 
+  /**
+   * Get default location type
+   */
+  public static function defaultLocationType() {
+    $options = self::getOptions();
+    return (int) CRM_Utils_Array::value('default_location_type', $options);
+  }
+
 
   /**
    * Get location type to be used for new addresses
