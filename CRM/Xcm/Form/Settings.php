@@ -106,7 +106,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     $this->addElement('select',
                       'diff_old_location_type',
-                      ts('Bump existing address to', array('domain' => 'de.systopia.xcm')),
+                      ts('Bump old address to type', array('domain' => 'de.systopia.xcm')),
                       array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes,
                       array('class' => 'crm-select2'));
 
