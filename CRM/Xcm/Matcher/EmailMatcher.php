@@ -68,18 +68,13 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // now: find contacts
-    $config = CRM_Xcm_Configuration::getOptions();
     $contact_search = array(
       'id'           => array('IN' => $email_contact_ids),
       'is_deleted'   => 0,
       'option.limit' => 0,
       'return'       => 'id');
     foreach ($this->other_contact_fields as $field_name) {
-      if (empty($config['case_sensitive'])) {
-        $contact_search[$field_name] = $contact_data[$field_name];
-      } else {
-        $contact_search[$field_name] = $contact_data[$field_name];
-      }
+      $contact_search[$field_name] = $contact_data[$field_name];
     }
     $contacts = civicrm_api3('Contact', 'get', $contact_search);
     $contact_matches = array();
