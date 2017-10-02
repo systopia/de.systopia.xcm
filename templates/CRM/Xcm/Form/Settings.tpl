@@ -21,8 +21,8 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.case_sensitive.label}</div>
-    <div class="content">{$form.case_sensitive.html}</div>
+    <div class="label">{$form.case_insensitive.label}</div>
+    <div class="content">{$form.case_insensitive.html}</div>
     <div class="clear"></div>
   </div>
 

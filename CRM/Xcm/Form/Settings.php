@@ -48,10 +48,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       ts('Subject', array('domain' => 'de.systopia.xcm')));
 
     $this->addElement('select',
-                      'case_sensitive',
-                      ts('String Comparison', array('domain' => 'de.systopia.xcm')),
-                      array(0 => ts('case sensitive',     array('domain' => 'de.systopia.xcm')),
-                            1 => ts('not case sensitive', array('domain' => 'de.systopia.xcm'))),
+                      'case_insensitive',
+                      ts('Attribute Comparison', array('domain' => 'de.systopia.xcm')),
+                      array(0 => ts('case-sensitive',     array('domain' => 'de.systopia.xcm')),
+                            1 => ts('not case-sensitive', array('domain' => 'de.systopia.xcm'))),
                       array('class' => 'crm-select2'));
 
     $this->addElement('select',
@@ -181,7 +181,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
       'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
       'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
-      'case_sensitive'           => CRM_Utils_Array::value('case_sensitive', $values),
+      'case_insensitive'           => CRM_Utils_Array::value('case_insensitive', $values),
       );
     CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
 

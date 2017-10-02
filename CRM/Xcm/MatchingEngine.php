@@ -285,6 +285,8 @@ class CRM_Xcm_MatchingEngine {
    * and the data submitted
    */
   protected function createDiffActivity($contact, $options, $subject, &$contact_data) {
+    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
 
     // look up some fields (e.g. prefix, ...)
     // TODO
@@ -294,7 +296,7 @@ class CRM_Xcm_MatchingEngine {
     $all_attributes = array_keys($contact) + array_keys($contact_data);
     foreach ($all_attributes as $attribute) {
       if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
-        if ($contact[$attribute] != $contact_data[$attribute]) {
+        if ($this->attributesDiffer($attribute, $contact[$attribute], $contact_data[$attribute], $case_insensitive)) {
           $differing_attributes[] = $attribute;
         }
       }
@@ -340,6 +342,26 @@ class CRM_Xcm_MatchingEngine {
         // some problem with the creation
         error_log("de.systopia.xcm: error when trying to create diff activity: " . $e->getMessage());
       }
+    }
+  }
+
+  /**
+   * compare two values of the given attribute name
+   *
+   * @return TRUE if atttributes differ
+   */
+  protected function attributesDiffer($attribute_name, $original_value, $submitted_value, $case_insensitive) {
+    // TODO: collapse double spaces?
+
+    // trim values first
+    $original_value  = trim($original_value);
+    $submitted_value = trim($submitted_value);
+
+    // compare
+    if ($case_insensitive) {
+      return strtolower($original_value) != strtolower($submitted_value);
+    } else {
+      return $original_value != $submitted_value;
     }
   }
 
