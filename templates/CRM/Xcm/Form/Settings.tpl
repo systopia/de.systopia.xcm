@@ -21,7 +21,7 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.case_insensitive.label}</div>
+    <div class="label">{$form.case_insensitive.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Case Sensitivity{/ts}", {literal}{"id":"id-case-sensitive","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.case_insensitive.html}</div>
     <div class="clear"></div>
   </div>
