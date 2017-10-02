@@ -21,7 +21,13 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.default_location_type.label}</div>
+    <div class="label">{$form.case_insensitive.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Case Sensitivity{/ts}", {literal}{"id":"id-case-sensitive","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.case_insensitive.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.default_location_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Location Type{/ts}", {literal}{"id":"id-location-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.default_location_type.html}</div>
     <div class="clear"></div>
   </div>
@@ -33,7 +39,7 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.fill_details.label}</div>
+    <div class="label">{$form.fill_details.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.fill_details.html}</div>
     <div class="clear"></div>
   </div>
@@ -43,7 +49,6 @@
     <div class="content">{$form.fill_address.html}</div>
     <div class="clear"></div>
   </div>
-
 </div>
 
 <div>
@@ -126,9 +131,9 @@
 </div>
 
 <div>
-  <h3>{ts domain="de.systopia.xcm"}"Data Changed" Activity{/ts}</h3>
+  <h3>{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}</h3>
   <div class="crm-section">
-    <div class="label">{$form.diff_activity.label}</div>
+    <div class="label">{$form.diff_activity.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}", {literal}{"id":"id-diff-activity","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.diff_activity.html}</div>
     <div class="clear"></div>
     <div id="diff_activity_details">
@@ -178,7 +183,7 @@ xcm_show_or_hide("#diff_activity", "#diff_activity_details", 0);
 cj("#duplicates_activity").change(function() {
   xcm_show_or_hide("#duplicates_activity", "#duplicates_activity_details", 500);
 });
-xcm_show_or_hide("#duplicates_activity", "#diff_activity_details", 0);
+xcm_show_or_hide("#duplicates_activity", "#duplicates_activity_details", 0);
 
 function xcm_show_or_hide(value_selector, div_selector, delay) {
   var value = cj(value_selector).val();
