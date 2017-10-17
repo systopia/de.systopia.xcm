@@ -6,12 +6,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de.systopia.xcm\n"
 "POT-Creation-Date: 2017-10-17 10:51+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
@@ -34,6 +34,10 @@ msgstr "Füllen (Kontaktdetails)"
 #: CRM/Xcm/Form/Settings.php
 msgid "Website"
 msgstr "Website"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Make New Detail Primary"
+msgstr "Neues Kontaktdetail primär?"
 
 #: CRM/Xcm/Form/Settings.php
 msgid "Fill Address"
@@ -101,7 +105,7 @@ msgstr "Nicht machen"
 
 #: CRM/Xcm/Form/Settings.php
 msgid "Matching Rule #%1"
-msgstr "Zuordnungsregel #%1"
+msgstr "Regel #%1"
 
 #: CRM/Xcm/Form/Settings.php
 msgid "Add to group"
@@ -225,7 +229,7 @@ msgstr ""
 
 #: js/process_diff.js
 msgid "Adopt"
-msgstr ""
+msgstr "Übernehmen"
 
 #: js/process_diff.js
 msgid "Add"
@@ -280,6 +284,14 @@ msgid "Warning: If you don't normalise your input here, your contacts might end 
 msgstr "Warnung: Falls die Eingabedaten nicht normalisiert sind (z.B. bei Telefonnummern), ist mit vielen Duplikaten zu rechnen die sich nur durch eine abweichende Schreibweise unterscheiden."
 
 #: templates/CRM/Xcm/Form/Settings.hlp
+msgid "If a new contact detail will be created, should it henceforth be the primarily used detail?"
+msgstr "Falls ein ein neues Kontaktdetail (z.B. Telefonnummer) übernommen wird, soll es fortan primäre verwendet werden?"
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "Warning: If you that match wasn't correct, you might change the primary means of communcation to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address."
+msgstr "Achtung! Fall die Zuordnung nicht korrekt war, kann so das primäre Kontaktdetail falsch gesetzt werden. Das kann in der Folge dazu führen, dass zum Beispiel eine vertrauliche Email an eine falsche Email-Adresse gesendet wird."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If no location type is explicitely submitted, this location type will be assumed."
 msgstr "Wird nur verwendet, falls nicht eine abweichende Kategorie übermittelt wird"
 
@@ -309,15 +321,15 @@ msgstr "Hilfe"
 
 #: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Matching Rules"
-msgstr ""
+msgstr "Zuordnungsregeln"
 
 #: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Matched Contacts"
-msgstr ""
+msgstr "Identifizierte Kontakte"
 
 #: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Created Contacts"
-msgstr ""
+msgstr "Neu erstellte Kontakte"
 
 #: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Duplicates Activity"

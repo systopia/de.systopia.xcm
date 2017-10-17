@@ -61,6 +61,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2 huge'));
 
+    $this->addElement('checkbox',
+                      'fill_details_primary',
+                      ts('Make New Detail Primary', array('domain' => 'de.systopia.xcm')));
+
     $this->addElement('select',
                       'fill_address',
                       ts('Fill Address', array('domain' => 'de.systopia.xcm')),
@@ -201,6 +205,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $options = array(
       'fill_address'               => CRM_Utils_Array::value('fill_address', $values),
       'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
+      'fill_details_primary'       => CRM_Utils_Array::value('fill_details_primary', $values),
       'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
@@ -361,30 +366,30 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   protected function getContactFields() {
     return array(
-      'display_name'                   => ts("Display Name", array('domain' => 'de.systopia.xcm')),
-      'household_name'                 => ts("Household Name", array('domain' => 'de.systopia.xcm')),
-      'organization_name'              => ts("Organization Name", array('domain' => 'de.systopia.xcm')),
-      'first_name'                     => ts("First Name", array('domain' => 'de.systopia.xcm')),
-      'last_name'                      => ts("Last Name", array('domain' => 'de.systopia.xcm')),
-      'middle_name'                    => ts("Middle Name", array('domain' => 'de.systopia.xcm')),
-      'display_name'                   => ts("Display Name", array('domain' => 'de.systopia.xcm')),
-      'nick_name'                      => ts("Nick Name", array('domain' => 'de.systopia.xcm')),
-      'legal_name'                     => ts("Legal Name", array('domain' => 'de.systopia.xcm')),
-      'prefix_id'                      => ts("Prefix", array('domain' => 'de.systopia.xcm')),
-      'suffix_id'                      => ts("Suffix", array('domain' => 'de.systopia.xcm')),
-      'birth_date'                     => ts("Birth Date", array('domain' => 'de.systopia.xcm')),
-      'gender_id'                      => ts("Gender", array('domain' => 'de.systopia.xcm')),
-      'formal_title'                   => ts("Formal Title", array('domain' => 'de.systopia.xcm')),
-      'job_title'                      => ts("Job Title", array('domain' => 'de.systopia.xcm')),
-      'do_not_email'                   => ts("Do not Email", array('domain' => 'de.systopia.xcm')),
-      'do_not_phone'                   => ts("Do not Phone", array('domain' => 'de.systopia.xcm')),
-      'do_not_sms'                     => ts("Do not SMS", array('domain' => 'de.systopia.xcm')),
-      'do_not_trade'                   => ts("Do not Trade", array('domain' => 'de.systopia.xcm')),
-      'is_opt_out'                     => ts("Opt-Out", array('domain' => 'de.systopia.xcm')),
-      'preferred_language'             => ts("Preferred Language", array('domain' => 'de.systopia.xcm')),
-      'preferred_communication_method' => ts("Preferred Communication Method", array('domain' => 'de.systopia.xcm')),
-      'legal_identifier'               => ts("Legal Identifier", array('domain' => 'de.systopia.xcm')),
-      'external_identifier'            => ts("External Identifier", array('domain' => 'de.systopia.xcm')),
+      'display_name'                   => ts("Display Name"),
+      'household_name'                 => ts("Household Name"),
+      'organization_name'              => ts("Organization Name"),
+      'first_name'                     => ts("First Name"),
+      'last_name'                      => ts("Last Name"),
+      'middle_name'                    => ts("Middle Name"),
+      'display_name'                   => ts("Display Name"),
+      'nick_name'                      => ts("Nick Name"),
+      'legal_name'                     => ts("Legal Name"),
+      'prefix_id'                      => ts("Prefix"),
+      'suffix_id'                      => ts("Suffix"),
+      'birth_date'                     => ts("Birth Date"),
+      'gender_id'                      => ts("Gender"),
+      'formal_title'                   => ts("Formal Title"),
+      'job_title'                      => ts("Job Title"),
+      'do_not_email'                   => ts("Do not Email"),
+      'do_not_phone'                   => ts("Do not Phone"),
+      'do_not_sms'                     => ts("Do not SMS"),
+      'do_not_trade'                   => ts("Do not Trade"),
+      'is_opt_out'                     => ts("Opt-Out"),
+      'preferred_language'             => ts("Preferred Language"),
+      'preferred_communication_method' => ts("Preferred Communication Method"),
+      'legal_identifier'               => ts("Legal Identifier"),
+      'external_identifier'            => ts("External Identifier"),
     );
   }
 }

@@ -22,6 +22,11 @@
   <p>{ts domain="de.systopia.xcm"}Warning: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>
 {/htxt}
 
+{htxt id='id-fill-details-primary'}
+  <p>{ts domain="de.systopia.xcm"}If a new contact detail will be created, should it henceforth be the primarily used detail?{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Warning: If you that match wasn't correct, you might change the primary means of communcation to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
+{/htxt}
+
 {htxt id='id-location-type'}
   <p>{ts domain="de.systopia.xcm"}If no location type is explicitely submitted, this location type will be assumed.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and wesites.{/ts}</p>

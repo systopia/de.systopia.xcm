@@ -32,6 +32,10 @@ msgid "Website"
 msgstr ""
 
 #: CRM/Xcm/Form/Settings.php
+msgid "Make New Detail Primary"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
 msgid "Fill Address"
 msgstr ""
 
@@ -290,6 +294,19 @@ msgid ""
 "Warning: If you don't normalise your input here, your contacts might end up "
 "with multiple instances of the same entity (e.g. phone), all with slightly "
 "different spelling."
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid ""
+"If a new contact detail will be created, should it henceforth be the "
+"primarily used detail?"
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid ""
+"Warning: If you that match wasn't correct, you might change the primary "
+"means of communcation to a wrong value. This could lead to e.g. a "
+"confidential email going out to the wrong email address."
 msgstr ""
 
 #: templates/CRM/Xcm/Form/Settings.hlp

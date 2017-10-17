@@ -215,10 +215,18 @@ class CRM_Xcm_MatchingEngine {
               'option.limit' => 1));
             if (empty($existing_entity['count'])) {
               // there is none -> create
-              civicrm_api3($entity, 'create', array(
+              $create_detail_call = array(
                 $entity            => $submitted_contact_data[$entity],
                 'contact_id'       => $result['contact_id'],
-                'location_type_id' => $location_type_id));
+                'location_type_id' => $location_type_id);
+
+              // mark as primary if requested
+              if (!empty($options['fill_details_primary'])) {
+                $create_detail_call['is_primary'] = 1;
+              }
+
+              // create the deail
+              civicrm_api3($entity, 'create', $create_detail_call);
 
               // add to data to avoid diff activity
               $current_contact_data[$entity] = $submitted_contact_data[$entity];

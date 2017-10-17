@@ -45,6 +45,12 @@
   </div>
 
   <div class="crm-section">
+    <div class="label">{$form.fill_details_primary.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.fill_details_primary.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
     <div class="label">{$form.fill_address.label}</div>
     <div class="content">{$form.fill_address.html}</div>
     <div class="clear"></div>
