@@ -1,0 +1,357 @@
+# Copyright CiviCRM LLC (c) 2004-2015
+# This file is distributed under the same license as the CiviCRM package.
+# If you contribute heavily to a translation and deem your work copyrightable,
+# make sure you license it to CiviCRM LLC under Academic Free License 3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: de.systopia.xcm\n"
+"POT-Creation-Date: 2017-10-17 10:51+0200\n"
+"Language-Team: SYSTOPIA <info@systopia.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Of multiple matches, pick:"
+msgstr "Bei mehreren Treffern, nimm:"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Default Location Type"
+msgstr "Standardkategorie"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Fill Fields"
+msgstr "Füllen (Felder)"
+
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
+msgid "Fill Details"
+msgstr "Füllen (Kontaktdetails)"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Website"
+msgstr "Website"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Fill Address"
+msgstr "Füllen (Address)"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Never"
+msgstr "Nie"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "If contact has no address"
+msgstr "Wenn der Kontakt noch keine Adresse hat"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "If contact has no address of that type"
+msgstr "Wenn der Kontakt noch keine Adresse mit gleicher Kategorie hat"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Don't generate"
+msgstr "Nicht erstellen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Generate Diff Activity"
+msgstr "Änderungsaktivität erstellen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Subject"
+msgstr "Betreff"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Attribute Comparison"
+msgstr "Werteabgleich"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "case-sensitive"
+msgstr "Groß-/Kleinschrebung beachten"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "not case-sensitive"
+msgstr "Groß-/Kleinschrebung nicht beachten"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Diff Processing Helper"
+msgstr "Verarbeitungshilfe aktivieren"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "No"
+msgstr "Nein"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Yes (beta)"
+msgstr "Ja (beta)"
+
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
+msgid "Location Type"
+msgstr "Kategorie"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Bump old address to type"
+msgstr "Alte Adresse weiterschieben"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Don't do that"
+msgstr "Nicht machen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Matching Rule #%1"
+msgstr "Zuordnungsregel #%1"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Add to group"
+msgstr "Zu Gruppe hinzufügen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Add to tag"
+msgstr "Zu Tag hinzufügen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Add activity"
+msgstr "Aktivität hinzufügen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Template"
+msgstr "Vorlage"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Generate Duplicates Activity"
+msgstr "Duplikatsaktivität erstellen"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Activity Subject"
+msgstr "Aktivitätsbetreff"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Save"
+msgstr "Speichern"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "None, thank you"
+msgstr "Keine"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "No content"
+msgstr "Keine Details"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "the oldest contact"
+msgstr "der älteste Kontakt"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "the newest contact"
+msgstr "der neuste Kontakt"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "none (create new contact)"
+msgstr "keinen (neuer Kontakt wird erstellt)"
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Display Name"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Household Name"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Organization Name"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Nick Name"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Legal Name"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Birth Date"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Gender"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Formal Title"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Job Title"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Do not Email"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Do not Phone"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Do not SMS"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Do not Trade"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Opt-Out"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Preferred Language"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Preferred Communication Method"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "Legal Identifier"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
+msgid "External Identifier"
+msgstr ""
+
+#: js/process_diff.js
+msgid "Adopt"
+msgstr ""
+
+#: js/process_diff.js
+msgid "Add"
+msgstr ""
+
+#: js/process_diff.js
+msgid "Add new address"
+msgstr ""
+
+#: js/process_diff.js
+msgid "The previous phone number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the phone number not possible."
+msgstr ""
+
+#: js/process_diff.js
+msgid "The previous address number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible."
+msgstr ""
+
+#: js/process_diff.js
+msgid "The address data submitted here is insufficient for the creation of a new address."
+msgstr ""
+
+#: js/process_diff.js
+msgid "The current primary address couldn't be identified, contact was probably modified in the meantime. Automatic processing not possible."
+msgstr ""
+
+#: js/process_diff.js
+msgid "The previously used primary address couldn't be demoted."
+msgstr ""
+
+#: js/process_diff.js
+msgid "Attribute updated."
+msgstr ""
+
+#: js/process_diff.js
+msgid "Success."
+msgstr "Erfolgreich"
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "Please note that most matchers are, by design, case-insensitive. This setting won't change that."
+msgstr "Bitte beachten, dass die meisten Zuordnungsregeln ohnehin nicht auf Groß-/Kleinschreibung achten. Diese Einstellung wird das Verhalten nicht ändern."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "However, this setting is also applied to the generation of a diff activity."
+msgstr "Allerdings greift diese Einstellung für das Erstellen der Änderungsaktivität (s.u.)"
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the given contact detail, it will be added."
+msgstr "Wenn Sie eine oder mehrere Kontaktdetails aktivieren, werden sie dem Kontakt bei erfolgreicher Zuordnung hinzugefügt."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "Warning: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling."
+msgstr "Warnung: Falls die Eingabedaten nicht normalisiert sind (z.B. bei Telefonnummern), ist mit vielen Duplikaten zu rechnen die sich nur durch eine abweichende Schreibweise unterscheiden."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "If no location type is explicitely submitted, this location type will be assumed."
+msgstr "Wird nur verwendet, falls nicht eine abweichende Kategorie übermittelt wird"
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "The location type is used for newly created addresses, emails, phones, and wesites."
+msgstr "Diese Adresskategorie wird für neu angelegt Adressen, Emails, Telefonnummern und Webseiten verwendet."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "This feature enables you to track and process all submitted data when a contact has been identified - but not changed."
+msgstr "Diese Option erlaubt es Ihnen die abweichenden übermittelten Kontaktdaten bei einer erfolgreichen Zuordnung nachzuvollziehen, ohne dass sie unkontrolliert übernommen werden."
+
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "The activity will contain an overview of the differing attributes for contact, and will be linked to that contact."
+msgstr "Die Aktivität wird eine Übersicht der abweichenden Attributswerte eines Kontakts beinhalten."
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "General Options"
+msgstr "Allgemeine Einstellungen"
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Case Sensitivity"
+msgstr "Groß-/Kleinschreibung"
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Help"
+msgstr "Hilfe"
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Matching Rules"
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Matched Contacts"
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Created Contacts"
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Duplicates Activity"
+msgstr "Duplikatsaktivität"
+
+#: templates/CRM/Xcm/Form/Settings.tpl
+msgid "Data Changed Activity"
+msgstr "Änderungsaktivität"
+
+#: templates/activity/diff.tpl
+msgid "Differing attributes for contact \"%1\" submitted"
+msgstr ""
+
+#: templates/activity/diff.tpl
+msgid "Attribute"
+msgstr "Attribut"
+
+#: templates/activity/diff.tpl
+msgid "Recorded Value"
+msgstr "Bestehender Wert"
+
+#: templates/activity/diff.tpl
+msgid "Submitted Value"
+msgstr "Übermittelter Wert"
+
+#: xcm.php
+msgid "Warning! This contact is tagged '%1'."
+msgstr ""
+
+#: xcm.php
+msgid "Warning"
+msgstr ""
+
+#: xcm.php
+msgid "Warning! The tags couldn't be read."
+msgstr ""
+

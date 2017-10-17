@@ -88,7 +88,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       ts('Attribute Comparison', array('domain' => 'de.systopia.xcm')),
                       array(0 => ts('case-sensitive',     array('domain' => 'de.systopia.xcm')),
                             1 => ts('not case-sensitive', array('domain' => 'de.systopia.xcm'))),
-                      array('class' => 'crm-select2'));
+                      array('class' => 'crm-select2 huge'));
 
     $this->addElement('select',
                       'diff_processing',
