@@ -55,6 +55,85 @@ class CRM_Xcm_Configuration {
   }
 
   /**
+   * Generate a list of field labels for the given diff
+   */
+  public static function getFieldLabels($differing_attributes) {
+    $field_labels = array();
+    $all_labels = self::getKnownFieldLabels();
+    foreach ($differing_attributes as $field_name) {
+      if (isset($all_labels[$field_name])) {
+        $field_labels[$field_name] = $all_labels[$field_name];
+      } else {
+        $field_labels[$field_name] = $field_name;
+      }
+    }
+    return $field_labels;
+  }
+
+  /**
+   * return all field labels
+   */
+  public static function getKnownFieldLabels() {
+    return array(
+      'first_name'             => ts('First Name'),
+      'last_name'              => ts('Last Name'),
+      'middle_name'            => ts('Middle Name'),
+      'prefix_id'              => ts('Prefix'),
+      'suffix_id'              => ts('Suffix'),
+      'phone'                  => ts('Phone'),
+      'email'                  => ts('Email'),
+      'street_address'         => ts('Street Address'),
+      'city'                   => ts('City'),
+      'country_id'             => ts('Country'),
+      'state_province_id'      => ts('State/Province'),
+      'postal_code'            => ts('Postal Code'),
+      'supplemental_address_1' => ts('Supplemental Address 1'),
+      'supplemental_address_2' => ts('Supplemental Address 2'),
+      'supplemental_address_3' => ts('Supplemental Address 3')
+    );
+  }
+
+  /**
+   * resolve some identifiers in the values
+   */
+  public static function resolveFieldValues(&$data) {
+    // country
+    if (isset($data['country_id']) && is_numeric($data['country_id'])) {
+      $countries = CRM_Core_PseudoConstant::country(FALSE, FALSE);
+      if (isset($countries[$data['country_id']])) {
+        $data['country_id'] = $countries[$data['country_id']];
+      }
+    }
+
+    error_log(json_encode($data));
+    // prefix
+    if (isset($data['prefix_id']) && is_numeric($data['prefix_id'])) {
+      try {
+        $data['prefix_id'] = civicrm_api3('OptionValue', 'getvalue', array(
+          'return'          => 'label',
+          'value'           => $data['prefix_id'],
+          'option_group_id' => 'individual_prefix'
+        ));
+      } catch (Exception $e) {
+        // if not found, there's not much we can do
+      }
+    }
+
+    // suffix
+    if (isset($data['suffix_id']) && is_numeric($data['suffix_id'])) {
+      try {
+        $data['suffix_id'] = civicrm_api3('OptionValue', 'getvalue', array(
+          'return'          => 'label',
+          'value'           => $data['suffix_id'],
+          'option_group_id' => 'individual_suffix'
+        ));
+      } catch (Exception $e) {
+        // if not found, there's not much we can do
+      }
+    }
+  }
+
+  /**
    * extract and return only the address data
    */
   public static function extractAddressData($data) {

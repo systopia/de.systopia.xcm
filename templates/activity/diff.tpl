@@ -22,9 +22,9 @@
   <tbody>
   {foreach from=$differing_attributes item=attribute}
     <tr>
-      <td>{$attribute}</td>
+      <td>{$fieldlabels.$attribute}</td>
       <td>{$existing_contact.$attribute}</td>
-      <td>{$submitted_data.$attribute}</td>
+      <td>{$submitted_data.$attribute} {if $location_types.$attribute}({$location_types.$attribute}){/if}</td>
     </tr>
   {/foreach}
   </tbody>

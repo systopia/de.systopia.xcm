@@ -266,7 +266,7 @@ class CRM_Xcm_MatchingEngine {
 
       // CREATE DIFF ACTIVITY
       if (!empty($options['diff_activity'])) {
-        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data);
+        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
       }
 
     }
@@ -358,12 +358,13 @@ class CRM_Xcm_MatchingEngine {
    * Create an activity listing all differences between the matched contact
    * and the data submitted
    */
-  protected function createDiffActivity($contact, $options, $subject, &$contact_data) {
+  protected function createDiffActivity($contact, $options, $subject, &$contact_data, $location_type_id) {
     $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
     $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
 
-    // look up some fields (e.g. prefix, ...)
-    // TODO
+    // look up some id fields
+    CRM_Xcm_Configuration::resolveFieldValues($contact);
+    CRM_Xcm_Configuration::resolveFieldValues($contact_data);
 
     // create diff
     $differing_attributes = array();
@@ -392,10 +393,24 @@ class CRM_Xcm_MatchingEngine {
     // TODO:
 
     if (!empty($differing_attributes)) {
+      // There ARE changes: render the diff activity
+
+      // add the location type for clarity
+      $location_types = array();
+      $location_type_name = civicrm_api3('LocationType', 'getvalue', array(
+          'return' => 'display_name',
+          'id'     => $location_type_id));
+      $location_fields = CRM_Xcm_Configuration::getAddressFields() + array('phone', 'email');
+      foreach ($location_fields as $fieldname) {
+        $location_types[$fieldname] = $location_type_name;
+      }
+
       // create activity
       $data = array(
         'differing_attributes' => $differing_attributes,
+        'fieldlabels'          => CRM_Xcm_Configuration::getFieldLabels($differing_attributes),
         'existing_contact'     => $contact,
+        'location_types'       => $location_types,
         'submitted_data'       => $contact_data
         );
 
