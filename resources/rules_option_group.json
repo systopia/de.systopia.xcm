@@ -37,6 +37,16 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_EmailFullNameMatcher",
+      "value": "CRM_Xcm_Matcher_EmailFullNameMatcher",
+      "label": "Last name, first name, and (any) email",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
       "name": "CRM_Xcm_Matcher_IbanBirthdayMatcher",
       "value": "CRM_Xcm_Matcher_IbanBirthdayMatcher",
       "label": "Birthday and IBAN (CiviSEPA or CiviBanking)",
@@ -60,6 +70,26 @@
       "name": "CRM_Xcm_Matcher_PhoneMatcher",
       "value": "CRM_Xcm_Matcher_PhoneMatcher",
       "label": "Phone (exact)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_EmailOnlyMatcher",
+      "value": "CRM_Xcm_Matcher_EmailOnlyMatcher",
+      "label": "Email (if only email submitted)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_PhoneOnlyMatcher",
+      "value": "CRM_Xcm_Matcher_PhoneOnlyMatcher",
+      "label": "Phone (if only phone submitted)",
       "filter": "0",
       "is_reserved": "1",
       "is_active": "1"
