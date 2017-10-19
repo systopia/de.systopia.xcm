@@ -106,6 +106,10 @@ class CRM_Xcm_MatchingEngine {
       civicrm_api3('Address', 'create', $address_data);
     }
 
+    // create phone number (that used to work...)
+    $this->addDetailToContact($new_contact['id'], 'phone',   $contact_data);
+    $this->addDetailToContact($new_contact['id'], 'website', $contact_data);
+
     return $new_contact;
   }
 
@@ -204,34 +208,10 @@ class CRM_Xcm_MatchingEngine {
       }
 
       // FILL CURRENT CONTACT DETAILS
-      if (!empty($options['fill_details'])) {
+      if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
-          if (!empty($submitted_contact_data[$entity])) {
-            // some value was submitted -> check if there is already an existing one
-            $existing_entity = civicrm_api3($entity, 'get', array(
-              $entity        => $submitted_contact_data[$entity],
-              'contact_id'   => $result['contact_id'],
-              'option.sort'  => 'is_primary desc',
-              'option.limit' => 1));
-            if (empty($existing_entity['count'])) {
-              // there is none -> create
-              $create_detail_call = array(
-                $entity            => $submitted_contact_data[$entity],
-                'contact_id'       => $result['contact_id'],
-                'location_type_id' => $location_type_id);
-
-              // mark as primary if requested
-              if (!empty($options['fill_details_primary'])) {
-                $create_detail_call['is_primary'] = 1;
-              }
-
-              // create the deail
-              civicrm_api3($entity, 'create', $create_detail_call);
-
-              // add to data to avoid diff activity
-              $current_contact_data[$entity] = $submitted_contact_data[$entity];
-            }
-          }
+          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']));
+          $current_contact_data[$entity] = $submitted_contact_data[$entity];
         }
       }
 
@@ -281,7 +261,6 @@ class CRM_Xcm_MatchingEngine {
 
   }
 
-
   protected function addContactToGroup($contact_id, $group_id) {
     // TODO: error handling
     civicrm_api3('GroupContact', 'create', array('contact_id' => $contact_id, 'group_id' => $group_id));
@@ -309,6 +288,50 @@ class CRM_Xcm_MatchingEngine {
     }
 
     $activity = CRM_Activity_BAO_Activity::create($activity_data);
+  }
+
+  /**
+   * Add a certain entity detail (phone,email,website)
+   */
+  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE) {
+    if (!empty($data[$entity])) {
+      // sort out location type
+      if (empty($data['location_type_id'])) {
+        $location_type_id = CRM_Xcm_Configuration::defaultLocationType();
+      } else {
+        $location_type_id = $data['location_type_id'];
+      }
+
+      // get attribute
+      $attribute = strtolower($entity); // for email and phone that works
+      $sorting = 'is_primary desc';
+      if (strtolower($entity) == 'website') {
+        $attribute = 'url';
+        $sorting = 'id desc';
+      }
+
+      // some value was submitted -> check if there is already an existing one
+      $existing_entity = civicrm_api3($entity, 'get', array(
+        $attribute     => $data[$entity],
+        'contact_id'   => $contact_id,
+        'option.sort'  => $sorting,
+        'option.limit' => 1));
+      if (empty($existing_entity['count'])) {
+        // there is none -> create
+        $create_detail_call = array(
+          $attribute         => $data[$entity],
+          'contact_id'       => $contact_id,
+          'location_type_id' => $location_type_id);
+
+        // mark as primary if requested
+        if ($as_primary) {
+          $create_detail_call['is_primary'] = 1;
+        }
+
+        // create the deail
+        civicrm_api3($entity, 'create', $create_detail_call);
+      }
+    }
   }
 
   /**
