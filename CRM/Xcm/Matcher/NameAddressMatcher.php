@@ -25,7 +25,7 @@ class CRM_Xcm_Matcher_NameAddressMatcher extends CRM_Xcm_MatchingRule {
    * 1) find all addresses matching city, postal_code, street_address
    * 2) find contacts with matching first and last names
    */
-  public function matchContact($contact_data, $params = NULL) {
+  public function matchContact(&$contact_data, $params = NULL) {
     foreach ($this->required_fields as $field_name) {
       if (empty($contact_data[$field_name])) {
         return $this->createResultUnmatched();

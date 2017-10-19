@@ -24,7 +24,7 @@ class CRM_Xcm_Matcher_IbanBirthdayMatcher extends CRM_Xcm_MatchingRule {
    * 2) collect bank account contacts (CiviBanking)
    * 3) find contacts with the same birth date
    */
-  public function matchContact($contact_data, $params = NULL) {
+  public function matchContact(&$contact_data, $params = NULL) {
     $potential_contact_ids = array();
     if (empty($contact_data['birth_date'])) {
       return $this->createResultUnmatched();

@@ -39,7 +39,7 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
    * 2) load the attached contacts
    * 3) check the other_contact_fields
    */
-  public function matchContact($contact_data, $params = NULL) {
+  public function matchContact(&$contact_data, $params = NULL) {
     if (empty($contact_data['email'])) {
       return $this->createResultUnmatched();
     }

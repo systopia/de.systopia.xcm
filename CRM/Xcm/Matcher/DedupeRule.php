@@ -28,22 +28,22 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
     // todo: handle NOT FOUND
   }
 
-  public function matchContact($contact_data, $params = NULL) {
+  public function matchContact(&$contact_data, $params = NULL) {
     // first check, if the contact_type is right
     $contact_type = $this->dedupe_group_bao->contact_type;
 
     if ($this->isContactType($contact_type, $contact_data)) {
-      
+
       // it's the right type, let's go:
       $dedupeParams = CRM_Dedupe_Finder::formatParams($contact_data, $contact_type);
       $dedupeParams['check_permission'] = '';
       $dupes = CRM_Dedupe_Finder::dupesByParams(
-          $dedupeParams, 
+          $dedupeParams,
           $contact_type,
           NULL,
           array(),
           $this->dedupe_group_bao->id);
-      
+
       $contact_id = $this->pickContact($dupes);
       if ($contact_id) {
         return $this->createResultMatched($contact_id);
