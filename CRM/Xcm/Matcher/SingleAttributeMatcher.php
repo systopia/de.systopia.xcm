@@ -54,7 +54,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
    * 2) check if none of the other attributes are set
    * 3) find all contacts based on our attribute
    */
-  public function matchContact($contact_data, $params = NULL) {
+  public function matchContact(&$contact_data, $params = NULL) {
     // 1) check if attribute is set
     if (empty($contact_data[$this->attribute])) {
       return $this->createResultUnmatched();
@@ -82,7 +82,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
 
     // make sure not to query w/o contact ids
     if (empty($entity_contact_ids)) {
-      return $this->createResultUnmatched();
+      return $this->createResultUnmatchedFixed($contact_data);
     }
 
     // now: find contacts
@@ -100,7 +100,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
     // process results
     switch (count($contact_matches)) {
       case 0:
-        return $this->createResultUnmatched();
+        return $this->createResultUnmatchedFixed($contact_data);
 
       case 1:
         return $this->createResultMatched(reset($contact_matches));
@@ -110,8 +110,23 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
         if ($contact_id) {
           return $this->createResultMatched($contact_id);
         } else {
-          return $this->createResultUnmatched();
+          return $this->createResultUnmatchedFixed($contact_data);
         }
     }
+  }
+
+  /**
+   * overrides createResultUnmatched() because in this case
+   * there are no other vital attributes for the creation
+   * of a contact present. We want to at least make sure
+   * the display_name is set.
+   */
+  protected function createResultUnmatchedFixed(&$contact_data) {
+    // set display_name so a contact _can_ be created
+    if (empty($contact_data['display_name'])) {
+      $contact_data['display_name'] = $contact_data[$this->attribute];
+    }
+
+    return $this->createResultUnmatched();
   }
 }

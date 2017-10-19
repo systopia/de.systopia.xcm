@@ -30,7 +30,7 @@ abstract class CRM_Xcm_MatchingRule {
    *                       other entries:
    *                         ...fee free to return whatever you think might be interesting
    */
-  abstract public function matchContact($contact_data, $params = NULL);
+  abstract public function matchContact(&$contact_data, $params = NULL);
 
 
   /**

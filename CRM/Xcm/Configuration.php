@@ -105,7 +105,6 @@ class CRM_Xcm_Configuration {
       }
     }
 
-    error_log(json_encode($data));
     // prefix
     if (isset($data['prefix_id']) && is_numeric($data['prefix_id'])) {
       try {
