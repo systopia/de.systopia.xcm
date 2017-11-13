@@ -137,25 +137,38 @@
 </div>
 
 <div>
-  <h3>{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}</h3>
+  <h3>{ts domain="de.systopia.xcm"}Difference Handling{/ts}</h3>
   <div class="crm-section">
-    <div class="label">{$form.diff_activity.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}", {literal}{"id":"id-diff-activity","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
-    <div class="content">{$form.diff_activity.html}</div>
+    <div class="label">{$form.diff_handler.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}", {literal}{"id":"id-diff-activity","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.diff_handler.html}</div>
     <div class="clear"></div>
-    <div id="diff_activity_details">
-      <div class="label">{$form.diff_activity_subject.label}</div>
-      <div class="content">{$form.diff_activity_subject.html}</div>
-      <div class="clear"></div>
-      <div class="label">{$form.diff_current_location_type.label}</div>
-      <div class="content">{$form.diff_current_location_type.html}</div>
-      <div class="clear"></div>
-      <div class="label">{$form.diff_old_location_type.label}</div>
-      <div class="content">{$form.diff_old_location_type.html}</div>
-      <div class="clear"></div>
-    </div>
   </div>
 
-  <div class="crm-section">
+  <div class="crm-section xcm-diff-common">
+    <div class="label">{$form.diff_activity.label}</div>
+    <div class="content">{$form.diff_activity.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-common">
+    <div class="label">{$form.diff_activity_subject.label}</div>
+    <div class="content">{$form.diff_activity_subject.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-diff-only">
+    <div class="label">{$form.diff_current_location_type.label}</div>
+    <div class="content">{$form.diff_current_location_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-diff-only">
+    <div class="label">{$form.diff_old_location_type.label}</div>
+    <div class="content">{$form.diff_old_location_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-diff-only"">
     <div class="label">{$form.diff_processing.label}</div>
     <div class="content">{$form.diff_processing.html}</div>
     <div class="clear"></div>
@@ -181,11 +194,6 @@ cj("#created_add_activity").change(function() {
 });
 xcm_show_or_hide("#created_add_activity", "#created_add_activity_details", 0);
 
-cj("#diff_activity").change(function() {
-  xcm_show_or_hide("#diff_activity", "#diff_activity_details", 500);
-});
-xcm_show_or_hide("#diff_activity", "#diff_activity_details", 0);
-
 cj("#duplicates_activity").change(function() {
   xcm_show_or_hide("#duplicates_activity", "#duplicates_activity_details", 500);
 });
@@ -199,5 +207,24 @@ function xcm_show_or_hide(value_selector, div_selector, delay) {
     cj(div_selector).hide(delay);
   }
 }
+
+/**
+ * Logic for the different DIFF handlers
+ */
+cj("#diff_handler").change(function() {
+  var value = cj("#diff_handler").val();
+  if (value == 'i3val') {
+    cj("div.xcm-diff-common").show();
+    cj("div.xcm-diff-diff-only").hide();
+  } else if (value == 'diff') {
+    cj("div.xcm-diff-common").show();
+    cj("div.xcm-diff-diff-only").show();
+  } else {
+    cj("div.xcm-diff-common").hide();
+    cj("div.xcm-diff-diff-only").hide();
+  }
+});
+cj("#diff_handler").change();
+
 </script>
 {/literal}

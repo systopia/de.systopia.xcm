@@ -185,8 +185,9 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // FILL/DIFF ACTIONS (require the current contact data):
+    $diff_handler = CRM_Xcm_Configuration::diffHandler();
     if (   !empty($options['fill_fields'])
-        || !empty($options['diff_activity'])
+        || ($diff_handler != 'none')
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
 
@@ -252,13 +253,19 @@ class CRM_Xcm_MatchingEngine {
         }
       }
 
-      // CREATE DIFF ACTIVITY
-      if (!empty($options['diff_activity'])) {
-        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+      // HANDLE DIFFERENCES
+      switch ($diff_handler) {
+        case 'diff':
+          $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          break;
+
+        case 'i3val':
+          $this->createI3ValActivity($current_contact_data, $submitted_contact_data);
+
+        default:
+          break;
       }
-
     }
-
   }
 
   protected function addContactToGroup($contact_id, $group_id) {
@@ -382,6 +389,24 @@ class CRM_Xcm_MatchingEngine {
     if (!empty($update_query)) {
       $update_query['id'] = $current_contact_data['id'];
       civicrm_api3('Contact', 'create', $update_query);
+    }
+  }
+
+  /**
+   * create I3Val diff activity
+   */
+  protected function createI3ValActivity($current_contact_data, $submitted_contact_data) {
+    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+
+    // compile udpate request
+    $submitted_contact_data['id'] = $current_contact_data['id'];
+    $submitted_contact_data['activity_subject'] = $options['diff_activity_subject'];
+
+    try {
+      $result = civicrm_api3('Contact', 'request_update', $submitted_contact_data);
+    } catch (Exception $e) {
+      // some problem with the creation
+      error_log("de.systopia.xcm: error when trying to create i3val update request: " . $e->getMessage());
     }
   }
 

@@ -75,12 +75,16 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
 
     // diff activity options
-    $activites = $this->getActivities();
-    $activites[0] = ts("Don't generate", array('domain' => 'de.systopia.xcm'));
+    $this->addElement('select',
+                      'diff_handler',
+                      ts('Process Differences', array('domain' => 'de.systopia.xcm')),
+                      $this->getDiffHandlers(),
+                      array('class' => 'crm-select2'));
+
     $this->addElement('select',
                       'diff_activity',
-                      ts('Generate Diff Activity', array('domain' => 'de.systopia.xcm')),
-                      $activites,
+                      ts('Activity Type', array('domain' => 'de.systopia.xcm')),
+                      $this->getActivities(FALSE),
                       array('class' => 'crm-select2'));
 
     $this->addElement('text',
@@ -100,7 +104,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       array(0 => ts('No', array('domain' => 'de.systopia.xcm')),
                             1 => ts('Yes (beta)',  array('domain' => 'de.systopia.xcm'))),
                       array('class' => 'crm-select2'));
-
 
     $this->addElement('select',
                       'diff_current_location_type',
@@ -210,6 +213,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
       'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
+      'diff_handler'               => CRM_Utils_Array::value('diff_handler', $values),
       'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
       'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
       'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
@@ -277,8 +281,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     return $types;
   }
 
-  protected function getActivities() {
-    $activity_list = array(0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')));
+  protected function getActivities($none_option = TRUE) {
+    $activity_list = array();
+    if ($none_option) {
+      $activity_list[0] = ts('None, thank you', array('domain' => 'de.systopia.xcm'));
+    }
 
     $activities = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_type', 'option.limit' => 9999));
     foreach ($activities['values'] as $activity) {
@@ -328,6 +335,21 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   /**
+   * Get the list of options for diff handlers
+   */
+  protected function getDiffHandlers() {
+    $diff_handlers = array();
+    $diff_handlers['none'] = ts("Don't do anything", array('domain' => 'de.systopia.xcm'));
+    $diff_handlers['diff'] = ts("Diff Activity", array('domain' => 'de.systopia.xcm'));
+
+    if (function_exists('i3val_civicrm_install')) {
+      $diff_handlers['i3val'] = ts("I3Val Handler", array('domain' => 'de.systopia.xcm'));
+    }
+
+    return $diff_handlers;
+  }
+
+  /**
    * get a list of custom fields eligible for submission.
    * those are all custom fields that belong to a contact in general
    */
@@ -372,7 +394,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'first_name'                     => ts("First Name"),
       'last_name'                      => ts("Last Name"),
       'middle_name'                    => ts("Middle Name"),
-      'display_name'                   => ts("Display Name"),
       'nick_name'                      => ts("Nick Name"),
       'legal_name'                     => ts("Legal Name"),
       'prefix_id'                      => ts("Prefix"),

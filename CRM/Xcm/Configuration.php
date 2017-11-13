@@ -170,6 +170,23 @@ class CRM_Xcm_Configuration {
   }
 
   /**
+   * Get the activity handler type
+   *
+   * @return 'i3val' (see be.aivl.i3val), 'diff' (simple activity) or 'none'
+   */
+  public static function diffHandler() {
+    $options = self::getOptions();
+    $handler = CRM_Utils_Array::value('diff_handler', $options);
+    if ($handler == 'i3val' && function_exists('i3val_civicrm_install')) {
+      return 'i3val';
+    } elseif ($handler == 'diff') {
+      return 'diff';
+    } else {
+      return 'none';
+    }
+  }
+
+  /**
    * See if the enhances (JS) diff processing is enabled
    */
   public static function diffProcessing() {
