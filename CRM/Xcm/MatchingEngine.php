@@ -186,8 +186,8 @@ class CRM_Xcm_MatchingEngine {
 
     // FILL/DIFF ACTIONS (require the current contact data):
     $diff_handler = CRM_Xcm_Configuration::diffHandler();
-    if (   !empty($options['fill_fields'])
-        || ($diff_handler != 'none')
+    if (   ($diff_handler != 'none')
+        || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
 
@@ -211,8 +211,7 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DETAILS
       if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
-          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']));
-          $current_contact_data[$entity] = $submitted_contact_data[$entity];
+          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
         }
       }
 
@@ -300,7 +299,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Add a certain entity detail (phone,email,website)
    */
-  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE) {
+  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE, &$data_update = NULL) {
     if (!empty($data[$entity])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
@@ -316,6 +315,8 @@ class CRM_Xcm_MatchingEngine {
         $attribute = 'url';
         $sorting = 'id desc';
       }
+
+
 
       // some value was submitted -> check if there is already an existing one
       $existing_entity = civicrm_api3($entity, 'get', array(
@@ -337,6 +338,11 @@ class CRM_Xcm_MatchingEngine {
 
         // create the deail
         civicrm_api3($entity, 'create', $create_detail_call);
+
+        // mark in update_data
+        if ($data_update && is_array($data_update)) {
+          $data_update[$attribute] = $data[$entity];
+        }
       }
     }
   }
