@@ -357,7 +357,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $custom_fields = array();
 
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
-      'extends'      => 'Contact',
+      'extends'      => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
       'is_active'    => 1,
       'option.limit' => 9999,
       'is_multiple'  => 0,
