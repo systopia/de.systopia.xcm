@@ -135,13 +135,17 @@ class CRM_Xcm_Configuration {
   /**
    * extract and return only the address data
    */
-  public static function extractAddressData($data) {
+  public static function extractAddressData($data, $copy_location_type = TRUE) {
     $fields = self::getAddressFields();
     $address_data = array();
     foreach ($fields as $field_name) {
       if (isset($data[$field_name])) {
         $address_data[$field_name] = $data[$field_name];
       }
+    }
+
+    if ($copy_location_type && isset($data['location_type_id'])) {
+      $address_data['location_type_id'] = $data['location_type_id'];
     }
     return $address_data;
   }

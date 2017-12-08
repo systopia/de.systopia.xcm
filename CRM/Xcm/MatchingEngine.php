@@ -244,7 +244,7 @@ class CRM_Xcm_MatchingEngine {
           } else {
             // address found -> add to current_contact_data for diff activity
             $existing_address = reset($addresses['values']);
-            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address);
+            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address, FALSE);
             foreach ($existing_address_data as $key => $value) {
               $current_contact_data[$key] = $value;
             }
