@@ -185,8 +185,9 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // FILL/DIFF ACTIONS (require the current contact data):
-    if (   !empty($options['fill_fields'])
-        || !empty($options['diff_activity'])
+    $diff_handler = CRM_Xcm_Configuration::diffHandler();
+    if (   ($diff_handler != 'none')
+        || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
 
@@ -210,8 +211,7 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DETAILS
       if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
-          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']));
-          $current_contact_data[$entity] = $submitted_contact_data[$entity];
+          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
         }
       }
 
@@ -244,7 +244,7 @@ class CRM_Xcm_MatchingEngine {
           } else {
             // address found -> add to current_contact_data for diff activity
             $existing_address = reset($addresses['values']);
-            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address);
+            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address, FALSE);
             foreach ($existing_address_data as $key => $value) {
               $current_contact_data[$key] = $value;
             }
@@ -252,13 +252,19 @@ class CRM_Xcm_MatchingEngine {
         }
       }
 
-      // CREATE DIFF ACTIVITY
-      if (!empty($options['diff_activity'])) {
-        $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+      // HANDLE DIFFERENCES
+      switch ($diff_handler) {
+        case 'diff':
+          $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          break;
+
+        case 'i3val':
+          $this->createI3ValActivity($current_contact_data, $submitted_contact_data);
+
+        default:
+          break;
       }
-
     }
-
   }
 
   protected function addContactToGroup($contact_id, $group_id) {
@@ -293,7 +299,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Add a certain entity detail (phone,email,website)
    */
-  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE) {
+  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE, &$data_update = NULL) {
     if (!empty($data[$entity])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
@@ -309,6 +315,8 @@ class CRM_Xcm_MatchingEngine {
         $attribute = 'url';
         $sorting = 'id desc';
       }
+
+
 
       // some value was submitted -> check if there is already an existing one
       $existing_entity = civicrm_api3($entity, 'get', array(
@@ -330,6 +338,11 @@ class CRM_Xcm_MatchingEngine {
 
         // create the deail
         civicrm_api3($entity, 'create', $create_detail_call);
+
+        // mark in update_data
+        if ($data_update && is_array($data_update)) {
+          $data_update[$attribute] = $data[$entity];
+        }
       }
     }
   }
@@ -382,6 +395,24 @@ class CRM_Xcm_MatchingEngine {
     if (!empty($update_query)) {
       $update_query['id'] = $current_contact_data['id'];
       civicrm_api3('Contact', 'create', $update_query);
+    }
+  }
+
+  /**
+   * create I3Val diff activity
+   */
+  protected function createI3ValActivity($current_contact_data, $submitted_contact_data) {
+    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+
+    // compile udpate request
+    $submitted_contact_data['id'] = $current_contact_data['id'];
+    $submitted_contact_data['activity_subject'] = $options['diff_activity_subject'];
+
+    try {
+      $result = civicrm_api3('Contact', 'request_update', $submitted_contact_data);
+    } catch (Exception $e) {
+      // some problem with the creation
+      error_log("de.systopia.xcm: error when trying to create i3val update request: " . $e->getMessage());
     }
   }
 

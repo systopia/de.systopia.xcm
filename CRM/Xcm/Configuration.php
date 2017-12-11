@@ -135,13 +135,17 @@ class CRM_Xcm_Configuration {
   /**
    * extract and return only the address data
    */
-  public static function extractAddressData($data) {
+  public static function extractAddressData($data, $copy_location_type = TRUE) {
     $fields = self::getAddressFields();
     $address_data = array();
     foreach ($fields as $field_name) {
       if (isset($data[$field_name])) {
         $address_data[$field_name] = $data[$field_name];
       }
+    }
+
+    if ($copy_location_type && isset($data['location_type_id'])) {
+      $address_data['location_type_id'] = $data['location_type_id'];
     }
     return $address_data;
   }
@@ -167,6 +171,23 @@ class CRM_Xcm_Configuration {
   public static function diffActivity() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('diff_activity', $options);
+  }
+
+  /**
+   * Get the activity handler type
+   *
+   * @return 'i3val' (see be.aivl.i3val), 'diff' (simple activity) or 'none'
+   */
+  public static function diffHandler() {
+    $options = self::getOptions();
+    $handler = CRM_Utils_Array::value('diff_handler', $options);
+    if ($handler == 'i3val' && function_exists('i3val_civicrm_install')) {
+      return 'i3val';
+    } elseif ($handler == 'diff') {
+      return 'diff';
+    } else {
+      return 'none';
+    }
   }
 
   /**
