@@ -442,7 +442,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // if there is one address attribute, add all (so the user can later compile a full address)
-    $address_parameters = array('street_address', 'country', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2');
+    $address_parameters = array('street_address', 'country_id', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2');
     if (array_intersect($address_parameters, $differing_attributes)) {
       foreach ($address_parameters as $attribute) {
         if (!in_array($attribute, $differing_attributes) && isset($contact[$attribute]) && isset($contact_data[$attribute])) {

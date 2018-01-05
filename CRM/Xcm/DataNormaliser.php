@@ -80,8 +80,16 @@ class CRM_Xcm_DataNormaliser {
   /**
    * Label data fields
    */
-  public static function labelData(&$data, $strip_ids = TRUE) {
-    // TODO
+  public static function labelData(&$data) {
+    $fieldtypes = self::getFieldTypes();
+    foreach ($fieldtypes as $fieldname => $fieldtype) {
+      if (!empty($data[$fieldname])) {
+        if (is_numeric($data[$fieldname])) {
+          // this is an ID:
+          $data[$fieldname] = self::lookupLabel($fieldname, $data[$fieldname], $fieldtype);
+        }
+      }
+    }
   }
 
 
@@ -107,7 +115,7 @@ class CRM_Xcm_DataNormaliser {
 
 
   /**
-   * Look up the ID for the given value in the give field
+   * Look up the ID for the given value in the given field
    * The result will be cached
    */
   public static function lookupID($fieldname, $value, $fieldtype) {
@@ -124,7 +132,8 @@ class CRM_Xcm_DataNormaliser {
     // ok, do the lookup
     $lookup_result = NULL;
     $query         = NULL;
-    $result_field  = 'id';
+    $id_field      = 'id';
+    $label_field   = 'name';
 
     switch ($fieldtype['type']) {
       case 'option_value':
@@ -134,21 +143,21 @@ class CRM_Xcm_DataNormaliser {
           'option.limit'    => 1,
           'return'          => 'value,label',
           'sequential'      => 1));
-        $result_field = 'value';
+        $id_field   = 'value';
+        $name_field = 'label';
         break;
 
       case 'country':
-        # resolve option value
         if (strlen($value) == 2) {
           $query = civicrm_api3('Country', 'get', array(
             'option.limit'    => 1,
             'iso_code'        => strtoupper($value),
-            'return'          => 'iso_code,id,name'));
+            'return'          => 'id,name'));
         } else {
           $query = civicrm_api3('Country', 'get', array(
             'option.limit'    => 1,
             'name'            => $value,
-            'return'          => 'iso_code,id,name'));
+            'return'          => 'id,name'));
         }
         break;
 
@@ -166,17 +175,83 @@ class CRM_Xcm_DataNormaliser {
 
     if ($query['count'] > 0) {
       $result = reset($query['values']);
-      $lookup_result = $result[$result_field];
+      $lookup_result = $result[$id_field];
 
       // cache result
       self::$_value2id[$fieldname][$value] = $lookup_result;
-      self::$_id2value[$fieldname][$lookup_result] = $value;
+      self::$_id2value[$fieldname][$lookup_result] = $result[$label_field];
     } else {
       self::$_value2id[$fieldname][$value] = 'NOT_FOUND';
     }
 
     return $lookup_result;
   }
+
+
+  /**
+   * Look up the label for the given ID value in the given field
+   * The result will be cached
+   */
+  public static function lookupLabel($fieldname, $id, $fieldtype) {
+    // check if the lookup has been cached
+    if (isset(self::$_id2value[$fieldname][$id])) {
+      $lookup_result = self::$_id2value[$fieldname][$id];
+      if ($lookup_result == 'NOT_FOUND') {
+        return NULL;
+      } else {
+        return $lookup_result;
+      }
+    }
+
+    // ok, do the lookup
+    $lookup_result = NULL;
+    $query         = NULL;
+    $result_field  = 'name';
+
+    switch ($fieldtype['type']) {
+      case 'option_value':
+        $query = civicrm_api3('OptionValue', 'get', array(
+          'option_group_id' => $fieldtype['option_group'],
+          'value'           => $id,
+          'option.limit'    => 1,
+          'return'          => 'value,label',
+          'sequential'      => 1));
+        $result_field = 'label';
+        break;
+
+      case 'country':
+        $query = civicrm_api3('Country', 'get', array(
+          'option.limit'    => 1,
+          'id'              => $id,
+          'return'          => 'name,id'));
+        break;
+
+      case 'location_type':
+        $query = civicrm_api3('LocationType', 'get', array(
+          'id'              => $id,
+          'option.limit'    => 1,
+          'return'          => 'name,id'));
+        break;
+
+      default:
+        # unknown type
+        return $id;
+    }
+
+    if ($query['count'] > 0) {
+      $result = reset($query['values']);
+      $lookup_result = $result[$result_field];
+
+      // cache result
+      self::$_id2value[$fieldname][$id] = $lookup_result;
+      self::$_value2id[$fieldname][$lookup_result] = $id;
+    } else {
+      self::$_id2value[$fieldname][$id] = 'NOT_FOUND';
+    }
+
+    return $lookup_result;
+  }
+
 
   /**
    * Get resolvable field types
