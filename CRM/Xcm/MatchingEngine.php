@@ -43,7 +43,9 @@ class CRM_Xcm_MatchingEngine {
     CRM_Xcm_Configuration::resolveCustomFields($contact_data);
 
     // also: do some sanitation and formatting
-    $this->sanitiseData($contact_data);
+    CRM_Xcm_DataNormaliser::normaliseFieldnames($contact_data);
+    CRM_Xcm_DataNormaliser::normaliseData($contact_data);
+    CRM_Xcm_DataNormaliser::resolveData($contact_data);
 
     // set defaults
     if (empty($contact_data['contact_type'])) {
@@ -200,7 +202,7 @@ class CRM_Xcm_MatchingEngine {
 
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
-      $this->sanitiseData($current_contact_data);
+      CRM_Xcm_DataNormaliser::normaliseData($current_contact_data);
 
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
@@ -425,8 +427,8 @@ class CRM_Xcm_MatchingEngine {
     $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
 
     // look up some id fields
-    CRM_Xcm_Configuration::resolveFieldValues($contact);
-    CRM_Xcm_Configuration::resolveFieldValues($contact_data);
+    CRM_Xcm_DataNormaliser::labelData($contact);
+    CRM_Xcm_DataNormaliser::labelData($contact_data);
 
     // create diff
     $differing_attributes = array();
