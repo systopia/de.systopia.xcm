@@ -94,45 +94,6 @@ class CRM_Xcm_Configuration {
   }
 
   /**
-   * resolve some identifiers in the values
-   */
-  public static function resolveFieldValues(&$data) {
-    // country
-    if (isset($data['country_id']) && is_numeric($data['country_id'])) {
-      $countries = CRM_Core_PseudoConstant::country(FALSE, FALSE);
-      if (isset($countries[$data['country_id']])) {
-        $data['country_id'] = $countries[$data['country_id']];
-      }
-    }
-
-    // prefix
-    if (isset($data['prefix_id']) && is_numeric($data['prefix_id'])) {
-      try {
-        $data['prefix_id'] = civicrm_api3('OptionValue', 'getvalue', array(
-          'return'          => 'label',
-          'value'           => $data['prefix_id'],
-          'option_group_id' => 'individual_prefix'
-        ));
-      } catch (Exception $e) {
-        // if not found, there's not much we can do
-      }
-    }
-
-    // suffix
-    if (isset($data['suffix_id']) && is_numeric($data['suffix_id'])) {
-      try {
-        $data['suffix_id'] = civicrm_api3('OptionValue', 'getvalue', array(
-          'return'          => 'label',
-          'value'           => $data['suffix_id'],
-          'option_group_id' => 'individual_suffix'
-        ));
-      } catch (Exception $e) {
-        // if not found, there's not much we can do
-      }
-    }
-  }
-
-  /**
    * extract and return only the address data
    */
   public static function extractAddressData($data, $copy_location_type = TRUE) {
