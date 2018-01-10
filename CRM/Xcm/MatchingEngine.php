@@ -240,7 +240,7 @@ class CRM_Xcm_MatchingEngine {
 
             // also add to 'submitted data' to avoid diff activity
             foreach ($address_data as $key => $value) {
-              $submitted_contact_data[$key] = $value;
+              $current_contact_data[$key] = $value;
             }
 
           } else {
