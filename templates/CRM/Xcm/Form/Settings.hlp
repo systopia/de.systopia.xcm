@@ -17,6 +17,10 @@
   <p>{ts domain="de.systopia.xcm"}However, this setting is also applied to the generation of a diff activity.{/ts}</p>
 {/htxt}
 
+{htxt id='id-fill-fields-multivalue'}
+  <p>{ts domain="de.systopia.xcm"}If a multi-value field is to be filled, should new values be added to the existing ones?{/ts}</p>
+{/htxt}
+
 {htxt id='id-fill-details'}
   <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the given contact detail, it will be added.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}Warning: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>

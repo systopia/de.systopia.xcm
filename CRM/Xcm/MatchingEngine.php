@@ -207,7 +207,7 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
         //  caution: will set the overwritten fields in $current_contact_data
-        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields']);
+        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields'], $options['fill_fields_multivalue']);
       }
 
       // FILL CURRENT CONTACT DETAILS
@@ -385,13 +385,23 @@ class CRM_Xcm_MatchingEngine {
    * Will fill (e.g. set if not set yet) the given fields in the database
    *  and update the $current_contact_data accordingly
    */
-  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields, $fill_multivalue) {
     $update_query = array();
     foreach ($fields as $key) {
-      if (    isset($submitted_contact_data[$key])
-           && (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='')) {
-        $update_query[$key] = $submitted_contact_data[$key];
-        $current_contact_data[$key] = $submitted_contact_data[$key];
+      if (isset($submitted_contact_data[$key])) {
+        // Fill field if empty.
+        if (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='') {
+          $update_query[$key] = $submitted_contact_data[$key];
+          $current_contact_data[$key] = $submitted_contact_data[$key];
+        }
+        // Fill multi-value field values.
+        elseif (
+          is_array($current_contact_data[$key]) // TODO: sufficient to check for is_array()?
+          && !empty($fill_multivalue)
+        ) {
+          $current_contact_data[$key] = array_unique(array_merge($current_contact_data[$key], $submitted_contact_data[$key]));
+          $update_query[$key] = $current_contact_data[$key];
+        }
       }
     }
     if (!empty($update_query)) {

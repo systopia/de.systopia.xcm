@@ -50,6 +50,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2 huge'));
 
+    $this->addElement('checkbox',
+      'fill_fields_multivalue',
+      ts('Fill multi-value field values', array('domain' => 'de.systopia.xcm')));
+
     $this->addElement('select',
                       'fill_details',
                       ts('Fill Details', array('domain' => 'de.systopia.xcm')),
@@ -207,6 +211,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // store options
     $options = array(
       'fill_address'               => CRM_Utils_Array::value('fill_address', $values),
+      'fill_fields_multivalue'     => CRM_Utils_Array::value('fill_fields_multivalue', $values),
       'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
       'fill_details_primary'       => CRM_Utils_Array::value('fill_details_primary', $values),
       'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
