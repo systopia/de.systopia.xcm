@@ -395,11 +395,44 @@ class CRM_Xcm_MatchingEngine {
           $current_contact_data[$key] = $submitted_contact_data[$key];
         }
         // Fill multi-value field values.
-        elseif (
-          is_array($current_contact_data[$key]) // TODO: sufficient to check for is_array()?
-          && !empty($fill_multivalue)
-        ) {
-          $current_contact_data[$key] = array_unique(array_merge($current_contact_data[$key], $submitted_contact_data[$key]));
+        elseif (!empty($fill_multivalue)) {
+          // Check whether the field is multi-value, statically cache results.
+          static $field_definitions = array();
+          if (empty($field_definitions[$key])) {
+            $field_definitions[$key] = civicrm_api3(
+              'Contact',
+              'getfield',
+              array(
+                'name' => $key,
+                'action' => 'getsingle',
+              )
+            );
+          }
+          // TODO: "is_multiple" refers to the field group being multiple?
+          // Use an assigned Option Group as indicator for being multi-value.
+          if (!isset($field_definitions[$key]['values']['pseudoconstant']['optionGroupName'])) {
+            continue;
+          }
+
+          // Ensure current and submitted field data being an array.
+          foreach (array(
+                     &$current_contact_data[$key],
+                     &$submitted_contact_data[$key],
+                   ) as &$value) {
+            if (!is_array($value)) {
+              if ($value === '' || $value === NULL) {
+                $value = array();
+              }
+              else {
+                $value = array($value);
+              }
+            }
+          }
+
+          $current_contact_data[$key] = array_unique(array_merge(
+            $current_contact_data[$key],
+            $submitted_contact_data[$key]
+          ));
           $update_query[$key] = $current_contact_data[$key];
         }
       }
