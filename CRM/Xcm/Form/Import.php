@@ -89,7 +89,12 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
       $uploadFile = $this->_submitFiles['uploadFile'];
     }
     else {
-      CRM_Core_Error::fatal('No file uploaded.');
+      CRM_Core_Session::setStatus(
+        E::ts('No file was uploaded.'),
+        E::ts('Import failure'),
+        'no-popup'
+      );
+      return;
     }
 
     // TODO: Make separator configurable.
@@ -100,10 +105,20 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
 
     $fd = fopen($file, 'r');
     if (!$fd) {
-      CRM_Core_Error::fatal("Could not read $filename.");
+      CRM_Core_Session::setStatus(
+        E::ts('Could not read import file %1.', array(1 => $filename)),
+        E::ts('Import failure'),
+        'no-popup'
+      );
+      return;
     }
     if (filesize($file) == 0) {
-      CRM_Core_Error::fatal("$filename is empty. Please upload a valid file.");
+      CRM_Core_Session::setStatus(
+        E::ts('Import file %1 is empty. Please upload a valid file.', array(1 => $filename)),
+        E::ts('Import failure'),
+        'no-popup'
+      );
+      return;
     }
 
     // Support tab character as separator.
@@ -124,7 +139,12 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
       $duplicateColName = TRUE;
     }
     if (in_array('', $columns) || $duplicateColName) {
-      CRM_Core_Error::fatal('Empty or duplicate column names.');
+      CRM_Core_Session::setStatus(
+        E::ts('Empty or duplicate column names.'),
+        E::ts('Import file format error'),
+        'no-popup'
+      );
+      return;
     }
 
     $errors = array();
