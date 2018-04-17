@@ -396,22 +396,39 @@ class CRM_Xcm_MatchingEngine {
         }
         // Fill multi-value field values.
         elseif (!empty($fill_multivalue)) {
-          // Check whether the field is multi-value, statically cache results.
-          static $field_definitions = array();
-          if (empty($field_definitions[$key])) {
-            $field_definitions[$key] = civicrm_api3(
-              'Contact',
-              'getfield',
-              array(
-                'name' => $key,
-                'action' => 'getsingle',
-              )
-            );
-          }
-          // TODO: "is_multiple" refers to the field group being multiple?
-          // Use an assigned Option Group as indicator for being multi-value.
-          if (!isset($field_definitions[$key]['values']['pseudoconstant']['optionGroupName'])) {
-            continue;
+          // Check for core field.
+          if (!in_array($key, array(
+            'preferred_communication_method',
+            // TODO: Add mulit-value core fields here.
+          ))) {
+            // Check for multi-value custom field.
+            if (strpos($key, 'custom_') === 0) {
+              $custom_field_id = explode('custom_', $key)[1];
+              // Check whether the field is multi-value, statically cache results.
+              static $custom_field_definitions = array();
+              if (empty($custom_field_definitions)) {
+                $custom_field_definitions = civicrm_api3(
+                  'CustomField',
+                  'get',
+                  array(
+                    'html_type' => array('IN' => array(
+                      'CheckBox',
+                      'Multi-Select',
+                      'Multi-Select State/Province',
+                      'Multi-Select Country',
+                      'AdvMulti-Select',
+                    )),
+                    'return' => array('name', 'html_type', 'option_group_id')
+                  )
+                );
+                if (!empty($custom_field_definitions['values'])) {
+                  $custom_field_definitions = $custom_field_definitions['values'];
+                }
+              }
+              if (!array_key_exists($custom_field_id, $custom_field_definitions)) {
+                continue;
+              }
+            }
           }
 
           // Ensure current and submitted field data being an array.
@@ -429,10 +446,24 @@ class CRM_Xcm_MatchingEngine {
             }
           }
 
-          $current_contact_data[$key] = array_unique(array_merge(
-            $current_contact_data[$key],
-            $submitted_contact_data[$key]
-          ));
+          // Retrieve field options for correct ordering.
+          static $field_options = array();
+          if (empty($field_options[$key])) {
+            $result = civicrm_api3('Contact', 'getfield', array(
+              'name' => $key,
+              'action' => 'getsingle',
+              'get_options' => 'get',
+            ));
+            $field_options[$key] = $result['values']['options'];
+          }
+          // Merge submitted with current data and sort by field options weight.
+          $current_contact_data[$key] = array_intersect(
+            array_keys($field_options[$key]),
+            array_unique(array_merge(
+              $submitted_contact_data[$key],
+              $current_contact_data[$key]
+            ))
+          );
           $update_query[$key] = $current_contact_data[$key];
         }
       }
