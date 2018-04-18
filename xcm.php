@@ -232,7 +232,7 @@ function xcm_civicrm_navigationMenu(&$menu) {
   );
   $menu_items = array();
   CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
-  _signatures_civix_insert_navigation_menu($menu, 'Contacts', array(
+  _xcm_civix_insert_navigation_menu($menu, 'Contacts', array(
     'label' => E::ts('Import contacts (XCM)', array('domain' => 'de.systopia.xcm')),
     'name' => 'Import contacts (XCM)',
     'url' => 'civicrm/import/contact/xcm',
