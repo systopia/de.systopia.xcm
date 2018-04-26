@@ -152,6 +152,15 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     $success_count = 0;
     while ($record = fgetcsv($fd, 0, $fieldSeparator)) {
       try {
+        // Separate multi-value field values with comma.
+        foreach ($record as $column => &$value) {
+          if (!empty($value) && CRM_Xcm_MatchingEngine::fieldIsMultivalue($firstrow[$column])) {
+            $value = array_map('trim', explode(',', $value));
+            if (count($value) == 1) {
+              $value = $value[0];
+            }
+          }
+        }
         $result = civicrm_api3('Contact', 'getorcreate', array_combine($firstrow, $record));
         if ($result['is_error']) {
           throw new Exception($result['error_message']);
