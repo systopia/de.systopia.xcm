@@ -507,11 +507,15 @@ class CRM_Xcm_MatchingEngine {
     // TODO: collapse double spaces?
 
     // trim values first
-    $original_value  = trim($original_value);
-    $submitted_value = trim($submitted_value);
+    if (is_string($original_value)) {
+      $original_value  = trim($original_value);
+    }
+    if (is_string($submitted_value)) {
+      $submitted_value = trim($submitted_value);
+    }
 
     // compare
-    if ($case_insensitive) {
+    if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
       return strtolower($original_value) != strtolower($submitted_value);
     } else {
       return $original_value != $submitted_value;
