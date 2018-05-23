@@ -16,7 +16,7 @@
 /*
  * Matches on (any) email and first_name
  */
-class CRM_Xcm_Matcher_EmailFullNameMatcher extends CRM_Xcm_Matcher_PhoneMatcher {
+class CRM_Xcm_Matcher_PhoneFullNameMatcher extends CRM_Xcm_Matcher_PhoneMatcher {
   function __construct() {
     parent::__construct(array('first_name', 'last_name', 'contact_type'));
   }
