@@ -51,9 +51,12 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
       }
     }
 
+    // strip non-numeric characters
+    $phone_numeric = preg_replace('#[^0-9]#', '', $contact_data['phone']);
+
     // find phones
     $phone_query = $this->restrictions;
-    $phone_query['phone'] = $contact_data['phone'];
+    $phone_query['phone_numeric'] = $phone_numeric;
     $phone_query['return'] = 'contact_id';
     $phone_query['option.limit'] = 0;
     $phones_found = civicrm_api3('Phone', 'get', $phone_query);

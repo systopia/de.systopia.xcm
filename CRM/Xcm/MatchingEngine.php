@@ -207,7 +207,7 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
         //  caution: will set the overwritten fields in $current_contact_data
-        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields']);
+        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields'], $options['fill_fields_multivalue']);
       }
 
       // FILL CURRENT CONTACT DETAILS
@@ -385,7 +385,7 @@ class CRM_Xcm_MatchingEngine {
    * Will fill (e.g. set if not set yet) the given fields in the database
    *  and update the $current_contact_data accordingly
    */
-  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields, $fill_multivalue) {
     $update_query = array();
     foreach ($fields as $key) {
       if (isset($submitted_contact_data[$key])) {
@@ -421,15 +421,33 @@ class CRM_Xcm_MatchingEngine {
             ));
             $field_options[$key] = $result['values']['options'];
           }
-          
-          // Merge submitted with current data and sort by field options weight.
-          $current_contact_data[$key] = array_intersect(
-            array_keys($field_options[$key]),
-            array_unique(array_merge(
-              $submitted_contact_data[$key],
-              $current_contact_data[$key]
-            ))
+          $current_field_options = $field_options[$key];
+
+          // Merge current and submitted field values.
+          $current_contact_data[$key] = array_merge(
+            $submitted_contact_data[$key],
+            $current_contact_data[$key]
           );
+
+          // Replace field item labels with their corresponding field values.
+          $current_contact_data[$key] = array_map(function($v) use ($current_field_options) {
+            if (array_key_exists($v, $current_field_options)) {
+              return $v;
+            }
+            elseif (in_array($v, $current_field_options)) {
+              return array_search($v, $current_field_options);
+            }
+            else {
+              return NULL;
+            }
+          }, $current_contact_data[$key]);
+
+          // Remove duplicate and disallowed field values.
+          $current_contact_data[$key] = array_intersect(
+            array_unique($current_contact_data[$key]),
+            array_keys($current_field_options)
+          );
+
           $update_query[$key] = $current_contact_data[$key];
         }
       }

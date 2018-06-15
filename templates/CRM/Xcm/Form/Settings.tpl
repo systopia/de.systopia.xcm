@@ -39,6 +39,12 @@
   </div>
 
   <div class="crm-section">
+    <div class="label">{$form.fill_fields_multivalue.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill multi-value field values{/ts}", {literal}{"id":"id-fill-fields-multivalue","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.fill_fields_multivalue.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
     <div class="label">{$form.fill_details.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.fill_details.html}</div>
     <div class="clear"></div>
