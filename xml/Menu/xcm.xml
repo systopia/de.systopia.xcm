@@ -9,4 +9,10 @@
     <adminGroup>CiviContribute</adminGroup>
     <icon>admin/duplicate_matching.png</icon>
   </item>
+  <item>
+    <path>civicrm/import/contact/xcm</path>
+    <page_callback>CRM_Xcm_Form_Import</page_callback>
+    <title>Import contacts (XCM)</title>
+    <access_arguments>import contacts</access_arguments>
+  </item>
 </menu>

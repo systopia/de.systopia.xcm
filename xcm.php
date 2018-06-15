@@ -14,6 +14,7 @@
 +--------------------------------------------------------*/
 
 require_once 'xcm.civix.php';
+use CRM_Xcm_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_config().
@@ -221,4 +222,28 @@ function xcm_civicrm_buildForm($formName, &$form) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_civicrm_navigationMenu().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ */
+function xcm_civicrm_navigationMenu(&$menu) {
+  $menu_item_search = array(
+    'name' => 'Import Contacts',
+  );
+  $menu_items = array();
+  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+  _xcm_civix_insert_navigation_menu($menu, 'Contacts', array(
+    'label' => E::ts('Import contacts (XCM)', array('domain' => 'de.systopia.xcm')),
+    'name' => 'Import contacts (XCM)',
+    'url' => 'civicrm/import/contact/xcm',
+    'permission' => 'import contacts',
+    'operator' => 'OR',
+    'separator' => 0,
+    // See https://github.com/civicrm/civicrm-core/pull/11772 for weight.
+    'weight' => $menu_items['weight'],
+  ));
+  _xcm_civix_navigationMenu($menu);
 }

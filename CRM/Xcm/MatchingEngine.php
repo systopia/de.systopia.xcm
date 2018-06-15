@@ -395,7 +395,7 @@ class CRM_Xcm_MatchingEngine {
           $current_contact_data[$key] = $submitted_contact_data[$key];
         }
         // Fill multi-value field values.
-        elseif (!empty($fill_multivalue) && $this->fieldIsMultivalue($key)) {
+        elseif (!empty($fill_multivalue) && self::fieldIsMultivalue($key)) {
           // Ensure current and submitted field data being an array.
           foreach (array(
                      &$current_contact_data[$key],
@@ -468,7 +468,7 @@ class CRM_Xcm_MatchingEngine {
    * @throws \CiviCRM_API3_Exception
    *   When an error occurred retrieving a custom field.
    */
-  protected function fieldIsMultivalue($key) {
+  public static function fieldIsMultivalue($key) {
     // Check for multi-value core field.
     if (in_array($key, array(
       'preferred_communication_method',
