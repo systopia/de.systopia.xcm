@@ -207,7 +207,7 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
         //  caution: will set the overwritten fields in $current_contact_data
-        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields']);
+        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields'], $options['fill_fields_multivalue']);
       }
 
       // FILL CURRENT CONTACT DETAILS
@@ -385,19 +385,128 @@ class CRM_Xcm_MatchingEngine {
    * Will fill (e.g. set if not set yet) the given fields in the database
    *  and update the $current_contact_data accordingly
    */
-  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+  protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields, $fill_multivalue) {
     $update_query = array();
     foreach ($fields as $key) {
-      if (    isset($submitted_contact_data[$key])
-           && (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='')) {
-        $update_query[$key] = $submitted_contact_data[$key];
-        $current_contact_data[$key] = $submitted_contact_data[$key];
+      if (isset($submitted_contact_data[$key])) {
+        // Fill field if empty.
+        if (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='') {
+          $update_query[$key] = $submitted_contact_data[$key];
+          $current_contact_data[$key] = $submitted_contact_data[$key];
+        }
+        // Fill multi-value field values.
+        elseif (!empty($fill_multivalue) && $this->fieldIsMultivalue($key)) {
+          // Ensure current and submitted field data being an array.
+          foreach (array(
+                     &$current_contact_data[$key],
+                     &$submitted_contact_data[$key],
+                   ) as &$value) {
+            if (!is_array($value)) {
+              if ($value === '' || $value === NULL) {
+                $value = array();
+              }
+              else {
+                $value = array($value);
+              }
+            }
+          }
+
+          // Retrieve field options for correct ordering.
+          static $field_options = array();
+          if (empty($field_options[$key])) {
+            $result = civicrm_api3('Contact', 'getfield', array(
+              'name' => $key,
+              'action' => 'getsingle',
+              'get_options' => 'get',
+            ));
+            $field_options[$key] = $result['values']['options'];
+          }
+          $current_field_options = $field_options[$key];
+
+          // Merge current and submitted field values.
+          $current_contact_data[$key] = array_merge(
+            $submitted_contact_data[$key],
+            $current_contact_data[$key]
+          );
+
+          // Replace field item labels with their corresponding field values.
+          $current_contact_data[$key] = array_map(function($v) use ($current_field_options) {
+            if (array_key_exists($v, $current_field_options)) {
+              return $v;
+            }
+            elseif (in_array($v, $current_field_options)) {
+              return array_search($v, $current_field_options);
+            }
+            else {
+              return NULL;
+            }
+          }, $current_contact_data[$key]);
+
+          // Remove duplicate and disallowed field values.
+          $current_contact_data[$key] = array_intersect(
+            array_unique($current_contact_data[$key]),
+            array_keys($current_field_options)
+          );
+
+          $update_query[$key] = $current_contact_data[$key];
+        }
       }
     }
     if (!empty($update_query)) {
       $update_query['id'] = $current_contact_data['id'];
       civicrm_api3('Contact', 'create', $update_query);
     }
+  }
+
+  /**
+   * @param $key
+   *   The field name to check for being multi-value.
+   *
+   * @return bool
+   *   Whether the given field accepts multiple values.
+   *
+   * @throws \CiviCRM_API3_Exception
+   *   When an error occurred retrieving a custom field.
+   */
+  protected function fieldIsMultivalue($key) {
+    // Check for multi-value core field.
+    if (in_array($key, array(
+      'preferred_communication_method',
+      // TODO: Add mulit-value core fields here.
+    ))) {
+      $is_multivalue = TRUE;
+    }
+
+    // Check for multi-value custom field.
+    if (strpos($key, 'custom_') === 0) {
+      $custom_field_id = explode('custom_', $key)[1];
+      // Check whether the field is multi-value, statically cache results.
+      static $custom_field_definitions = array();
+      if (empty($custom_field_definitions)) {
+        $custom_field_definitions = civicrm_api3(
+          'CustomField',
+          'get',
+          array(
+            'html_type' => array('IN' => array(
+              'CheckBox',
+              'Multi-Select',
+              'Multi-Select State/Province',
+              'Multi-Select Country',
+              'AdvMulti-Select',
+            )),
+            'return' => array('name', 'html_type', 'option_group_id')
+          )
+        );
+        if (!empty($custom_field_definitions['values'])) {
+          $custom_field_definitions = $custom_field_definitions['values'];
+        }
+      }
+      if (array_key_exists($custom_field_id, $custom_field_definitions)) {
+        $is_multivalue = TRUE;
+      }
+    }
+
+    return !empty($is_multivalue);
   }
 
   /**
