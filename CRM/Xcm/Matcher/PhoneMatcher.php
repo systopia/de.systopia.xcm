@@ -51,8 +51,21 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
       }
     }
 
-    // strip non-numeric characters
-    $phone_numeric = preg_replace('#[^0-9]#', '', $contact_data['phone']);
+    // use com.cividesk.normalize to normalize phone numbers prior to matching
+    // this is necessary if prefixing with +[country_code] is enabled, otherwise
+    // no incoming phone numbers without the prefix will match
+    if (method_exists('CRM_Utils_Normalize', 'normalize_phone')) {
+      // all we want is the normalized phone number, so make a copy first
+      $normalized_phone = $contact_data;
+      $normalized_phone['phone_type_id'] = 1; // use a dummy value
+      $normalizer = new CRM_Utils_Normalize();
+      $normalizer->normalize_phone($normalized_phone);
+      // strip non-numeric characters
+      $phone_numeric = preg_replace('#[^0-9]#', '', $normalized_phone['phone']);
+    } else {
+      // strip non-numeric characters
+      $phone_numeric = preg_replace('#[^0-9]#', '', $contact_data['phone']);
+    }
 
     // find phones
     $phone_query = $this->restrictions;
