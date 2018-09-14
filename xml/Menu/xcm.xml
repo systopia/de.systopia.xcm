@@ -6,7 +6,7 @@
     <title>Xtended Contact Matcher (XCM) Settings</title>
     <access_arguments>administer CiviCRM</access_arguments>
     <desc>Configure the settings of your Xtended Contact Matcher</desc>
-    <adminGroup>CiviContribute</adminGroup>
+    <adminGroup>System Settings</adminGroup>
     <icon>admin/duplicate_matching.png</icon>
   </item>
   <item>
