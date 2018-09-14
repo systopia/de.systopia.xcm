@@ -139,7 +139,11 @@ class CRM_Xcm_CustomData {
         $extends_list = array();
         foreach ($data['extends_entity_column_value'] as $activity_type) {
           if (!is_numeric($activity_type)) {
-            $activity_type = CRM_Core_OptionGroup::getValue('activity_type', $activity_type, 'name');
+            $activity_type = CRM_Core_PseudoConstant::getKey(
+              'CRM_Activity_BAO_Activity',
+              'activity_type_id',
+              $activity_type
+            );
           }
           if ($activity_type) {
             $extends_list[] = $activity_type;
