@@ -492,7 +492,6 @@ class CRM_Xcm_MatchingEngine {
               'Multi-Select',
               'Multi-Select State/Province',
               'Multi-Select Country',
-              'AdvMulti-Select',
             )),
             'return' => array('name', 'html_type', 'option_group_id')
           )
