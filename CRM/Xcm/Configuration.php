@@ -32,7 +32,11 @@ class CRM_Xcm_Configuration {
    * Get created activity status
    */
   public static function defaultActivityStatus() {
-    return (int) CRM_Core_OptionGroup::getValue('activity_status', 'Scheduled', 'name');
+    return CRM_Core_PseudoConstant::getKey(
+      'CRM_Activity_BAO_Activity',
+      'activity_status_id',
+      'Scheduled'
+    );
   }
 
   /**
@@ -193,7 +197,11 @@ class CRM_Xcm_Configuration {
     if (!empty($options['diff_phone_type'])) {
       return (int) $options['diff_phone_type'];
     } else {
-      return (int) CRM_Core_OptionGroup::getValue('phone_type', 'Phone', 'name');
+      return CRM_Core_PseudoConstant::getKey(
+        'CRM_Core_BAO_Phone',
+        'phone_type_id',
+        'Phone'
+      );
     }
   }
 
@@ -205,7 +213,11 @@ class CRM_Xcm_Configuration {
     if (!empty($options['diff_mobile_type'])) {
       return (int) $options['diff_mobile_type'];
     } else {
-      return (int) CRM_Core_OptionGroup::getValue('phone_type', 'Mobile', 'name');
+      return CRM_Core_PseudoConstant::getKey(
+        'CRM_Core_BAO_Phone',
+        'phone_type_id',
+        'Mobile'
+      );
     }
   }
 
