@@ -1,4 +1,4 @@
-#Introduction
+# Introduction
 
 Importing contacts using the CiviCRM API is a usual task with a usual problem:
 Duplicates. Each API action that wants to add or update contacts needs to look
