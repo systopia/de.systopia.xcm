@@ -18,20 +18,122 @@
  */
 class CRM_Xcm_Configuration {
 
+  /** stores the whole settings blob */
+  protected static $_all_profiles = NULL;
+
+  /** stores the whole settings blob */
+  protected $profile_name = NULL;
 
   /**
-   * returns a list of tag names to warn on if processing diffs
+   * Get the configuration object with the given name
+   *  If name is omitted, returns the default configuration
    *
-   * @return array
+   * @param null $profile_name
+   * @return CRM_Xcm_Configuration
    */
-  public static function getOptions() {
-    return CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+  public static function getConfigProfile($profile_name = NULL) {
+    return new CRM_Xcm_Configuration($profile_name);
+  }
+
+  /**
+   * Constructor. Every object merely consists of the name of
+   * the profile, the whole data blob is stored in a shared,
+   * static way.
+   *
+   * CRM_Xcm_Configuration constructor.
+   * @param null $profile_name
+   */
+  protected function __construct($profile_name = NULL) {
+    $all_profiles = self::getAllProfiles();
+
+    // find the profile
+    if (empty($profile_name)) {
+      // empty parameter means 'default'
+      foreach ($all_profiles as $name => $profile) {
+        if (!empty($profile['is_default'])) {
+          $profile_name = $name;
+        }
+      }
+
+      // if no profile found, take the first one
+      if (empty($profile_name)) {
+        $profile_name = reset(array_keys($all_profiles));
+        $this->setDefaultProfile($profile_name);
+      }
+    }
+    $this->profile_name = $profile_name;
+  }
+
+  /**
+   * Get the whole config blob
+   *
+   * @return array profile_name => profile data
+   */
+  protected static function getAllProfiles() {
+    if (self::$_all_profiles === NULL) {
+      self::$_all_profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+      if (!is_array(self::$_all_profiles) || empty(self::$_all_profiles)) {
+        self::$_all_profiles = array('default' => array());
+      }
+    }
+    return self::$_all_profiles;
+  }
+
+  /**
+   * Writes the all config profiles to the DB
+   */
+  public static function storeAllProfiles() {
+    if (is_array(self::$_all_profiles)) {
+      // TODO
+    }
+  }
+
+  /**
+   * Mark the default profile
+   *
+   * @param $profile_name
+   */
+  public static function setDefaultProfile($profile_name) {
+    foreach ()
+
+  }
+
+  /**
+   * Mark the default profile
+   *
+   * @param $profile_name
+   */
+  public function cloneProfile($new_profile_name) {
+
+  }
+
+  /**
+   * Mark the default profile
+   *
+   * @param $profile_name
+   */
+  public function deleteProfile($new_profile_name) {
+
+  }
+
+
+
+  public function getOptions() {
+
+  }
+
+  public function getRules() {
+
+  }
+
+  public function getPostProcessing() {
+
   }
 
   /**
    * Get created activity status
    */
-  public static function defaultActivityStatus() {
+  public function defaultActivityStatus() {
     return CRM_Core_PseudoConstant::getKey(
       'CRM_Activity_BAO_Activity',
       'activity_status_id',
@@ -44,14 +146,14 @@ class CRM_Xcm_Configuration {
    *
    * @return array
    */
-  public static function diffProcess_warnOnTags() {
+  public function diffProcess_warnOnTags() {
     return array();
   }
 
   /**
    * return all address fields
    */
-  public static function getAddressFields() {
+  public function getAddressFields() {
     return array(
       'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3',
       'street_address', 'city', 'country_id', 'state_province_id', 'postal_code',
@@ -61,7 +163,7 @@ class CRM_Xcm_Configuration {
   /**
    * Generate a list of field labels for the given diff
    */
-  public static function getFieldLabels($differing_attributes) {
+  public function getFieldLabels($differing_attributes) {
     $field_labels = array();
     $all_labels = self::getKnownFieldLabels();
     foreach ($differing_attributes as $field_name) {
@@ -77,7 +179,7 @@ class CRM_Xcm_Configuration {
   /**
    * return all field labels
    */
-  public static function getKnownFieldLabels() {
+  public function getKnownFieldLabels() {
     return array(
       'first_name'             => ts('First Name'),
       'last_name'              => ts('Last Name'),
@@ -100,7 +202,7 @@ class CRM_Xcm_Configuration {
   /**
    * extract and return only the address data
    */
-  public static function extractAddressData($data, $copy_location_type = TRUE) {
+  public function extractAddressData($data, $copy_location_type = TRUE) {
     $fields = self::getAddressFields();
     $address_data = array();
     foreach ($fields as $field_name) {
@@ -118,7 +220,7 @@ class CRM_Xcm_Configuration {
   /**
    * extract and return everything but the address data
    */
-  public static function stripAddressData($data) {
+  public function stripAddressData($data) {
     $fields = self::getAddressFields();
     $remaining_data = array();
     foreach ($data as $field_name => $value) {
@@ -133,7 +235,7 @@ class CRM_Xcm_Configuration {
    * Get the activity type ID used for the diff activity
    * If NULL|0|'' the generation is not enabled
    */
-  public static function diffActivity() {
+  public function diffActivity() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('diff_activity', $options);
   }
@@ -143,7 +245,7 @@ class CRM_Xcm_Configuration {
    *
    * @return 'i3val' (see be.aivl.i3val), 'diff' (simple activity) or 'none'
    */
-  public static function diffHandler() {
+  public function diffHandler() {
     $options = self::getOptions();
     $handler = CRM_Utils_Array::value('diff_handler', $options);
     if ($handler == 'i3val' && function_exists('i3val_civicrm_install')) {
@@ -158,7 +260,7 @@ class CRM_Xcm_Configuration {
   /**
    * See if the enhances (JS) diff processing is enabled
    */
-  public static function diffProcessing() {
+  public function diffProcessing() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('diff_processing', $options);
   }
@@ -166,7 +268,7 @@ class CRM_Xcm_Configuration {
   /**
    * Get default location type
    */
-  public static function defaultLocationType() {
+  public function defaultLocationType() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('default_location_type', $options);
   }
@@ -175,7 +277,7 @@ class CRM_Xcm_Configuration {
   /**
    * Get location type to be used for new addresses
    */
-  public static function currentLocationType() {
+  public function currentLocationType() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('diff_current_location_type', $options);
   }
@@ -184,7 +286,7 @@ class CRM_Xcm_Configuration {
    * Get location type to be used for addresses that are being
    * replaced by new ones
    */
-  public static function oldLocationType() {
+  public function oldLocationType() {
     $options = self::getOptions();
     return (int) CRM_Utils_Array::value('diff_old_location_type', $options);
   }
@@ -192,7 +294,7 @@ class CRM_Xcm_Configuration {
   /**
    * Get generic (landline) phone type
    */
-  public static function phoneType() {
+  public function phoneType() {
     $options = self::getOptions();
     if (!empty($options['diff_phone_type'])) {
       return (int) $options['diff_phone_type'];
@@ -208,7 +310,7 @@ class CRM_Xcm_Configuration {
   /**
    * Get mobile phone type
    */
-  public static function mobileType() {
+  public function mobileType() {
     $options = self::getOptions();
     if (!empty($options['diff_mobile_type'])) {
       return (int) $options['diff_mobile_type'];
@@ -232,7 +334,7 @@ class CRM_Xcm_Configuration {
    * internal function to replace "<custom_group_name>.<custom_field_name>"
    * in the data array with the custom_XX notation.
    */
-  public static function resolveCustomFields(&$data) {
+  public function resolveCustomFields(&$data) {
     // first: find out which ones to cache
     $customgroups_used = array();
     foreach ($data as $key => $value) {
@@ -262,7 +364,7 @@ class CRM_Xcm_Configuration {
   /**
   * Get CustomField entity (cached)
   */
-  public static function getCustomField($custom_group_name, $custom_field_name) {
+  public function getCustomField($custom_group_name, $custom_field_name) {
     self::cacheCustomGroups(array($custom_group_name));
 
     if (isset(self::$custom_group_cache[$custom_group_name][$custom_field_name])) {
@@ -275,7 +377,7 @@ class CRM_Xcm_Configuration {
   /**
   * Get CustomField entity (cached)
   */
-  public static function cacheCustomGroups($custom_group_names) {
+  public function cacheCustomGroups($custom_group_names) {
     foreach ($custom_group_names as $custom_group_name) {
       if (!isset(self::$custom_group_cache[$custom_group_name])) {
         // set to empty array to indicate our intentions
@@ -294,7 +396,7 @@ class CRM_Xcm_Configuration {
    * determine the current user ID
    * @see https://github.com/CiviCooP/org.civicoop.apiuidfix
    */
-  public static function getCurrentUserID($fallback_id = 2) {
+  public function getCurrentUserID($fallback_id = 2) {
     // try the session first
     $session = CRM_Core_Session::singleton();
     $userId = $session->get('userID');
