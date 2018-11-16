@@ -13,8 +13,8 @@
 +-------------------------------------------------------*}
 
 <div>{ts domain="de.systopia.xcm"}This is a list of the different XCM configurations. You might be perfectly fine with just the default configuration, but if you're using XCM in multiple contexts, different configuration profiles might come in handy.{/ts}</div>
+<br/>
 
-{* TODO: beautify *}
 <table>
     <thead>
         <tr>
@@ -32,11 +32,11 @@
             <td><code>{$profile.pid}</code></td>
             <td>{if $profile.is_default}{ts domain="de.systopia.xcm"}YES{/ts}{else}{ts domain="de.systopia.xcm"}NO{/ts}{/if}</td>
             <td>
-                <a href="{crmURL p="civicrm/admin/setting/xcm_profile" q="reset=1&pid=$pid"}">{ts domain="de.systopia.xcm"}edit{/ts}</a>
-                <a href="{crmURL p="civicrm/admin/setting/xcm_profile" q="reset=1&clone=$pid"}">{ts domain="de.systopia.xcm"}copy{/ts}</a>
+                <a class="action-item crm-hover-button no-popup" href="{crmURL p="civicrm/admin/setting/xcm_profile" q="reset=1&pid=$pid"}">{ts domain="de.systopia.xcm"}edit{/ts}</a>
+                <a class="action-item crm-hover-button no-popup" href="{crmURL p="civicrm/admin/setting/xcm_profile" q="reset=1&clone=$pid"}">{ts domain="de.systopia.xcm"}copy{/ts}</a>
                 {if !$profile.is_default}
-                    <a href="{crmURL p="civicrm/admin/setting/xcm" q="xaction=delete&pid=$pid"}">{ts domain="de.systopia.xcm"}delete{/ts}</a>
-                    <a href="{crmURL p="civicrm/admin/setting/xcm" q="xaction=setdefault&pid=$pid"}">{ts domain="de.systopia.xcm"}set default{/ts}</a>
+                    <a class="action-item crm-hover-button no-popup" href="{crmURL p="civicrm/admin/setting/xcm" q="xaction=delete&pid=$pid"}">{ts domain="de.systopia.xcm"}delete{/ts}</a>
+                    <a class="action-item crm-hover-button no-popup" href="{crmURL p="civicrm/admin/setting/xcm" q="xaction=setdefault&pid=$pid"}">{ts domain="de.systopia.xcm"}set default{/ts}</a>
                 {/if}
             </td>
         </tr>

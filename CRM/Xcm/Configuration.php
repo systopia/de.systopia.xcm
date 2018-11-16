@@ -319,24 +319,6 @@ class CRM_Xcm_Configuration {
   }
 
   /**
-   * returns a list of tag names to warn on if processing diffs
-   *
-   * @return array
-   */
-  public function diffProcess_warnOnTags() {
-    return array();
-  }
-
-  /**
-   * Get the activity type ID used for the diff activity
-   * If NULL|0|'' the generation is not enabled
-   */
-  public function diffActivity() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_activity', $options);
-  }
-
-  /**
    * Get the activity handler type
    *
    * @return string 'i3val' (see be.aivl.i3val), 'diff' (simple activity) or 'none'
@@ -352,14 +334,6 @@ class CRM_Xcm_Configuration {
     } else {
       return 'none';
     }
-  }
-
-  /**
-   * See if the enhances (JS) diff processing is enabled
-   */
-  public function diffProcessing() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_processing', $options);
   }
 
   /**
@@ -448,5 +422,129 @@ class CRM_Xcm_Configuration {
     }
 
     return $fallback_id;
+  }
+
+
+  /*******************************************************
+   **               DIFF HELPER                         **
+   ******************************************************/
+
+  /**
+   * Identify and return the profile that feels responsible
+   * for this diff activity
+   *
+   * @param $activity_type_id
+   * @param $status_id
+   *
+   * @return CRM_Xcm_Configuration|null
+   * @throws Exception
+   */
+  protected static function getProfileForDiffActivityHelper($activity_type_id, $status_id) {
+    $all_profiles = self::getProfileList();
+    // see if there is a matching config
+    foreach ($all_profiles as $profile_name => $profile_label) {
+      $config = CRM_Xcm_Configuration::getConfigProfile($profile_name);
+
+      $diff_enabled     = $config->diffProcessing();
+      $diff_activity_id = $config->diffActivity();
+      $diff_status_id   = $config->defaultActivityStatus();
+
+      if (   $diff_enabled
+          && $diff_activity_id == $activity_type_id
+          && $diff_status_id   == $status_id) {
+        // yes, this configuration matches!
+        return $config;
+      }
+    }
+
+    // if we get here, none of the configurations matched.
+    return NULL;
+  }
+
+  /**
+   *
+   * @param $form
+   * @param $activity_type_id
+   * @param $status_id
+   * @throws Exception
+   */
+  public static function injectDiffHelper(&$form, $activity_type_id, $status_id) {
+    try {
+      $profile = self::getProfileForDiffActivityHelper($activity_type_id, $status_id);
+      if (!$profile) return;
+
+      // WARN if contact is tagged with certain tags
+      $warnOnTags = CRM_Xcm_Configuration::diffProcess_warnOnTags();
+      if (!empty($warnOnTags)) {
+        $contact_id = $form->getVar('_currentlyViewedContactId');
+        if ($contact_id) {
+          $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
+          foreach ($warnOnTags as $tagName) {
+            if (in_array($tagName, $tags)) {
+              CRM_Core_Session::setStatus(
+                  E::ts("Warning! This contact is tagged '%1'.", array(1=>$tagName)),
+                  E::ts("Warning"), 'warning');
+            }
+          }
+        } else {
+          CRM_Core_Session::setStatus(
+              E::ts("Warning! The tags couldn't be read."),
+              E::ts("Warning"), 'error');
+        }
+      }
+
+      // build constants array for JS
+      $constants['targetActivityId']              = $form->getVar('_activityId');
+      $constants['location_type_current_address'] = $profile->currentLocationType();
+      $constants['location_type_old_address']     = $profile->oldLocationType();
+      $constants['phone_type_phone_value']        = $profile->phoneType();
+      $constants['phone_type_mobile_value']       = $profile->mobileType();
+
+      // add prefix_ids
+      $constants['prefix_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'prefix_id');
+      $constants['prefix_names'] = array_flip($constants['prefix_ids']);
+
+      // add gender_ids
+      $constants['gender_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
+      $constants['gender_names'] = array_flip($constants['gender_ids']);
+
+      // add countries
+      $constants['country_ids']   = CRM_Core_PseudoConstant::country(FALSE, FALSE);
+      $constants['country_names'] = array_flip($constants['country_ids']);
+
+      CRM_Core_Resources::singleton()->addVars('de.systopia.xcm', $constants);
+
+      CRM_Core_Region::instance('form-body')->add(array(
+          'script' => file_get_contents(__DIR__ . '/../../js/process_diff.js')
+      ));
+    } catch (Exception $ex) {
+      CRM_Core_Error::debug_log_message("DiffHelper injection failed: " . $ex->getMessage());
+    }
+  }
+
+  /**
+   * See if the enhances (JS) diff processing is enabled
+   */
+  public function diffProcessing() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('diff_processing', $options);
+  }
+
+  /**
+   * returns a list of tag names to warn on if processing diffs
+   *
+   * @return array
+   */
+  public static function diffProcess_warnOnTags() {
+    return array();
+  }
+
+  /**
+   * Get the activity type ID used for the diff activity
+   * If NULL|0|'' the generation is not enabled
+   */
+  public function diffActivity() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('diff_activity', $options);
   }
 }
