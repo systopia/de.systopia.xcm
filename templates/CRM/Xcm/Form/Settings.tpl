@@ -13,6 +13,20 @@
 +-------------------------------------------------------*}
 
 <div>
+  <h3>{ts domain="de.systopia.xcm"}XCM Matching Profile{/ts}</h3>
+  {$form.clone.label}
+  <div class="crm-section">
+    <div class="label">{$form.pid.label}</div>
+    <div class="content">{$form.pid.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.profile_label.label}</div>
+    <div class="content">{$form.profile_label.html}</div>
+    <div class="clear"></div>
+  </div>
+
   <h3>{ts domain="de.systopia.xcm"}General Options{/ts}</h3>
   <div class="crm-section">
     <div class="label">{$form.picker.label}</div>

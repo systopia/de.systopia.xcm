@@ -1,7 +1,7 @@
 <?php
 /*-------------------------------------------------------+
 | Extended Contact Matcher XCM                           |
-| Copyright (C) 2016 SYSTOPIA                            |
+| Copyright (C) 2016-2018 SYSTOPIA                       |
 | Author: B. Endres (endres@systopia.de)                 |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
@@ -12,6 +12,8 @@
 | copyright header is strictly prohibited without        |
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
+
+use CRM_Xcm_ExtensionUtil as E;
 
 /*
  * Configuration wrapper
@@ -38,6 +40,20 @@ class CRM_Xcm_Configuration {
   }
 
   /**
+   * Get a simple list of all current profiles
+   * @return array profile_name => profile_label
+   */
+  public static function getProfileList() {
+    $profile_list = array();
+    $all_profiles = self::getAllProfiles();
+    foreach ($all_profiles as $profile_name => $profile_data) {
+      $profile = CRM_Xcm_Configuration::getConfigProfile($profile_name);
+      $profile_list[$profile_name] = $profile->getLabel();
+    }
+    return $profile_list;
+  }
+
+  /**
    * Constructor. Every object merely consists of the name of
    * the profile, the whole data blob is stored in a shared,
    * static way.
@@ -48,7 +64,7 @@ class CRM_Xcm_Configuration {
    * @throws Exception
    */
   protected function __construct($profile_name = NULL) {
-    $all_profiles = self::getAllProfiles();
+    $all_profiles = &self::getAllProfiles();
 
     // find the profile
     if (empty($profile_name)) {
@@ -72,7 +88,7 @@ class CRM_Xcm_Configuration {
    * Get the complete configuration data
    */
   protected function &getConfiguration() {
-    $all_profiles = self::getAllProfiles();
+    $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$this->profile_name])) {
       return $all_profiles[$this->profile_name];
     } else {
@@ -111,7 +127,7 @@ class CRM_Xcm_Configuration {
    * @throws Exception if the profile given doesn't exist
    */
   public static function setDefaultProfile($default_profile_name) {
-    $all_profiles = self::getAllProfiles();
+    $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$default_profile_name])) {
       foreach ($all_profiles as $profile_name => &$profile) {
         if ($profile_name == $default_profile_name) {
@@ -132,7 +148,7 @@ class CRM_Xcm_Configuration {
    * @throws Exception if the profile given doesn't exist
    */
   public function cloneProfile($new_profile_name) {
-    $all_profiles = self::getAllProfiles();
+    $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$new_profile_name])) {
       throw new Exception("Profile '{$new_profile_name}' already exists!");
     }
@@ -146,7 +162,7 @@ class CRM_Xcm_Configuration {
    * Warning: do not use this object after deletion
    */
   public function deleteProfile() {
-    $all_profiles = self::getAllProfiles();
+    $all_profiles = &self::getAllProfiles();
     unset($all_profiles[$this->profile_name]);
   }
 
@@ -179,6 +195,32 @@ class CRM_Xcm_Configuration {
     } else {
       throw new Exception("ConfigGroup has to be an array.");
     }
+  }
+
+  /**
+   * Get the label/name of this profile
+   *
+   * @return string label
+   * @throws Exception
+   */
+  public function getLabel() {
+    $profile_data = $this->getConfiguration();
+    if (!empty($profile_data['label'])) {
+      return "{$profile_data['label']} ('{$this->profile_name}')";
+    } else {
+      return E::ts("Profile '%1'", [1 => $this->profile_name]);
+    }
+  }
+
+  /**
+   * Set this config profile's label
+   *
+   * @param $label string the new label
+   * @throws Exception
+   */
+  public function setLabel($label) {
+    $profile_data = $this->getConfiguration();
+    $profile_data['label'] = $label;
   }
 
   /**

@@ -39,7 +39,7 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
    * @return TRUE on success
    * @throws Exception
    */
-  public function upgrade_0150() {
+  public function upgrade_0151() {
     $this->ctx->log->info('Introducing configuration profiles.');
     $profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
     if ($profiles === NULL) {
@@ -62,6 +62,10 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
       CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'rules');
       CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'postprocessing');
     }
+
+    // also: rebuild menu
+    CRM_Core_Invoke::rebuildMenuAndCaches();
+
     return TRUE;
   }
 

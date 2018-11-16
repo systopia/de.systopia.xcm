@@ -1,7 +1,7 @@
 <?php
 /*-------------------------------------------------------+
 | Extended Contact Matcher XCM                           |
-| Copyright (C) 2016 SYSTOPIA                            |
+| Copyright (C) 2016-2018 SYSTOPIA                       |
 | Author: B. Endres (endres@systopia.de)                 |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
@@ -15,6 +15,7 @@
 
 require_once 'CRM/Core/Form.php';
 
+use CRM_Xcm_ExtensionUtil as E;
 
 define('XCM_MAX_RULE_COUNT', 9);
 
@@ -23,28 +24,60 @@ define('XCM_MAX_RULE_COUNT', 9);
  */
 class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
+  /** profile name */
+  protected $config = NULL;
+
   /**
    * build form
+   *
+   * @throws Exception
    */
   public function buildQuickForm() {
+    // load Profile stuff
+    $clone        = CRM_Utils_Request::retrieve('clone', 'String');
+    $profile_name = CRM_Utils_Request::retrieve('pid', 'String');
+    if ($clone) {
+      $this->config = CRM_Xcm_Configuration::getConfigProfile($clone);
+      $this->addElement('hidden', 'clone', $clone);
+    } else {
+      $this->config = CRM_Xcm_Configuration::getConfigProfile($profile_name);
+      $this->addElement('hidden', 'clone', '');
+    }
+
+    $this->addElement('text',
+        'pid',
+        E::ts('Profile ID'));
+    if ($clone) {
+      $this->setDefaults(['pid' => E::ts('new_profile_id')]);
+    } else {
+      $this->setDefaults(['pid' => $profile_name]);
+      $this->freeze(['pid']);
+    }
+
+    $this->addElement('text',
+        'profile_label',
+        E::ts('Profile Name'));
+    $this->setDefaults(['profile_label' => $this->config->getLabel()]);
+
+
     $locationTypes = $this->getLocationTypes();
 
     // add general options
     $this->addElement('select',
                       'picker',
-                      ts('Of multiple matches, pick:', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Of multiple matches, pick:'),
                       $this->getPickers(),
                       array('class' => 'crm-select2 huge'));
 
     $this->addElement('select',
                       'default_location_type',
-                      ts('Default Location Type', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Default Location Type'),
                       $locationTypes,
                       array('class' => 'crm-select2 huge'));
 
     $this->addElement('select',
                       'fill_fields',
-                      ts('Fill Fields', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Fill Fields'),
                       $this->getContactFields() + $this->getCustomFields(),
                       array(// 'style'    => 'width:450px; height:100%;',
                             'multiple' => 'multiple',
@@ -52,73 +85,73 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     $this->addElement('checkbox',
       'fill_fields_multivalue',
-      ts('Fill multi-value field values', array('domain' => 'de.systopia.xcm')));
+      E::ts('Fill multi-value field values'));
 
     $this->addElement('select',
                       'fill_details',
-                      ts('Fill Details', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Fill Details'),
                       array(
-                        'email'   => ts('Email', array('domain' => 'de.systopia.xcm')),
-                        'phone'   => ts('Phone', array('domain' => 'de.systopia.xcm')),
-                        'website' => ts('Website', array('domain' => 'de.systopia.xcm'))),
+                        'email'   => E::ts('Email'),
+                        'phone'   => E::ts('Phone'),
+                        'website' => E::ts('Website')),
                       array(// 'style'    => 'width:450px; height:100%;',
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2 huge'));
 
     $this->addElement('checkbox',
                       'fill_details_primary',
-                      ts('Make New Detail Primary', array('domain' => 'de.systopia.xcm')));
+                      E::ts('Make New Detail Primary'));
 
     $this->addElement('select',
                       'fill_address',
-                      ts('Fill Address', array('domain' => 'de.systopia.xcm')),
-                      array(0 => ts('Never', array('domain' => 'de.systopia.xcm')),
-                            1 => ts('If contact has no address', array('domain' => 'de.systopia.xcm')),
-                            2 => ts('If contact has no address of that type', array('domain' => 'de.systopia.xcm'))),
+                      E::ts('Fill Address'),
+                      array(0 => E::ts('Never'),
+                            1 => E::ts('If contact has no address'),
+                            2 => E::ts('If contact has no address of that type')),
                       array('class' => 'crm-select2 huge'));
 
 
     // diff activity options
     $this->addElement('select',
                       'diff_handler',
-                      ts('Process Differences', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Process Differences'),
                       $this->getDiffHandlers(),
                       array('class' => 'crm-select2'));
 
     $this->addElement('select',
                       'diff_activity',
-                      ts('Activity Type', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Activity Type'),
                       $this->getActivities(FALSE),
                       array('class' => 'crm-select2'));
 
     $this->addElement('text',
                       "diff_activity_subject",
-                      ts('Subject', array('domain' => 'de.systopia.xcm')));
+                      E::ts('Subject'));
 
     $this->addElement('select',
                       'case_insensitive',
-                      ts('Attribute Comparison', array('domain' => 'de.systopia.xcm')),
-                      array(0 => ts('case-sensitive',     array('domain' => 'de.systopia.xcm')),
-                            1 => ts('not case-sensitive', array('domain' => 'de.systopia.xcm'))),
+                      E::ts('Attribute Comparison'),
+                      array(0 => E::ts('case-sensitive',     array('domain' => 'de.systopia.xcm')),
+                            1 => E::ts('not case-sensitive')),
                       array('class' => 'crm-select2 huge'));
 
     $this->addElement('select',
                       'diff_processing',
-                      ts('Diff Processing Helper', array('domain' => 'de.systopia.xcm')),
-                      array(0 => ts('No', array('domain' => 'de.systopia.xcm')),
-                            1 => ts('Yes (beta)',  array('domain' => 'de.systopia.xcm'))),
+                      E::ts('Diff Processing Helper'),
+                      array(0 => E::ts('No'),
+                            1 => E::ts('Yes (beta)',  array('domain' => 'de.systopia.xcm'))),
                       array('class' => 'crm-select2'));
 
     $this->addElement('select',
                       'diff_current_location_type',
-                      ts('Location Type', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Location Type'),
                       $locationTypes,
                       array('class' => 'crm-select2'));
 
     $this->addElement('select',
                       'diff_old_location_type',
-                      ts('Bump old address to type', array('domain' => 'de.systopia.xcm')),
-                      array('0' => ts("Don't do that", array('domain' => 'de.systopia.xcm'))) + $locationTypes,
+                      E::ts('Bump old address to type'),
+                      array('0' => E::ts("Don't do that")) + $locationTypes,
                       array('class' => 'crm-select2'));
 
 
@@ -126,7 +159,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     for ($i=1; $i <= XCM_MAX_RULE_COUNT; $i++) {
       $this->addElement('select',
                         "rule_$i",
-                        ts('Matching Rule #%1', array(1 => $i, 'domain' => 'de.systopia.xcm')),
+                        E::ts('Matching Rule #%1', array(1 => $i, 'domain' => 'de.systopia.xcm')),
                         $this->getRuleOptions($i),
                         array('class' => 'crm-select2', 'style' => 'width: 400px'));
     }
@@ -135,29 +168,29 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     foreach (array('matched', 'created') as $mode) {
       $this->addElement('select',
                         "{$mode}_add_group",
-                        ts('Add to group', array('domain' => 'de.systopia.xcm')),
+                        E::ts('Add to group'),
                         $this->getGroups(),
                         array('class' => 'crm-select2'));
 
       $this->addElement('select',
                         "{$mode}_add_tag",
-                        ts('Add to tag', array('domain' => 'de.systopia.xcm')),
+                        E::ts('Add to tag'),
                         $this->getTags(),
                         array('class' => 'crm-select2'));
 
       $this->addElement('select',
                         "{$mode}_add_activity",
-                        ts('Add activity', array('domain' => 'de.systopia.xcm')),
+                        E::ts('Add activity'),
                         $this->getActivities(),
                         array('class' => 'crm-select2'));
 
       $this->addElement('text',
                         "{$mode}_add_activity_subject",
-                        ts('Subject', array('domain' => 'de.systopia.xcm')));
+                        E::ts('Subject'));
 
       $this->addElement('select',
                         "{$mode}_add_activity_template",
-                        ts('Template', array('domain' => 'de.systopia.xcm')),
+                        E::ts('Template'),
                         $this->getTemplates(),
                         array('class' => 'crm-select2'));
     }
@@ -165,18 +198,18 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // generate duplicate activity
     $this->addElement('select',
                       'duplicates_activity',
-                      ts('Generate Duplicates Activity', array('domain' => 'de.systopia.xcm')),
+                      E::ts('Generate Duplicates Activity'),
                       $this->getActivities(),
                       array('class' => 'crm-select2'));
 
     $this->addElement('text',
                       'duplicates_subject',
-                      ts('Activity Subject', array('domain' => 'de.systopia.xcm')));
+                      E::ts('Activity Subject'));
 
     $this->addButtons(array(
       array(
         'type' => 'submit',
-        'name' => ts('Save', array('domain' => 'de.systopia.xcm')),
+        'name' => E::ts('Save'),
         'isDefault' => TRUE,
       ),
     ));
@@ -193,9 +226,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * @return array
    */
   public function setDefaultValues() {
-    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
-    $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
-    $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+    $options        = $this->config->getOptions();
+    $rules          = $this->config->getRules();
+    $postprocessing = $this->config->getPostprocessing();
 
     if ($options==NULL)        $options = array();
     if ($rules==NULL)          $rules = array();
@@ -204,9 +237,34 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     return $options + $rules + $postprocessing;
   }
 
+  /**
+   * Field validation
+   *
+   * @return bool
+   */
+  public function validate() {
+    $values = $this->exportValues();
+
+    if (empty($values['pid']) || !preg_match("#^[0-9a-zA-Z_-]+$#", $values['pid'])) {
+      $this->_errors['pid'] = E::ts("A profile ID cannot contain whitespaces or special characters");
+    }
+
+    parent::validate();
+    return (0 == count($this->_errors));
+  }
 
   public function postProcess() {
     $values = $this->exportValues();
+
+    // check if this is to be stored as a copy!
+    if (!empty($values['clone'])) {
+      $new_profile_id = $values['pid'];
+      $this->config->cloneProfile($new_profile_id);
+      $this->config = CRM_Xcm_Configuration::getConfigProfile($new_profile_id);
+    }
+
+    // store label
+    $this->config->setLabel($values['profile_label']);
 
     // store options
     $options = array(
@@ -227,14 +285,14 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
       'case_insensitive'           => CRM_Utils_Array::value('case_insensitive', $values),
       );
-    CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
+    $this->config->setOptions($options);
 
     // store the rules
     $rules = array();
     for ($i=1; isset($values["rule_$i"]); $i++) {
       $rules["rule_$i"] = $values["rule_$i"];
     }
-    CRM_Core_BAO_Setting::setItem($rules, 'de.systopia.xcm', 'rules');
+    $this->config->setRules($rules);
 
     // store the postprocessing
     $postprocessing = array();
@@ -244,7 +302,10 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
         $postprocessing[$key] = CRM_Utils_Array::value($key, $values);
       }
     }
-    CRM_Core_BAO_Setting::setItem($postprocessing, 'de.systopia.xcm', 'postprocessing');
+    $this->config->setPostprocessing($postprocessing);
+
+    // save options
+    $this->config->store();
 
     parent::postProcess();
   }
@@ -258,7 +319,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getRuleOptions($i) {
     // compile list
     if ($i > 1) {
-      $none_option = array(0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')));
+      $none_option = array(0 => E::ts('None, thank you'));
     } else {
       $none_option = array();
     }
@@ -289,7 +350,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getActivities($none_option = TRUE) {
     $activity_list = array();
     if ($none_option) {
-      $activity_list[0] = ts('None, thank you', array('domain' => 'de.systopia.xcm'));
+      $activity_list[0] = E::ts('None, thank you');
     }
 
     $activities = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_type', 'option.limit' => 9999));
@@ -301,7 +362,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getTags() {
-    $tag_list = array(0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')));
+    $tag_list = array(0 => E::ts('None, thank you'));
 
     $tags = civicrm_api3('Tag', 'get', array('is_active' => 1, 'option.limit' => 9999));
     foreach ($tags['values'] as $tag) {
@@ -311,7 +372,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getTemplates() {
-    $template_list = array(0 => ts('No content', array('domain' => 'de.systopia.xcm')));
+    $template_list = array(0 => E::ts('No content'));
 
     $templates = civicrm_api3('MessageTemplate', 'get', array('is_active' => 1, 'is_reserved' => 0, 'option.limit' => 9999));
     foreach ($templates['values'] as $template) {
@@ -321,7 +382,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getGroups() {
-    $group_list = array(0 => ts('None, thank you', array('domain' => 'de.systopia.xcm')));
+    $group_list = array(0 => E::ts('None, thank you'));
 
     $groups = civicrm_api3('Group', 'get', array('is_active' => 1, 'option.limit' => 9999));
     foreach ($groups['values'] as $group) {
@@ -333,9 +394,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
   protected function getPickers() {
     return array(
-      'min'  => ts('the oldest contact', array('domain' => 'de.systopia.xcm')),
-      'max'  => ts('the newest contact', array('domain' => 'de.systopia.xcm')),
-      'none' => ts('none (create new contact)', array('domain' => 'de.systopia.xcm')),
+      'min'  => E::ts('the oldest contact'),
+      'max'  => E::ts('the newest contact'),
+      'none' => E::ts('none (create new contact)'),
       );
   }
 
@@ -344,11 +405,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   protected function getDiffHandlers() {
     $diff_handlers = array();
-    $diff_handlers['none'] = ts("Don't do anything", array('domain' => 'de.systopia.xcm'));
-    $diff_handlers['diff'] = ts("Diff Activity", array('domain' => 'de.systopia.xcm'));
+    $diff_handlers['none'] = E::ts("Don't do anything");
+    $diff_handlers['diff'] = E::ts("Diff Activity");
 
     if (function_exists('i3val_civicrm_install')) {
-      $diff_handlers['i3val'] = ts("I3Val Handler", array('domain' => 'de.systopia.xcm'));
+      $diff_handlers['i3val'] = E::ts("I3Val Handler");
     }
 
     return $diff_handlers;
@@ -393,29 +454,29 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   protected function getContactFields() {
     return array(
-      'display_name'                   => ts("Display Name"),
-      'household_name'                 => ts("Household Name"),
-      'organization_name'              => ts("Organization Name"),
-      'first_name'                     => ts("First Name"),
-      'last_name'                      => ts("Last Name"),
-      'middle_name'                    => ts("Middle Name"),
-      'nick_name'                      => ts("Nick Name"),
-      'legal_name'                     => ts("Legal Name"),
-      'prefix_id'                      => ts("Prefix"),
-      'suffix_id'                      => ts("Suffix"),
-      'birth_date'                     => ts("Birth Date"),
-      'gender_id'                      => ts("Gender"),
-      'formal_title'                   => ts("Formal Title"),
-      'job_title'                      => ts("Job Title"),
-      'do_not_email'                   => ts("Do not Email"),
-      'do_not_phone'                   => ts("Do not Phone"),
-      'do_not_sms'                     => ts("Do not SMS"),
-      'do_not_trade'                   => ts("Do not Trade"),
-      'is_opt_out'                     => ts("Opt-Out"),
-      'preferred_language'             => ts("Preferred Language"),
-      'preferred_communication_method' => ts("Preferred Communication Method"),
-      'legal_identifier'               => ts("Legal Identifier"),
-      'external_identifier'            => ts("External Identifier"),
+      'display_name'                   => E::ts("Display Name"),
+      'household_name'                 => E::ts("Household Name"),
+      'organization_name'              => E::ts("Organization Name"),
+      'first_name'                     => E::ts("First Name"),
+      'last_name'                      => E::ts("Last Name"),
+      'middle_name'                    => E::ts("Middle Name"),
+      'nick_name'                      => E::ts("Nick Name"),
+      'legal_name'                     => E::ts("Legal Name"),
+      'prefix_id'                      => E::ts("Prefix"),
+      'suffix_id'                      => E::ts("Suffix"),
+      'birth_date'                     => E::ts("Birth Date"),
+      'gender_id'                      => E::ts("Gender"),
+      'formal_title'                   => E::ts("Formal Title"),
+      'job_title'                      => E::ts("Job Title"),
+      'do_not_email'                   => E::ts("Do not Email"),
+      'do_not_phone'                   => E::ts("Do not Phone"),
+      'do_not_sms'                     => E::ts("Do not SMS"),
+      'do_not_trade'                   => E::ts("Do not Trade"),
+      'is_opt_out'                     => E::ts("Opt-Out"),
+      'preferred_language'             => E::ts("Preferred Language"),
+      'preferred_communication_method' => E::ts("Preferred Communication Method"),
+      'legal_identifier'               => E::ts("Legal Identifier"),
+      'external_identifier'            => E::ts("External Identifier"),
     );
   }
 }
