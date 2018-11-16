@@ -21,7 +21,8 @@
  * @return api3 reply with contact_id  or  ERROR
  */
 function civicrm_api3_contact_getorcreate($params) {
-  $engine = CRM_Xcm_MatchingEngine::getSingleton();
+  $profile = CRM_Utils_Array::value('xcm_profile', $params, NULL);
+  $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->getOrCreateContact($params);
 
   if (empty($result['contact_id'])) {
@@ -39,6 +40,7 @@ function civicrm_api3_contact_getorcreate($params) {
  * @todo implement properly
  */
 function _civicrm_api3_contact_getorcreate_spec(&$params) {
+
   // $params['contact_type']['api.required'] = 1;
 }
 
