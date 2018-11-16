@@ -139,6 +139,7 @@ class CRM_Xcm_Configuration {
     } else {
       throw new Exception("Profile '{$default_profile_name}' unknown!");
     }
+    self::storeAllProfiles();
   }
 
   /**
@@ -154,7 +155,9 @@ class CRM_Xcm_Configuration {
     }
 
     // simply store a copy of the data
-    $all_profiles[$new_profile_name] = (array) $this->getConfiguration();
+    $new_configuration = (array) $this->getConfiguration();
+    $new_configuration['is_default'] = 0;
+    $all_profiles[$new_profile_name] = $new_configuration;
   }
 
   /**
@@ -189,13 +192,25 @@ class CRM_Xcm_Configuration {
    * @throws Exception
    */
   protected function setConfigGroup($setting_name, $settings) {
-    $config = $this->getConfiguration();
+    $config = &$this->getConfiguration();
     if (is_array($settings)) {
       $config[$setting_name] = $settings;
     } else {
       throw new Exception("ConfigGroup has to be an array.");
     }
   }
+
+  /**
+   * See if this is the default profile
+   *
+   * @return int 1 if is default
+   * @throws Exception
+   */
+  public function isDefault() {
+    $profile_data = $this->getConfiguration();
+    return CRM_Utils_Array::value('is_default', $profile_data, '0');return $value;
+  }
+
 
   /**
    * Get the label/name of this profile
@@ -206,7 +221,7 @@ class CRM_Xcm_Configuration {
   public function getLabel() {
     $profile_data = $this->getConfiguration();
     if (!empty($profile_data['label'])) {
-      return "{$profile_data['label']} ('{$this->profile_name}')";
+      return $profile_data['label'];
     } else {
       return E::ts("Profile '%1'", [1 => $this->profile_name]);
     }
@@ -219,7 +234,7 @@ class CRM_Xcm_Configuration {
    * @throws Exception
    */
   public function setLabel($label) {
-    $profile_data = $this->getConfiguration();
+    $profile_data = &$this->getConfiguration();
     $profile_data['label'] = $label;
   }
 

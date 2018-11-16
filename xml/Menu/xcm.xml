@@ -3,7 +3,7 @@
   <item>
     <path>civicrm/admin/setting/xcm</path>
     <page_callback>CRM_Xcm_Page_Profiles</page_callback>
-    <title>XCM Matching Profiles</title>
+    <title>Xtended Contact Matcher (XCM) Configuration</title>
     <access_arguments>access CiviCRM</access_arguments>
     <desc>Configure your Xtended Contact Matcher (XCM)</desc>
     <adminGroup>System Settings</adminGroup>

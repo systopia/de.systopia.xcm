@@ -56,8 +56,14 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     $this->addElement('text',
         'profile_label',
-        E::ts('Profile Name'));
-    $this->setDefaults(['profile_label' => $this->config->getLabel()]);
+        E::ts('Profile Name'),
+        ['class' => 'huge'],
+        FALSE);
+    if ($clone) {
+      $this->setDefaults(['profile_label' => E::ts("Copy of ") . $this->config->getLabel()]);
+    } else {
+      $this->setDefaults(['profile_label' => $this->config->getLabel()]);
+    }
 
 
     $locationTypes = $this->getLocationTypes();
@@ -249,6 +255,14 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       $this->_errors['pid'] = E::ts("A profile ID cannot contain whitespaces or special characters");
     }
 
+    if (!empty($values['clone'])) {
+      // make sure the pid doesn't exist
+      $list = CRM_Xcm_Configuration::getProfileList();
+      if (isset($list[$values['pid']])) {
+        $this->_errors['pid'] = E::ts("This profile ID is already in use");
+      }
+    }
+
     parent::validate();
     return (0 == count($this->_errors));
   }
@@ -308,6 +322,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->config->store();
 
     parent::postProcess();
+    CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/admin/setting/xcm'));
   }
 
 
