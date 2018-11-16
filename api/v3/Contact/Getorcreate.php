@@ -18,7 +18,8 @@
  *
  * @param $params any kind of contact related information: base data, address data, phone data, email, etc.
  *        Nb. One of first_name, last_name, email, display_name is mandatory.
- * @return api3 reply with contact_id  or  ERROR
+ * @return array api3 reply with contact_id  or  ERROR
+ * @throws Exception
  */
 function civicrm_api3_contact_getorcreate($params) {
   $profile = CRM_Utils_Array::value('xcm_profile', $params, NULL);
@@ -36,11 +37,19 @@ function civicrm_api3_contact_getorcreate($params) {
 
 /**
  * API3 action specs
- *
- * @todo implement properly
  */
 function _civicrm_api3_contact_getorcreate_spec(&$params) {
-
-  // $params['contact_type']['api.required'] = 1;
+  $params['contact_type'] = array(
+      'name'         => 'contact_type',
+      'api.required' => 1,
+      'type'         => CRM_Utils_Type::T_STRING,
+      'title'        => 'Contact Type',
+  );
+  $params['xcm_profile'] = array(
+      'name'         => 'xcm_profile',
+      'api.required' => 0,
+      'type'         => CRM_Utils_Type::T_STRING,
+      'title'        => 'Which profile should be used for matching?',
+  );
 }
 

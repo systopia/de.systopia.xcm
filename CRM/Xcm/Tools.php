@@ -173,33 +173,4 @@ class CRM_Xcm_Tools {
     }
   }
 
-  /**
-   * determine the current user ID
-   * @see https://github.com/CiviCooP/org.civicoop.apiuidfix
-   */
-  public function getCurrentUserID($fallback_id = 2) {
-    // try the session first
-    $session = CRM_Core_Session::singleton();
-    $userId = $session->get('userID');
-    if (!empty($userId)) {
-      return $userId;
-    }
-
-    // check via API key, i.e. when coming through REST-API
-    $api_key = CRM_Utils_Request::retrieve('api_key', 'String', $store, FALSE, NULL, 'REQUEST');
-    if (!$api_key || strtolower($api_key) == 'null') {
-      return $fallback_id; // nothing we can do
-    }
-
-    // load user via API KEU
-    $valid_user = CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $api_key, 'id', 'api_key');
-
-    // If we didn't find a valid user, die
-    if (!empty($valid_user)) {
-      //now set the UID into the session
-      return $valid_user;
-    }
-
-    return $fallback_id;
-  }
 }

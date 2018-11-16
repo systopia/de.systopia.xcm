@@ -55,7 +55,7 @@ class CRM_Xcm_MatchingEngine {
    */
   public function getOrCreateContact(&$contact_data) {
     // first: resolve custom fields to custom_xx notation
-    CRM_Xcm_Configuration::resolveCustomFields($contact_data);
+    CRM_Xcm_Tools::resolveCustomFields($contact_data);
 
     // also: do some sanitation and formatting
     CRM_Xcm_DataNormaliser::normaliseFieldnames($contact_data);
@@ -111,10 +111,10 @@ class CRM_Xcm_MatchingEngine {
 
     // create contact
     $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
-    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Configuration::stripAddressData($contact_data));
+    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Tools::stripAddressData($contact_data));
 
     // create address separately (see https://github.com/systopia/de.systopia.xcm/issues/6)
-    $address_data = CRM_Xcm_Configuration::extractAddressData($contact_data);
+    $address_data = CRM_Xcm_Tools::extractAddressData($contact_data);
     if (!empty($address_data)) {
       $address_data['contact_id'] = $new_contact['id'];
       if (empty($address_data['location_type_id'])) {
@@ -238,7 +238,7 @@ class CRM_Xcm_MatchingEngine {
 
       // FILL CURRENT CONTACT ADDRESS
       if (!empty($options['fill_address'])) {
-        $address_data = CRM_Xcm_Configuration::extractAddressData($submitted_contact_data);
+        $address_data = CRM_Xcm_Tools::extractAddressData($submitted_contact_data);
         if (!empty($address_data)) {
           $address_data['location_type_id'] = $location_type_id;
 
@@ -265,7 +265,7 @@ class CRM_Xcm_MatchingEngine {
           } else {
             // address found -> add to current_contact_data for diff activity
             $existing_address = reset($addresses['values']);
-            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address, FALSE);
+            $existing_address_data = CRM_Xcm_Tools::extractAddressData($existing_address, FALSE);
             foreach ($existing_address_data as $key => $value) {
               $current_contact_data[$key] = $value;
             }
@@ -591,7 +591,7 @@ class CRM_Xcm_MatchingEngine {
       $location_type_name = civicrm_api3('LocationType', 'getvalue', array(
           'return' => 'display_name',
           'id'     => $location_type_id));
-      $location_fields = CRM_Xcm_Configuration::getAddressFields() + array('phone', 'email');
+      $location_fields = CRM_Xcm_Tools::getAddressFields() + array('phone', 'email');
       foreach ($location_fields as $fieldname) {
         $location_types[$fieldname] = $location_type_name;
       }
@@ -599,7 +599,7 @@ class CRM_Xcm_MatchingEngine {
       // create activity
       $data = array(
         'differing_attributes' => $differing_attributes,
-        'fieldlabels'          => CRM_Xcm_Configuration::getFieldLabels($differing_attributes),
+        'fieldlabels'          => CRM_Xcm_Tools::getFieldLabels($differing_attributes),
         'existing_contact'     => $contact,
         'location_types'       => $location_types,
         'submitted_data'       => $contact_data
