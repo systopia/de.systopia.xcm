@@ -77,7 +77,8 @@ class CRM_Xcm_Configuration {
 
       // if no profile found, take the first one
       if (empty($profile_name)) {
-        $profile_name = reset(array_keys($all_profiles));
+        $all_profile_name = array_keys($all_profiles);
+        $profile_name = reset($all_profile_name);
         $this->setDefaultProfile($profile_name);
       }
     }
