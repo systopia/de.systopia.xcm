@@ -89,6 +89,14 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2 huge'));
 
+    $this->addElement('select',
+        'override_fields',
+        E::ts('Override Fields'),
+        $this->getContactFields() + $this->getCustomFields(),
+        array(// 'style'    => 'width:450px; height:100%;',
+              'multiple' => 'multiple',
+              'class'    => 'crm-select2 huge'));
+
     $this->addElement('checkbox',
       'fill_fields_multivalue',
       E::ts('Fill multi-value field values'));
@@ -297,6 +305,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
       'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
       'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
+      'override_fields'            => CRM_Utils_Array::value('override_fields', $values),
       'case_insensitive'           => CRM_Utils_Array::value('case_insensitive', $values),
       );
     $this->config->setOptions($options);

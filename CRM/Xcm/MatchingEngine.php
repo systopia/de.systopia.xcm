@@ -208,6 +208,7 @@ class CRM_Xcm_MatchingEngine {
     // FILL/DIFF ACTIONS (require the current contact data):
     $diff_handler = $this->config->diffHandler();
     if (   ($diff_handler != 'none')
+        || !empty($options['override_fields'])
         || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
@@ -222,6 +223,12 @@ class CRM_Xcm_MatchingEngine {
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
       CRM_Xcm_DataNormaliser::normaliseData($current_contact_data);
+
+      // OVERRIDE CURRENT CONTACT DATA
+      if (!empty($options['override_fields'])) {
+        //  caution: will set the overwritten fields in $current_contact_data
+        $this->overrideContactData($current_contact_data, $submitted_contact_data, $options['override_fields']);
+      }
 
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
@@ -478,6 +485,30 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
+   * Will override the given fields in the database
+   *  and update the $current_contact_data accordingly
+   */
+  protected function overrideContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+    $update_query = array();
+    foreach ($fields as $key) {
+      if (isset($submitted_contact_data[$key])) {
+        $current_value   = CRM_Utils_Array::value($key, $current_contact_data);
+        if ($current_value != $submitted_contact_data[$key]) {
+          $update_query[$key]         = $submitted_contact_data[$key];
+          $current_contact_data[$key] = $submitted_contact_data[$key];
+        }
+      }
+    }
+
+    // run update should it be required
+    if (!empty($update_query)) {
+      $update_query['id'] = $current_contact_data['id'];
+      civicrm_api3('Contact', 'create', $update_query);
+    }
+  }
+
+
+  /**
    * @param $key
    *   The field name to check for being multi-value.
    *
@@ -702,4 +733,5 @@ class CRM_Xcm_MatchingEngine {
 
     return $result;
   }
+
 }
