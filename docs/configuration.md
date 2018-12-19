@@ -143,7 +143,7 @@ an activity be created, connecting all matched contacts as potential duplicates.
 ![Extended Contact Matcher (XCM) configuration form - Difference handling](img/xcm-configuration-difference-handling.png "Extended Contact Matcher (XCM) configuration form - Difference handling")
 
 This section defines, what to do when a contact has been identified by XCM,
-submitted data was different to the contact's current state, and thode different
+submitted data was different to the contact's current state, and those different
 properties have not been changed by XCM.
 
 ### Diff Activity
