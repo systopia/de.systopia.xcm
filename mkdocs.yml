@@ -5,6 +5,7 @@ theme: material
 pages:
 - 'Introduction': index.md
 - 'Configuration': configuration.md
+- 'Contact Import': contact-import.md
 - 'API': api.md
 
 markdown_extensions:
