@@ -230,6 +230,14 @@ class CRM_Xcm_MatchingEngine {
         $this->overrideContactData($current_contact_data, $submitted_contact_data, $options['override_fields']);
       }
 
+      // OVERRIDE CONTACT DETAILS
+      if (!empty($options['override_details']) && is_array($options['override_details'])) {
+        //  caution: will override detail data
+        foreach ($options['override_details'] as $entity_type) {
+          $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
+        }
+      }
+
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
         //  caution: will set the overwritten fields in $current_contact_data
@@ -507,6 +515,52 @@ class CRM_Xcm_MatchingEngine {
     }
   }
 
+  /**
+   * Will override the given detail entity in the database,
+   *  and update the $current_contact_data accordingly
+   *
+   * It will only overwrite entities with the same location type,
+   *  and not overwrite primary entries, unless $override_details_primary is TRUE
+   */
+  protected function overrideContactDetail($entity_type, &$current_contact_data, $submitted_contact_data) {
+    $main_attribute = (strtolower($entity_type) == 'website') ? 'url' : strtolower($entity_type);
+    if (empty($submitted_contact_data[$main_attribute])) {
+      // parameter empty - nothing to do
+      return;
+    }
+
+    // find current entries and replace the first match
+    try {
+      $options = $this->config->getOptions();
+      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
+      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      $location_type            = empty($address_data['location_type_id']) ? $this->config->defaultLocationType() : $address_data['location_type_id'];
+
+      // query entities
+      $entity_query = civicrm_api3($entity_type, 'get', [
+          'contact_id'       => $current_contact_data['id'],
+          $main_attribute    => $submitted_contact_data[$main_attribute],
+          'location_type_id' => $location_type,
+          'option.limit'     => 0]);
+
+      // find the first matching one, and
+      foreach ($entity_query['values'] as $entity_data) {
+        if ($this->attributesDiffer($main_attribute, $entity_data[$main_attribute], $submitted_contact_data[$main_attribute], $case_insensitive)) {
+          if (empty($entity_data['is_primary']) || $override_details_primary) {
+            // we are allowed to overwrite this: do it!
+            civicrm_api3($entity_type, 'create', [
+                'id'            => $entity_data['id'],
+                $main_attribute => $submitted_contact_data[$main_attribute]]);
+            $current_contact_data[$main_attribute] = $submitted_contact_data[$main_attribute];
+            break;
+          }
+        }
+      }
+    } catch (Exception $ex) {
+      // something went wrong
+      error_log("de.systopia.xcm: error when trying to override {$entity_type}: " . $ex->getMessage());
+    }
+  }
 
   /**
    * @param $key

@@ -97,6 +97,22 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
               'multiple' => 'multiple',
               'class'    => 'crm-select2 huge'));
 
+    $this->addElement('select',
+        'override_details',
+        E::ts('Override Details'),
+        array(
+            'email'   => E::ts('Email'),
+            'phone'   => E::ts('Phone'),
+            'website' => E::ts('Website')),
+        array(// 'style'    => 'width:450px; height:100%;',
+              'multiple' => 'multiple',
+              'class'    => 'crm-select2 huge'));
+
+    $this->addElement('checkbox',
+        'override_details_primary',
+        E::ts('Change Primary Detail?'));
+
+
     $this->addElement('checkbox',
       'fill_fields_multivalue',
       E::ts('Fill multi-value field values'));
@@ -294,6 +310,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'fill_fields_multivalue'     => CRM_Utils_Array::value('fill_fields_multivalue', $values),
       'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
       'fill_details_primary'       => CRM_Utils_Array::value('fill_details_primary', $values),
+      'override_details'           => CRM_Utils_Array::value('override_details', $values),
+      'override_details_primary'   => CRM_Utils_Array::value('override_details_primary', $values),
       'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
