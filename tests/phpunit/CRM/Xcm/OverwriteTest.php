@@ -66,6 +66,126 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
   }
 
   /**
+   * Test if the entity overwrite works
+   */
+  public function testDetailOverwrite() {
+    $details_to_test = ['phone', 'im', 'website']; // TODO: test email, but needs different identification
+    $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
+    $this->setXCMOption('fill_details', []);
+    $this->setXCMOption('override_details', $details_to_test);
+    $location_type_ids = array_keys($this->getLocationTypeIDs());
+    
+    foreach ($details_to_test as $entity) {
+      // create test contact
+      $test_contact = $this->createContactWithRandomEmail([
+          'first_name' => 'Carl',
+          'last_name'  => 'Carlson'
+      ]);
+
+      $non_primary = rand(10000000,99999999);
+      $primary     = $non_primary . '9';
+
+      switch (strtolower($entity)) {
+        case 'email':
+          $has_primary = TRUE;
+          $attribute = 'email';
+          $identifying_attributes = ['location_type_id'];
+          break;
+
+        case 'phone':
+          $has_primary = TRUE;
+          $non_primary = "+1 {$non_primary}";
+          $primary     = "+2 {$primary}";
+          $attribute   = 'phone';
+          $identifying_attributes = ['location_type_id', 'phone_type_id'];
+          break;
+
+        case 'im':
+          $has_primary = TRUE;
+          $attribute   = 'name';
+          $identifying_attributes = ['location_type_id', 'provider_id'];
+          break;
+
+        case 'website':
+          $has_primary = FALSE;
+          $non_primary = "http://{$non_primary}.com";
+          $primary     = "http://{$primary}.net";
+          $attribute   = 'url';
+          $identifying_attributes = ['website_type_id'];
+          break;
+
+        default:
+          # unknown type
+          $has_primary = FALSE;
+          $identifying_attributes = [];
+          $this->throwException(new Exception("Unknown type {$entity}!"));
+      }
+
+
+      // create details with contact
+      $primary_detail = $this->assertAPI3($entity, 'create', [
+          $attribute         => $primary,
+          'contact_id'       => $test_contact['id'],
+          'location_type_id' => $location_type_ids[1],
+          'is_primary'       => 1]);
+      $primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $primary_detail['id']]);
+
+      if ($has_primary) {
+        $non_primary_detail = $this->assertAPI3($entity, 'create', [
+            $attribute         => $non_primary,
+            'contact_id'       => $test_contact['id'],
+            'location_type_id' => $location_type_ids[0],
+            'is_primary'       => 0]);
+        $non_primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $non_primary_detail['id']]);
+      } else {
+        $non_primary_detail = $primary_detail;
+      }
+
+      // check if primary was set (if applicable)
+      if ($has_primary) {
+        $this->assertEquals(1, $primary_detail['is_primary']);
+        $this->assertEquals(0, $non_primary_detail['is_primary']);
+      }
+
+      // test with override primary off and on
+      $this->setXCMOption('override_details_primary', 0);
+      $this->assertDetailOverride($entity, $test_contact, $attribute, !$has_primary, $primary_detail, $identifying_attributes, 'a');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, 'b');
+
+      $this->setXCMOption('override_details_primary', 1);
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $primary_detail, $identifying_attributes, 'c');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, 'd');
+    }
+  }
+
+  /**
+   * Helper function for testDetailOverwrite
+   * Simply try to override the detail
+   */
+  protected function assertDetailOverride($entity, $test_contact, $attribute, $expects_success, $detail, $identifying_attributes, $suffix = 's') {
+    // compile lookup query
+    $lookup_query = [
+        'email'            => $test_contact['email'],
+        'first_name'       => 'Carl',
+        'last_name'        => 'Carlson',
+        $attribute         => $detail[$attribute] . $suffix,
+    ];
+    foreach ($identifying_attributes as $identifying_attribute) {
+      if (!empty($detail[$identifying_attribute])) {
+        $lookup_query[$identifying_attribute] = $detail[$identifying_attribute];
+      }
+    }
+    $this->assertXCMLookup($lookup_query, $test_contact['id']);
+
+    // reload entity
+    $new_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $detail['id']]);
+
+    // evaluate
+    $event = $expects_success ? 'NOT overwritten' : 'overwritten';
+    $this->assertEquals($expects_success, $new_detail[$attribute] == $detail[$attribute] . $suffix, "{$entity}:{$detail['id']} was {$event}.");
+  }
+
+  /**
    * Test the the overwrite function doesn't trigger the creation of a change activity
    */
   public function testSimpleOverwriteNoChangeActivity() {

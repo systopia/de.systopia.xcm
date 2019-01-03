@@ -55,4 +55,5 @@
 {htxt id='id-override-details-primary'}
   <p>{ts domain="de.systopia.xcm"}Should this feature be allowed to overwrite primary details?{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}Warning: You might change the primary means of communication to an untrusted value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Remark: This does not apply to websites, where no primary flag is used.{/ts}</p>
 {/htxt}

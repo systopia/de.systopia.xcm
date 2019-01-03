@@ -523,7 +523,36 @@ class CRM_Xcm_MatchingEngine {
    *  and not overwrite primary entries, unless $override_details_primary is TRUE
    */
   protected function overrideContactDetail($entity_type, &$current_contact_data, $submitted_contact_data) {
-    $main_attribute = (strtolower($entity_type) == 'website') ? 'url' : strtolower($entity_type);
+    switch (strtolower($entity_type)) {
+      case 'email':
+        $has_primary = TRUE;
+        $main_attribute = 'email';
+        $identifying_attributes = ['location_type_id'];
+        break;
+
+      case 'phone':
+        $has_primary = TRUE;
+        $main_attribute = 'phone';
+        $identifying_attributes = ['location_type_id', 'phone_type_id'];
+        break;
+
+      case 'im':
+        $has_primary = TRUE;
+        $main_attribute = 'name';
+        $identifying_attributes = ['location_type_id', 'provider_id'];
+        break;
+
+      case 'website':
+        $has_primary = FALSE;
+        $main_attribute = 'url';
+        $identifying_attributes = ['website_type_id'];
+        break;
+
+      default:
+        # unknown type
+        return;
+    }
+
     if (empty($submitted_contact_data[$main_attribute])) {
       // parameter empty - nothing to do
       return;
@@ -534,19 +563,25 @@ class CRM_Xcm_MatchingEngine {
       $options = $this->config->getOptions();
       $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
       $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
-      $location_type            = empty($address_data['location_type_id']) ? $this->config->defaultLocationType() : $address_data['location_type_id'];
+      if (empty($submitted_contact_data['location_type_id'])) {
+        $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
+      }
 
-      // query entities
-      $entity_query = civicrm_api3($entity_type, 'get', [
+      // query existing entities
+      $entity_query_params = [
           'contact_id'       => $current_contact_data['id'],
-          $main_attribute    => $submitted_contact_data[$main_attribute],
-          'location_type_id' => $location_type,
-          'option.limit'     => 0]);
+          'option.limit'     => 0];
+      // add identifying attributes
+      foreach ($identifying_attributes as $identifying_attribute) {
+        if (!empty($submitted_contact_data[$identifying_attribute]))
+        $entity_query_params[$identifying_attribute] = $submitted_contact_data[$identifying_attribute];
+      }
+      $entity_query = civicrm_api3($entity_type, 'get', $entity_query_params);
 
       // find the first matching one, and
       foreach ($entity_query['values'] as $entity_data) {
         if ($this->attributesDiffer($main_attribute, $entity_data[$main_attribute], $submitted_contact_data[$main_attribute], $case_insensitive)) {
-          if (empty($entity_data['is_primary']) || $override_details_primary) {
+          if (empty($entity_data['is_primary']) || $override_details_primary || !$has_primary) {
             // we are allowed to overwrite this: do it!
             civicrm_api3($entity_type, 'create', [
                 'id'            => $entity_data['id'],

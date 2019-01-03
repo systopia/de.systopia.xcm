@@ -44,24 +44,40 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit_Framework_TestCase implements H
   }
 
   /**
+   * Execute the API call and assert that it is successfull
+   *
+   * @param $entity string entity
+   * @param $action string action
+   * @param $params array parameters
+   * @return array result
+   */
+  public function assertAPI3($entity, $action, $params) {
+    try {
+      return civicrm_api3($entity, $action, $params);
+    } catch (CiviCRM_API3_Exception $ex) {
+      $this->assertFalse(TRUE, "API Exception: " . $ex->getMessage());
+      return NULL;
+    }
+  }
+
+  /**
    * Get the default activity type id used for diff activities, unless otherwise specified
    *
    * @return array|null
-   * @throws CiviCRM_API3_Exception
    */
   public function getDefaultDiffActivityTypeID() {
     if ($this->diff_activity_type_id === NULL) {
-      $existing_activity = civicrm_api3('OptionValue', 'get', ['option_group_id' => 'activity_type', 'name' => 'xcm_test_diff_activity']);
+      $existing_activity = $this->assertAPI3('OptionValue', 'get', ['option_group_id' => 'activity_type', 'name' => 'xcm_test_diff_activity']);
       if (!empty($existing_activity['id'])) {
-        $this->diff_activity_type_id = civicrm_api3('OptionValue', 'getvalue', ['id' => $existing_activity['id'], 'return' => 'value']);
+        $this->diff_activity_type_id = $this->assertAPI3('OptionValue', 'getvalue', ['id' => $existing_activity['id'], 'return' => 'value']);
 
       } else {
         // create it
-        $new_activity = civicrm_api3('OptionValue', 'create', [
+        $new_activity = $this->assertAPI3('OptionValue', 'create', [
             'option_group_id' => 'activity_type',
             'name'            => 'xcm_test_diff_activity',
             'label'           => 'XCM Test Suite Diff Activity']);
-        $this->diff_activity_type_id = civicrm_api3('OptionValue', 'getvalue', ['id' => $new_activity['id'], 'return' => 'value']);
+        $this->diff_activity_type_id = $this->assertAPI3('OptionValue', 'getvalue', ['id' => $new_activity['id'], 'return' => 'value']);
       }
     }
     return $this->diff_activity_type_id;
@@ -104,7 +120,7 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit_Framework_TestCase implements H
       $activity_type_id = $this->getDefaultDiffActivityTypeID();
     }
 
-    return civicrm_api3('Activity', 'getcount', [
+    return $this->assertAPI3('Activity', 'getcount', [
         'activity_type_id'  => $activity_type_id,
         'target_contact_id' => $contact_id,
         'subject'           => $subject
@@ -152,6 +168,19 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit_Framework_TestCase implements H
 
     $result = civicrm_api3('Contact', 'getorcreate', $contact_data);
     $this->assertEquals($contact_id, $result['id'], "Unexpected contact identified");
+  }
+
+  /**
+   * get a list of active location type
+   * @return array lc_id => lc_name
+   */
+  public function getLocationTypeIDs() {
+    $list = [];
+    $lt_query = $this->assertAPI3('LocationType', 'get', ['option.limit' => 0, 'return' => 'id,name']);
+    foreach ($lt_query['values'] as $lt) {
+      $list[$lt['id']] = $lt['name'];
+    }
+    return $list;
   }
 
   /**
