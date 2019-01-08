@@ -15,3 +15,8 @@ use of XCM, does not have to be adapted.
 
 Extension developers are encouraged to make use of XCM's functionality by
 relying on its API action `Contact.getorcreate`.
+
+!!! info
+    Since XCM only provides the API action, no core functionality is being
+    affected. That is, contact imports via the CiviCRM Core UI, as well as
+    Contact Add/Edit forms do not use XCM's matching rules.
