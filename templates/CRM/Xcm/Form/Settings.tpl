@@ -65,6 +65,11 @@
 
 <div>
   <h3>{ts domain="de.systopia.xcm"}Matching Rules{/ts}</h3>
+  <div class="crm-section">
+    <div class="label">{$form.match_contact_id.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Match contact ID{/ts}", {literal}{"id":"id-match-contact-id","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.match_contact_id.html}</div>
+    <div class="clear"></div>
+  </div>
   {foreach from=$rule_idxs item=rule_idx}
     {capture assign=dropdown_name}rule_{$rule_idx}{/capture}
     <div class="crm-section">

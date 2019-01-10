@@ -54,6 +54,13 @@ class CRM_Xcm_MatchingEngine {
 
     // then: match
     $result = $this->matchContact($contact_data);
+
+    // Rename the "id" parameter to avoid any quirks later on.
+    if (isset($contact_data['id'])) {
+      $contact_data['xcm_submitted_contact_id'] = $contact_data['id'];
+      unset($contact_data['id']);
+    }
+
     if (empty($result['contact_id'])) {
       // the matching failed
       $new_contact = $this->createContact($contact_data);
@@ -76,6 +83,21 @@ class CRM_Xcm_MatchingEngine {
    * @todo document
    */
   public function matchContact(&$contact_data) {
+    // Check for "match_contact_id" setting and try to match by contact ID.
+    if (isset($contact_data['id'])) {
+      $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+      if ($options['match_contact_id']) {
+        // The setting is "on", try to match by contact ID.
+        $result = civicrm_api3('Contact', 'get', array(
+          'id' => $contact_data['xcm_contact_id'],
+          'sequential' => 1,
+        ));
+        if ($result['count'] == 1) {
+          return $result['values'][0];
+        }
+      }
+    }
+
     $rules = $this->getMatchingRules();
     foreach ($rules as $rule) {
       $result = $rule->matchContact($contact_data);
