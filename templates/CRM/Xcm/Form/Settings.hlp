@@ -32,7 +32,8 @@
 {/htxt}
 
 {htxt id='id-match-contact-id'}
-  <p>{ts domain="de.systopia.xcm"}If activated, XCM will try to match contacts by a submitted "id" parameter. If this is not activated, the parameter will be ignored.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If activated, XCM will use a submitted "id" parameter to identify the contact - bypassing all configured rules.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If not activated, the "id" parameter will be completely ignored.{/ts}</p>
 {/htxt}
 
 {htxt id='id-location-type'}
