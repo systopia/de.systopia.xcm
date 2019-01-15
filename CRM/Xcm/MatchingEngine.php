@@ -55,12 +55,6 @@ class CRM_Xcm_MatchingEngine {
     // then: match
     $result = $this->matchContact($contact_data);
 
-    // Rename the "id" parameter to avoid any quirks later on.
-    if (isset($contact_data['id'])) {
-      $contact_data['xcm_submitted_contact_id'] = $contact_data['id'];
-      unset($contact_data['id']);
-    }
-
     if (empty($result['contact_id'])) {
       // the matching failed
       $new_contact = $this->createContact($contact_data);
@@ -85,17 +79,28 @@ class CRM_Xcm_MatchingEngine {
   public function matchContact(&$contact_data) {
     // Check for "match_contact_id" setting and try to match by contact ID.
     if (isset($contact_data['id'])) {
-      $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
-      if ($options['match_contact_id']) {
-        // The setting is "on", try to match by contact ID.
-        $result = civicrm_api3('Contact', 'get', array(
-          'id' => $contact_data['xcm_contact_id'],
-          'sequential' => 1,
-        ));
-        if ($result['count'] == 1) {
-          return $result['values'][0];
+      if (!empty($contact_data['id'])) {
+        $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+        if (!empty($options['match_contact_id'])) {
+          // The setting is "on", try to match by contact ID.
+          try {
+            $contact = civicrm_api3('Contact', 'getsingle', array(
+                'id'         => $contact_data['id'],
+                'return'     => 'id,is_deleted'
+            ));
+            if (empty($contact['is_deleted'])) {
+              // ID refers to a real contact, that has not been deleted
+              return self::createResultMatched($contact_data['id']);
+            }
+          } catch (Exception $ex) {
+            // not found? no problem... let's move on...
+          }
         }
       }
+
+      // Rename the "id" parameter to avoid any quirks later on.
+      $contact_data['xcm_submitted_contact_id'] = $contact_data['id'];
+      unset($contact_data['id']);
     }
 
     $rules = $this->getMatchingRules();
@@ -704,5 +709,28 @@ class CRM_Xcm_MatchingEngine {
     }
 
     return $result;
+  }
+
+  /**
+   * generate a valid reply with the given contact ID and confidence
+   */
+  public static function createResultMatched($contact_id, $confidence = 1.0) {
+    if (empty($contact_id)) {
+      return self::createResultUnmatched();
+    } else {
+      return array(
+          'contact_id' => $contact_id,
+          'confidence' => $confidence
+      );
+    }
+  }
+
+  /**
+   * generate a valid negative reply
+   */
+  public static function createResultUnmatched($message = 'not matched') {
+    return array(
+        'message' => $message,
+    );
   }
 }
