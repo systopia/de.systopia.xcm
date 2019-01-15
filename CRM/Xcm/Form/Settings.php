@@ -161,6 +161,12 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       array('class' => 'crm-select2'));
 
 
+    $this->addElement(
+      'checkbox',
+      'match_contact_id',
+      ts('Match contacts by contact ID', array('domain' => 'de.systopia.xcm'))
+    );
+
     // add the rule selectors
     for ($i=1; $i <= XCM_MAX_RULE_COUNT; $i++) {
       $this->addElement('select',
@@ -298,6 +304,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
       'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
       'case_insensitive'           => CRM_Utils_Array::value('case_insensitive', $values),
+      'match_contact_id'           => CRM_Utils_Array::value('match_contact_id', $values),
       );
     $this->config->setOptions($options);
 

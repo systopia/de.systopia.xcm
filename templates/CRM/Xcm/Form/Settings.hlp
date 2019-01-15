@@ -31,6 +31,11 @@
   <p>{ts domain="de.systopia.xcm"}Warning: If you that match wasn't correct, you might change the primary means of communcation to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
 {/htxt}
 
+{htxt id='id-match-contact-id'}
+  <p>{ts domain="de.systopia.xcm"}If activated, XCM will use a submitted "id" parameter to identify the contact - bypassing all configured rules.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If not activated, the "id" parameter will be completely ignored.{/ts}</p>
+{/htxt}
+
 {htxt id='id-location-type'}
   <p>{ts domain="de.systopia.xcm"}If no location type is explicitely submitted, this location type will be assumed.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and wesites.{/ts}</p>

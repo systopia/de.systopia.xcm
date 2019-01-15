@@ -135,22 +135,13 @@ abstract class CRM_Xcm_MatchingRule {
    * generate a valid reply with the given contact ID and confidence
    */
   protected function createResultMatched($contact_id, $confidence = 1.0) {
-    if (empty($contact_id)) {
-      return $this->createResultUnmatched();
-    } else {
-      return array(
-        'contact_id' => $contact_id,
-        'confidence' => $confidence
-        );
-    }
+    return CRM_Xcm_MatchingEngine::createResultMatched($contact_id, $confidence);
   }
 
   /**
    * generate a valid negative reply
    */
   protected function createResultUnmatched($message = 'not matched') {
-    return array(
-      'message' => $message,
-      );
+    return CRM_Xcm_MatchingEngine::createResultUnmatched($message);
   }
 }
