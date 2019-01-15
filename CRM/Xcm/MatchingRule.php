@@ -32,6 +32,32 @@ abstract class CRM_Xcm_MatchingRule {
    */
   abstract public function matchContact(&$contact_data, $params = NULL);
 
+  /** stores the configuration instance */
+  protected $config = NULL;
+
+  /**
+   * Get the configuration context this matcher runs under
+   *
+   * @return CRM_Xcm_Configuration
+   * @throws Exception
+   */
+  public function getConfig() {
+    if (!$this->config) {
+      // not set? shouldn't happen. Anyway: use default!
+      $this->config = CRM_Xcm_Configuration::getConfigProfile();
+    }
+    return $this->config;
+  }
+
+  /**
+   * Set the configuration context this matcher runs under
+   *
+   * @param $config CRM_Xcm_Configuration configuration object
+   * @throws Exception
+   */
+  public function setConfig($config) {
+    $this->config = $config;
+  }
 
   /**
    * try to return/guess the contact_type.
@@ -68,11 +94,13 @@ abstract class CRM_Xcm_MatchingRule {
    *
    * @param $contact_ids  array of contact IDs
    * @return contact_id or NULL
+   * @throws Exception
    */
   protected function pickContact($contact_ids) {
     if (empty($contact_ids)) return NULL;
 
-    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $config  = $this->getConfig();
+    $options = $config->getOptions();
 
     // create activity for duplicates if requested
     try {
@@ -80,7 +108,7 @@ abstract class CRM_Xcm_MatchingRule {
         civicrm_api3('Activity', 'create', array(
             'activity_type_id'   => $options['duplicates_activity'],
             'subject'            => $options['duplicates_subject'],
-            'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
+            'status_id'          => $config->defaultActivityStatus(),
             'activity_date_time' => date("YmdHis"),
             'target_id'          => $contact_ids,
         ));

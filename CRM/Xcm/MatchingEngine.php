@@ -20,16 +20,31 @@
 class CRM_Xcm_MatchingEngine {
 
   /** singleton instance of the engine */
-  protected static $_singleton = NULL;
+  protected static $_singletons = array();
+
+  /** Configuration for this engine */
+  protected $config = NULL;
 
   /**
    * get the singleton instance of the engine
+   * @param $profile
+   * @return CRM_Xcm_MatchingEngine
    */
-  public static function getSingleton() {
-    if (self::$_singleton===NULL) {
-      self::$_singleton = new CRM_Xcm_MatchingEngine();
+  public static function getEngine($profile = NULL) {
+    if (!isset(self::$_singletons[$profile])) {
+      self::$_singletons[$profile] = new CRM_Xcm_MatchingEngine($profile);
     }
-    return self::$_singleton;
+    return self::$_singletons[$profile];
+  }
+
+  /**
+   * CRM_Xcm_MatchingEngine constructor, fetches the configuration
+   *
+   * @param $profile string profile name or NULL
+   * @throws Exception
+   */
+  protected function __construct($profile) {
+    $this->config = CRM_Xcm_Configuration::getConfigProfile($profile);
   }
 
   /**
@@ -40,7 +55,7 @@ class CRM_Xcm_MatchingEngine {
    */
   public function getOrCreateContact(&$contact_data) {
     // first: resolve custom fields to custom_xx notation
-    CRM_Xcm_Configuration::resolveCustomFields($contact_data);
+    CRM_Xcm_Tools::resolveCustomFields($contact_data);
 
     // also: do some sanitation and formatting
     CRM_Xcm_DataNormaliser::normaliseFieldnames($contact_data);
@@ -96,14 +111,14 @@ class CRM_Xcm_MatchingEngine {
 
     // create contact
     $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
-    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Configuration::stripAddressData($contact_data));
+    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Tools::stripAddressData($contact_data));
 
     // create address separately (see https://github.com/systopia/de.systopia.xcm/issues/6)
-    $address_data = CRM_Xcm_Configuration::extractAddressData($contact_data);
+    $address_data = CRM_Xcm_Tools::extractAddressData($contact_data);
     if (!empty($address_data)) {
       $address_data['contact_id'] = $new_contact['id'];
       if (empty($address_data['location_type_id'])) {
-        $address_data['location_type_id'] = CRM_Xcm_Configuration::defaultLocationType();
+        $address_data['location_type_id'] = $this->config->defaultLocationType();
       }
       civicrm_api3('Address', 'create', $address_data);
     }
@@ -120,7 +135,7 @@ class CRM_Xcm_MatchingEngine {
    * @todo document
    */
   protected function getMatchingRules() {
-    $rules = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
+    $rules = $this->config->getRules();
     $rule_instances = array();
 
     foreach ($rules as $rule_name) {
@@ -129,12 +144,16 @@ class CRM_Xcm_MatchingEngine {
 
       } elseif ('DEDUPE_' == substr($rule_name, 0, 7)) {
         // this is a dedupe rule
-        $rule_instances[] = new CRM_Xcm_Matcher_DedupeRule(substr($rule_name, 7));
+        $new_rule = new CRM_Xcm_Matcher_DedupeRule(substr($rule_name, 7));
+        $new_rule->setConfig($this->config);
+        $rule_instances[] = $new_rule;
 
       } else {
         // this should be a class name
         // TODO: error handling
-        $rule_instances[] = new $rule_name();
+        $new_rule = new $rule_name();
+        $new_rule->setConfig($this->config);
+        $rule_instances[] = $new_rule;
       }
     }
     return $rule_instances;
@@ -144,7 +163,7 @@ class CRM_Xcm_MatchingEngine {
    * @todo document
    */
   protected function postProcessNewContact(&$new_contact, &$contact_data) {
-    $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+    $postprocessing = $this->config->getPostprocessing();
 
     if (!empty($postprocessing['created_add_group'])) {
       $this->addContactToGroup($new_contact['id'], $postprocessing['created_add_group']);
@@ -167,8 +186,8 @@ class CRM_Xcm_MatchingEngine {
    * Perform all the post processing the configuration imposes
    */
   protected function postProcessContactMatch(&$result, &$submitted_contact_data) {
-    $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
-    $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $postprocessing = $this->config->getPostprocessing();
+    $options        = $this->config->getOptions();
 
     if (!empty($postprocessing['matched_add_group'])) {
       $this->addContactToGroup($result['contact_id'], $postprocessing['matched_add_group']);
@@ -187,7 +206,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // FILL/DIFF ACTIONS (require the current contact data):
-    $diff_handler = CRM_Xcm_Configuration::diffHandler();
+    $diff_handler = $this->config->diffHandler();
     if (   ($diff_handler != 'none')
         || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
@@ -195,7 +214,7 @@ class CRM_Xcm_MatchingEngine {
 
       // sort out location type
       if (empty($submitted_contact_data['location_type_id'])) {
-        $location_type_id = CRM_Xcm_Configuration::defaultLocationType();
+        $location_type_id = $this->config->defaultLocationType();
       } else {
         $location_type_id = $submitted_contact_data['location_type_id'];
       }
@@ -219,7 +238,7 @@ class CRM_Xcm_MatchingEngine {
 
       // FILL CURRENT CONTACT ADDRESS
       if (!empty($options['fill_address'])) {
-        $address_data = CRM_Xcm_Configuration::extractAddressData($submitted_contact_data);
+        $address_data = CRM_Xcm_Tools::extractAddressData($submitted_contact_data);
         if (!empty($address_data)) {
           $address_data['location_type_id'] = $location_type_id;
 
@@ -246,7 +265,7 @@ class CRM_Xcm_MatchingEngine {
           } else {
             // address found -> add to current_contact_data for diff activity
             $existing_address = reset($addresses['values']);
-            $existing_address_data = CRM_Xcm_Configuration::extractAddressData($existing_address, FALSE);
+            $existing_address_data = CRM_Xcm_Tools::extractAddressData($existing_address, FALSE);
             foreach ($existing_address_data as $key => $value) {
               $current_contact_data[$key] = $value;
             }
@@ -283,7 +302,7 @@ class CRM_Xcm_MatchingEngine {
     $activity_data = array(
         'activity_type_id'   => $activity_type_id,
         'subject'            => $subject,
-        'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
+        'status_id'          => $this->config->defaultActivityStatus(),
         'activity_date_time' => date("YmdHis"),
         'target_contact_id'  => (int) $contact_id,
         'source_contact_id'  => (int) $contact_id,
@@ -305,7 +324,7 @@ class CRM_Xcm_MatchingEngine {
     if (!empty($data[$entity])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
-        $location_type_id = CRM_Xcm_Configuration::defaultLocationType();
+        $location_type_id = $this->config->defaultLocationType();
       } else {
         $location_type_id = $data['location_type_id'];
       }
@@ -512,7 +531,7 @@ class CRM_Xcm_MatchingEngine {
    * create I3Val diff activity
    */
   protected function createI3ValActivity($current_contact_data, $submitted_contact_data) {
-    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $options = $this->config->getOptions();
 
     // compile udpate request
     $submitted_contact_data['id'] = $current_contact_data['id'];
@@ -531,7 +550,7 @@ class CRM_Xcm_MatchingEngine {
    * and the data submitted
    */
   protected function createDiffActivity($contact, $options, $subject, &$contact_data, $location_type_id) {
-    $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+    $options = $this->config->getOptions();
     $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
 
     // look up some id fields
@@ -572,7 +591,7 @@ class CRM_Xcm_MatchingEngine {
       $location_type_name = civicrm_api3('LocationType', 'getvalue', array(
           'return' => 'display_name',
           'id'     => $location_type_id));
-      $location_fields = CRM_Xcm_Configuration::getAddressFields() + array('phone', 'email');
+      $location_fields = CRM_Xcm_Tools::getAddressFields() + array('phone', 'email');
       foreach ($location_fields as $fieldname) {
         $location_types[$fieldname] = $location_type_name;
       }
@@ -580,7 +599,7 @@ class CRM_Xcm_MatchingEngine {
       // create activity
       $data = array(
         'differing_attributes' => $differing_attributes,
-        'fieldlabels'          => CRM_Xcm_Configuration::getFieldLabels($differing_attributes),
+        'fieldlabels'          => CRM_Xcm_Tools::getFieldLabels($differing_attributes),
         'existing_contact'     => $contact,
         'location_types'       => $location_types,
         'submitted_data'       => $contact_data
@@ -589,10 +608,10 @@ class CRM_Xcm_MatchingEngine {
       $activity_data = array(
           'activity_type_id'   => $options['diff_activity'],
           'subject'            => $subject,
-          'status_id'          => CRM_Xcm_Configuration::defaultActivityStatus(),
+          'status_id'          => $this->config->defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
           'target_contact_id'  => (int) $contact['id'],
-          'source_contact_id'  => CRM_Xcm_Configuration::getCurrentUserID($contact['id']),
+          'source_contact_id'  => $this->config->getCurrentUserID($contact['id']),
           'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
           'details'            => $this->renderTemplate('activity/diff.tpl', $data),
       );

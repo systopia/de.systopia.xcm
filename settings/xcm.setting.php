@@ -17,26 +17,15 @@
 * Settings metadata file
 */
 return array(
-  'xcm_options' => array(
-    'group_name' => 'de.systopia.xcm',
-    'group' => 'de.systopia.xcm',
-    'name' => 'xcm_options',
-    'type' => 'Array',
-    'default' => NULL,
-    'add' => '4.6',
-    'is_domain' => 1,
-    'is_contact' => 0,
-    'description' => 'Generic XCM Settings'
-  ),
-  'postprocessing' => array(
-    'group_name' => 'de.systopia.xcm',
-    'group' => 'de.systopia.xcm',
-    'name' => 'postprocessing',
-    'type' => 'Array',
-    'default' => NULL,
-    'add' => '4.6',
-    'is_domain' => 1,
-    'is_contact' => 0,
-    'description' => 'XCM Postprocessing Settings'
+  'xcm_config_profiles' => array(
+      'group_name' => 'de.systopia.xcm',
+      'group' => 'de.systopia.xcm',
+      'name' => 'xcm_config_profiles',
+      'type' => 'Array',
+      'default' => NULL,
+      'add' => '4.6',
+      'is_domain' => 1,
+      'is_contact' => 0,
+      'description' => 'XCM Configuration Profiles'
   )
  );

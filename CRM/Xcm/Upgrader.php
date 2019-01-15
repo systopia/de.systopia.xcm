@@ -33,4 +33,40 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Add new phone rules
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0151() {
+    $this->ctx->log->info('Introducing configuration profiles.');
+    $profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
+    if ($profiles === NULL) {
+      // this seems to be the first time: convert
+      $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+      $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
+      $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+      $profiles = array(
+          'default' => array(
+              'is_default'     => 1,
+              'options'        => ($options === NULL ? array() : $options),
+              'rules'          => ($rules === NULL ? array() : $rules),
+              'postprocessing' => ($postprocessing === NULL ? array() : $postprocessing),
+          )
+      );
+
+      // save and reset the others
+      CRM_Core_BAO_Setting::setItem($profiles, 'de.systopia.xcm', 'xcm_config_profiles');
+      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'xcm_options');
+      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'rules');
+      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'postprocessing');
+    }
+
+    // also: rebuild menu
+    CRM_Core_Invoke::rebuildMenuAndCaches();
+
+    return TRUE;
+  }
+
 }
