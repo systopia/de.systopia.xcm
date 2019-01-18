@@ -209,6 +209,7 @@ class CRM_Xcm_MatchingEngine {
     $diff_handler = $this->config->diffHandler();
     if (   ($diff_handler != 'none')
         || !empty($options['override_fields'])
+        || !empty($options['override_details'])
         || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
@@ -526,26 +527,32 @@ class CRM_Xcm_MatchingEngine {
     switch (strtolower($entity_type)) {
       case 'email':
         $has_primary = TRUE;
-        $main_attribute = 'email';
+        $data_attributes = ['email'];
         $identifying_attributes = ['location_type_id'];
         break;
 
       case 'phone':
         $has_primary = TRUE;
-        $main_attribute = 'phone';
+        $data_attributes = ['phone'];
         $identifying_attributes = ['location_type_id', 'phone_type_id'];
         break;
 
       case 'im':
         $has_primary = TRUE;
-        $main_attribute = 'name';
+        $data_attributes = ['name'];
         $identifying_attributes = ['location_type_id', 'provider_id'];
         break;
 
       case 'website':
         $has_primary = FALSE;
-        $main_attribute = 'url';
+        $data_attributes = ['url'];
         $identifying_attributes = ['website_type_id'];
+        break;
+
+      case 'address':
+        $has_primary = TRUE;
+        $data_attributes = ['street_address', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3', 'county_id', 'country_id', 'state_province_id'];
+        $identifying_attributes = ['location_type_id'];
         break;
 
       default:
@@ -553,8 +560,15 @@ class CRM_Xcm_MatchingEngine {
         return;
     }
 
-    if (empty($submitted_contact_data[$main_attribute])) {
-      // parameter empty - nothing to do
+    // if all main attributes are empty, there's nothing to to
+    $data_present = FALSE;
+    foreach ($data_attributes as $data_attribute) {
+      if (!empty($submitted_contact_data[$data_attribute])) {
+        $data_present = TRUE;
+        break;
+      }
+    }
+    if (!$data_present) {
       return;
     }
 
@@ -578,15 +592,29 @@ class CRM_Xcm_MatchingEngine {
       }
       $entity_query = civicrm_api3($entity_type, 'get', $entity_query_params);
 
-      // find the first matching one, and
+      // find the first matching one, and overwrite
       foreach ($entity_query['values'] as $entity_data) {
-        if ($this->attributesDiffer($main_attribute, $entity_data[$main_attribute], $submitted_contact_data[$main_attribute], $case_insensitive)) {
+        if ($this->attributesDiffer($data_attributes, $entity_data, $submitted_contact_data, $case_insensitive)) {
           if (empty($entity_data['is_primary']) || $override_details_primary || !$has_primary) {
-            // we are allowed to overwrite this: do it!
-            civicrm_api3($entity_type, 'create', [
-                'id'            => $entity_data['id'],
-                $main_attribute => $submitted_contact_data[$main_attribute]]);
-            $current_contact_data[$main_attribute] = $submitted_contact_data[$main_attribute];
+            // this is the one that will be overwritten - i.e. deleted an newly created, so...
+            // FIRST: delete existing one
+            civicrm_api3($entity_type, 'delete', ['id' => $entity_data['id']]);
+
+            // THEN: compile a new one
+            $new_entity = ['contact_id' => $entity_data['contact_id']];
+            foreach ($identifying_attributes as $attribute) {
+              if (isset($submitted_contact_data[$attribute])) {
+                $new_entity[$attribute] = $submitted_contact_data[$attribute];
+                $current_contact_data[$attribute] = $submitted_contact_data[$attribute];
+              }
+            }
+            foreach ($data_attributes as $attribute) {
+              if (isset($submitted_contact_data[$attribute])) {
+                $new_entity[$attribute] = $submitted_contact_data[$attribute];
+                $current_contact_data[$attribute] = $submitted_contact_data[$attribute];
+              }
+            }
+            $result = civicrm_api3($entity_type, 'create', $new_entity);
             break;
           }
         }
@@ -682,7 +710,7 @@ class CRM_Xcm_MatchingEngine {
     $all_attributes = array_keys($contact) + array_keys($contact_data);
     foreach ($all_attributes as $attribute) {
       if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
-        if ($this->attributesDiffer($attribute, $contact[$attribute], $contact_data[$attribute], $case_insensitive)) {
+        if ($this->attributesDiffer([$attribute], $contact, $contact_data, $case_insensitive)) {
           $differing_attributes[] = $attribute;
         }
       }
@@ -750,23 +778,35 @@ class CRM_Xcm_MatchingEngine {
    *
    * @return TRUE if atttributes differ
    */
-  protected function attributesDiffer($attribute_name, $original_value, $submitted_value, $case_insensitive) {
+  protected function attributesDiffer($data_attributes, $original_values, $submitted_values, $case_insensitive) {
     // TODO: collapse double spaces?
 
-    // trim values first
-    if (is_string($original_value)) {
-      $original_value  = trim($original_value);
-    }
-    if (is_string($submitted_value)) {
-      $submitted_value = trim($submitted_value);
+    foreach ($data_attributes as $data_attribute) {
+      $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
+      $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+
+      // trim values first
+      if (is_string($original_value)) {
+        $original_value  = trim($original_value);
+      }
+      if (is_string($submitted_value)) {
+        $submitted_value = trim($submitted_value);
+      }
+
+      // compare
+      if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
+        if (strtolower($original_value) != strtolower($submitted_value)) {
+          return TRUE;
+        }
+      } else {
+        if ($original_value != $submitted_value) {
+          return TRUE;
+        }
+      }
     }
 
-    // compare
-    if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
-      return strtolower($original_value) != strtolower($submitted_value);
-    } else {
-      return $original_value != $submitted_value;
-    }
+    // all are equal? good
+    return FALSE;
   }
 
 

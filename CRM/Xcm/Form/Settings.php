@@ -104,7 +104,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
             'email'   => E::ts('Email'),
             'phone'   => E::ts('Phone'),
             'website' => E::ts('Website'),
-            'im'      => E::ts('IM')),
+            'im'      => E::ts('IM'),
+            'address' => E::ts('Address')),
         array(// 'style'    => 'width:450px; height:100%;',
               'multiple' => 'multiple',
               'class'    => 'crm-select2 huge'));

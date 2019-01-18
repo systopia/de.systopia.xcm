@@ -69,7 +69,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
    * Test if the entity overwrite works
    */
   public function testDetailOverwrite() {
-    $details_to_test = ['phone', 'im', 'website']; // TODO: test email, but needs different identification
+    $details_to_test = ['phone', 'im', 'website', 'address']; // TODO: test email, but needs different identification
     $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
     $this->setXCMOption('fill_details', []);
     $this->setXCMOption('override_details', $details_to_test);
@@ -112,6 +112,14 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
           $primary     = "http://{$primary}.net";
           $attribute   = 'url';
           $identifying_attributes = ['website_type_id'];
+          break;
+
+        case 'address':
+          $has_primary = TRUE;
+          $non_primary = "{$non_primary} Str. 1";
+          $primary     = "{$primary}-Weg 23";
+          $attribute   = 'street_address';
+          $identifying_attributes = ['location_type_id'];
           break;
 
         default:
@@ -175,14 +183,31 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
         $lookup_query[$identifying_attribute] = $detail[$identifying_attribute];
       }
     }
+
+    $old_detail_count = $this->assertAPI3($entity, 'getcount', [
+        'contact_id' => $test_contact['id'],
+        $attribute   => $detail[$attribute] . $suffix]);
+
+    $all_details = $this->assertAPI3($entity, 'get', ['contact_id' => $test_contact['id']]);
+
     $this->assertXCMLookup($lookup_query, $test_contact['id']);
 
-    // reload entity
-    $new_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $detail['id']]);
+    $all_details = $this->assertAPI3($entity, 'get', ['contact_id' => $test_contact['id']]);
+
+    $new_detail_count = $this->assertAPI3($entity, 'getcount', [
+        'contact_id' => $test_contact['id'],
+        $attribute   => $detail[$attribute] . $suffix]);
+
+    $old_detail_still_exists = (bool) $this->assertAPI3($entity, 'getcount', ['id' => $detail['id']]);
 
     // evaluate
-    $event = $expects_success ? 'NOT overwritten' : 'overwritten';
-    $this->assertEquals($expects_success, $new_detail[$attribute] == $detail[$attribute] . $suffix, "{$entity}:{$detail['id']} was {$event}.");
+    if ($expects_success) {
+      $this->assertGreaterThan($old_detail_count, $new_detail_count, "Detail '{$detail[$attribute]}{$suffix}' not created");
+      $this->assertFalse($old_detail_still_exists, "Detail '{$detail[$attribute]}' still exists.");
+    } else {
+      $this->assertLessThanOrEqual($old_detail_count, $new_detail_count, "Detail '{$detail[$attribute]}{$suffix}' created despite primary protection.");
+      $this->assertTrue($old_detail_still_exists, "Detail '{$detail[$attribute]}' deleted despite primary protection.");
+    }
   }
 
   /**
