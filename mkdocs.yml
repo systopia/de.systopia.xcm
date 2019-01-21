@@ -1,0 +1,22 @@
+site_name: Extended Contact Matcher (XCM)
+repo_url: https://github.com/systopia/de.systopia.xcm
+theme: material
+
+pages:
+- 'Introduction': index.md
+- 'Configuration': configuration.md
+- 'Contact Import': contact-import.md
+- 'API': api.md
+
+markdown_extensions:
+- attr_list
+- admonition
+- def_list
+- codehilite
+- toc:
+    permalink: true
+- pymdownx.superfences
+- pymdownx.inlinehilite
+- pymdownx.tilde
+- pymdownx.betterem
+- pymdownx.mark
