@@ -95,7 +95,7 @@ class CRM_Xcm_MatchingEngine {
     // Check for "match_contact_id" setting and try to match by contact ID.
     if (isset($contact_data['id'])) {
       if (!empty($contact_data['id'])) {
-        $options = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
+        $options = $this->config->getOptions();
         if (!empty($options['match_contact_id'])) {
           // The setting is "on", try to match by contact ID.
           try {
