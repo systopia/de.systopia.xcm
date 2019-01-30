@@ -27,7 +27,8 @@
 {/htxt}
 
 {htxt id='id-fill-details'}
-  <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the given contact detail, it will be added.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the same contact detail, it will be added.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}For example, if somebody submits phone number '12345', but the contact only has '54321' and '12345-6', the submitted number '12345' will be added to the contact as a third entry.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}Remark: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>
 {/htxt}
 
