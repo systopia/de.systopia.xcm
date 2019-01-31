@@ -26,7 +26,9 @@
     <div class="content">{$form.profile_label.html}</div>
     <div class="clear"></div>
   </div>
+</div>
 
+<div>
   <h3>{ts domain="de.systopia.xcm"}General Options{/ts}</h3>
   <div class="crm-section">
     <div class="label">{$form.picker.label}</div>
@@ -43,6 +45,29 @@
   <div class="crm-section">
     <div class="label">{$form.default_location_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Location Type{/ts}", {literal}{"id":"id-location-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.default_location_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
+</div>
+
+<div>
+  <h3>{ts domain="de.systopia.xcm"}Update Options - Danger!{/ts} <a onclick='CRM.help("{ts domain="de.systopia.xcm"}Update Data{/ts}", {literal}{"id":"id-update","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></h3>
+
+  <div class="crm-section">
+    <div class="label">{$form.override_fields.label}</div>
+    <div class="content">{$form.override_fields.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.override_details.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.override_details.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.override_details_primary.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.override_details_primary.html}</div>
     <div class="clear"></div>
   </div>
 
@@ -75,7 +100,9 @@
     <div class="content">{$form.fill_address.html}</div>
     <div class="clear"></div>
   </div>
+
 </div>
+
 
 <div>
   <h3>{ts domain="de.systopia.xcm"}Matching Rules{/ts}</h3>

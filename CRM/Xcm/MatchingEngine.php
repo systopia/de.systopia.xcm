@@ -235,6 +235,8 @@ class CRM_Xcm_MatchingEngine {
     // FILL/DIFF ACTIONS (require the current contact data):
     $diff_handler = $this->config->diffHandler();
     if (   ($diff_handler != 'none')
+        || !empty($options['override_fields'])
+        || !empty($options['override_details'])
         || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
         || !empty($options['fill_details'])) {
@@ -249,6 +251,20 @@ class CRM_Xcm_MatchingEngine {
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
       CRM_Xcm_DataNormaliser::normaliseData($current_contact_data);
+
+      // OVERRIDE CURRENT CONTACT DATA
+      if (!empty($options['override_fields'])) {
+        //  caution: will set the overwritten fields in $current_contact_data
+        $this->overrideContactData($current_contact_data, $submitted_contact_data, $options['override_fields']);
+      }
+
+      // OVERRIDE CONTACT DETAILS
+      if (!empty($options['override_details']) && is_array($options['override_details'])) {
+        //  caution: will override detail data
+        foreach ($options['override_details'] as $entity_type) {
+          $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
+        }
+      }
 
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
@@ -347,7 +363,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Add a certain entity detail (phone,email,website)
    */
-  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE, &$data_update = NULL) {
+  protected function addDetailToContact($contact_id, $entity, &$data, $as_primary = FALSE, &$data_update = NULL) {
     if (!empty($data[$entity])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
@@ -391,6 +407,9 @@ class CRM_Xcm_MatchingEngine {
         if ($data_update && is_array($data_update)) {
           $data_update[$attribute] = $data[$entity];
         }
+      } else {
+        // detail already exists -> remove so it doesn't end up in diff
+        unset($data[$entity]);
       }
     }
   }
@@ -505,6 +524,138 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
+   * Will override the given fields in the database
+   *  and update the $current_contact_data accordingly
+   */
+  protected function overrideContactData(&$current_contact_data, $submitted_contact_data, $fields) {
+    $update_query = array();
+    foreach ($fields as $key) {
+      if (isset($submitted_contact_data[$key])) {
+        $current_value   = CRM_Utils_Array::value($key, $current_contact_data);
+        if ($current_value != $submitted_contact_data[$key]) {
+          $update_query[$key]         = $submitted_contact_data[$key];
+          $current_contact_data[$key] = $submitted_contact_data[$key];
+        }
+      }
+    }
+
+    // run update should it be required
+    if (!empty($update_query)) {
+      $update_query['id'] = $current_contact_data['id'];
+      civicrm_api3('Contact', 'create', $update_query);
+    }
+  }
+
+  /**
+   * Will override the given detail entity in the database,
+   *  and update the $current_contact_data accordingly
+   *
+   * It will only overwrite entities with the same location type,
+   *  and not overwrite primary entries, unless $override_details_primary is TRUE
+   */
+  protected function overrideContactDetail($entity_type, &$current_contact_data, $submitted_contact_data) {
+    switch (strtolower($entity_type)) {
+      case 'email':
+        $has_primary = TRUE;
+        $data_attributes = ['email'];
+        $identifying_attributes = ['location_type_id'];
+        break;
+
+      case 'phone':
+        $has_primary = TRUE;
+        $data_attributes = ['phone'];
+        $identifying_attributes = ['location_type_id', 'phone_type_id'];
+        break;
+
+      case 'im':
+        $has_primary = TRUE;
+        $data_attributes = ['name'];
+        $identifying_attributes = ['location_type_id', 'provider_id'];
+        break;
+
+      case 'website':
+        $has_primary = FALSE;
+        $data_attributes = ['url'];
+        $identifying_attributes = ['website_type_id'];
+        break;
+
+      case 'address':
+        $has_primary = TRUE;
+        $data_attributes = ['street_address', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3', 'county_id', 'country_id', 'state_province_id'];
+        $identifying_attributes = ['location_type_id'];
+        break;
+
+      default:
+        # unknown type
+        return;
+    }
+
+    // if all main attributes are empty, there's nothing to to
+    $data_present = FALSE;
+    foreach ($data_attributes as $data_attribute) {
+      if (!empty($submitted_contact_data[$data_attribute])) {
+        $data_present = TRUE;
+        break;
+      }
+    }
+    if (!$data_present) {
+      return;
+    }
+
+    // find current entries and replace the first match
+    try {
+      $options = $this->config->getOptions();
+      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
+      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      if (empty($submitted_contact_data['location_type_id'])) {
+        $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
+      }
+
+      // query existing entities
+      $entity_query_params = [
+          'contact_id'       => $current_contact_data['id'],
+          'option.limit'     => 0];
+      // add identifying attributes
+      foreach ($identifying_attributes as $identifying_attribute) {
+        if (!empty($submitted_contact_data[$identifying_attribute]))
+        $entity_query_params[$identifying_attribute] = $submitted_contact_data[$identifying_attribute];
+      }
+      $entity_query = civicrm_api3($entity_type, 'get', $entity_query_params);
+
+      // find the first matching one, and overwrite
+      foreach ($entity_query['values'] as $entity_data) {
+        if ($this->attributesDiffer($data_attributes, $entity_data, $submitted_contact_data, $case_insensitive)) {
+          if (empty($entity_data['is_primary']) || $override_details_primary || !$has_primary) {
+            // this is the one that will be overwritten - i.e. deleted an newly created, so...
+            // FIRST: delete existing one
+            civicrm_api3($entity_type, 'delete', ['id' => $entity_data['id']]);
+
+            // THEN: compile a new one
+            $new_entity = ['contact_id' => $entity_data['contact_id']];
+            foreach ($identifying_attributes as $attribute) {
+              if (isset($submitted_contact_data[$attribute])) {
+                $new_entity[$attribute] = $submitted_contact_data[$attribute];
+                $current_contact_data[$attribute] = $submitted_contact_data[$attribute];
+              }
+            }
+            foreach ($data_attributes as $attribute) {
+              if (isset($submitted_contact_data[$attribute])) {
+                $new_entity[$attribute] = $submitted_contact_data[$attribute];
+                $current_contact_data[$attribute] = $submitted_contact_data[$attribute];
+              }
+            }
+            $result = civicrm_api3($entity_type, 'create', $new_entity);
+            break;
+          }
+        }
+      }
+    } catch (Exception $ex) {
+      // something went wrong
+      error_log("de.systopia.xcm: error when trying to override {$entity_type}: " . $ex->getMessage());
+    }
+  }
+
+  /**
    * @param $key
    *   The field name to check for being multi-value.
    *
@@ -589,7 +740,7 @@ class CRM_Xcm_MatchingEngine {
     $all_attributes = array_keys($contact) + array_keys($contact_data);
     foreach ($all_attributes as $attribute) {
       if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
-        if ($this->attributesDiffer($attribute, $contact[$attribute], $contact_data[$attribute], $case_insensitive)) {
+        if ($this->attributesDiffer([$attribute], $contact, $contact_data, $case_insensitive)) {
           $differing_attributes[] = $attribute;
         }
       }
@@ -657,23 +808,35 @@ class CRM_Xcm_MatchingEngine {
    *
    * @return TRUE if atttributes differ
    */
-  protected function attributesDiffer($attribute_name, $original_value, $submitted_value, $case_insensitive) {
+  protected function attributesDiffer($data_attributes, $original_values, $submitted_values, $case_insensitive) {
     // TODO: collapse double spaces?
 
-    // trim values first
-    if (is_string($original_value)) {
-      $original_value  = trim($original_value);
-    }
-    if (is_string($submitted_value)) {
-      $submitted_value = trim($submitted_value);
+    foreach ($data_attributes as $data_attribute) {
+      $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
+      $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+
+      // trim values first
+      if (is_string($original_value)) {
+        $original_value  = trim($original_value);
+      }
+      if (is_string($submitted_value)) {
+        $submitted_value = trim($submitted_value);
+      }
+
+      // compare
+      if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
+        if (strtolower($original_value) != strtolower($submitted_value)) {
+          return TRUE;
+        }
+      } else {
+        if ($original_value != $submitted_value) {
+          return TRUE;
+        }
+      }
     }
 
-    // compare
-    if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
-      return strtolower($original_value) != strtolower($submitted_value);
-    } else {
-      return $original_value != $submitted_value;
-    }
+    // all are equal? good
+    return FALSE;
   }
 
 

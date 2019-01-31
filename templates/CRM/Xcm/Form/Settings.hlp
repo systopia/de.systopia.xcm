@@ -12,6 +12,11 @@
 | written permission from the original author(s).        |
 +-------------------------------------------------------*}
 
+{htxt id='id-update'}
+  <p>{ts domain="de.systopia.xcm"}Be aware that the settings in this section allow the incoming data to modify your contacts without supervision.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If the source of the incoming data is not trusted, you should think twice about what you enable here.{/ts}</p>
+{/htxt}
+
 {htxt id='id-case-sensitive'}
   <p>{ts domain="de.systopia.xcm"}Please note that most matchers are, by design, case-insensitive. This setting won't change that.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}However, this setting is also applied to the generation of a diff activity.{/ts}</p>
@@ -22,13 +27,14 @@
 {/htxt}
 
 {htxt id='id-fill-details'}
-  <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the given contact detail, it will be added.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}Warning: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the same contact detail, it will be added.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}For example, if somebody submits phone number '12345', but the contact only has '54321' and '12345-6', the submitted number '12345' will be added to the contact as a third entry.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Remark: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>
 {/htxt}
 
 {htxt id='id-fill-details-primary'}
   <p>{ts domain="de.systopia.xcm"}If a new contact detail will be created, should it henceforth be the primarily used detail?{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}Warning: If you that match wasn't correct, you might change the primary means of communcation to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Warning: If you that match wasn't correct, you might change the primary means of communication to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
 {/htxt}
 
 {htxt id='id-match-contact-id'}
@@ -37,11 +43,23 @@
 {/htxt}
 
 {htxt id='id-location-type'}
-  <p>{ts domain="de.systopia.xcm"}If no location type is explicitely submitted, this location type will be assumed.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and wesites.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If no location type is explicitly submitted, this location type will be assumed.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and websites.{/ts}</p>
 {/htxt}
 
 {htxt id='id-diff-activity'}
   <p>{ts domain="de.systopia.xcm"}This feature enables you to track and process all submitted data when a contact has been identified - but not changed.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}The activity will contain an overview of the differing attributes for contact, and will be linked to that contact.{/ts}</p>
+{/htxt}
+
+{htxt id='id-override-details'}
+  <p>{ts domain="de.systopia.xcm"}If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched, but already has another detail (e.g. phone number) recorded for the given location type, that record will be overwritten!{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}For security reasons, a <i>primary</i> detail will not be overwritten, unless you enable the "Change Primary Detail?" option.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Remark: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling.{/ts}</p>
+{/htxt}
+
+{htxt id='id-override-details-primary'}
+  <p>{ts domain="de.systopia.xcm"}Should this feature be allowed to overwrite primary details?{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Warning: You might change the primary means of communication to an untrusted value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Remark: This does not apply to websites, where no primary flag is used.{/ts}</p>
 {/htxt}

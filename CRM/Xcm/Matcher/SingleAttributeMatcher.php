@@ -19,6 +19,9 @@
  */
 class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
 
+  /** additional restrictions  */
+  protected $restrictions = array();
+
   /** the attribute that this matcher is using */
   protected $attribute = NULL;
 
