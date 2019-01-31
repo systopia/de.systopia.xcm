@@ -33,8 +33,9 @@
 {/htxt}
 
 {htxt id='id-fill-details-primary'}
-  <p>{ts domain="de.systopia.xcm"}If a new contact detail will be created, should it henceforth be the primarily used detail?{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}Warning: If you that match wasn't correct, you might change the primary means of communication to a wrong value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If a new contact detail (e.g. email) will be created, should it henceforth be the primarily used detail?{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Should the submitted detail already exist, it would still be made primary if this option is enabled.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Warning: If you that match or the detail wasn't correct, you might change the primary means of communication to an incorrect value. This could lead to, for example, a confidential email going out to the wrong person.{/ts}</p>
 {/htxt}
 
 {htxt id='id-match-contact-id'}

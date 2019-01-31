@@ -408,7 +408,12 @@ class CRM_Xcm_MatchingEngine {
           $data_update[$attribute] = $data[$entity];
         }
       } else {
-        // detail already exists -> remove so it doesn't end up in diff
+        // there already is a detail withe same value...
+        if ($as_primary) {
+          // ...and config says it should be primary -> make it sure it's primary:
+          $this->makeExistingDetailPrimary($contact_id, $entity, $attribute, $data[$entity]);
+        }
+        // also make sure, it doesn't end up in diff:
         unset($data[$entity]);
       }
     }
@@ -652,6 +657,31 @@ class CRM_Xcm_MatchingEngine {
     } catch (Exception $ex) {
       // something went wrong
       error_log("de.systopia.xcm: error when trying to override {$entity_type}: " . $ex->getMessage());
+    }
+  }
+
+  /**
+   * Will make an existing detail primary, if it isn't already
+   *
+   * @param $contact_id
+   * @param $entity
+   * @param $attribute
+   * @param $attribute_value
+   */
+  protected function makeExistingDetailPrimary($contact_id, $entity, $attribute, $attribute_value) {
+    // find the detail
+    $detail = civicrm_api3($entity, 'getsingle', [
+        'contact_id'   => $contact_id,
+        $attribute     => $attribute_value,
+        'option.sort'  => "$attribute desc",
+        'option.limit' => 1,
+        'return'       => 'is_primary,id'
+    ]);
+    if (empty($detail['is_primary'])) {
+      // detail not yet primary -> set it
+      civicrm_api3($entity, 'create', [
+          'id'         => $detail['id'],
+          'is_primary' => 1]);
     }
   }
 
