@@ -41,7 +41,7 @@ function civicrm_api3_contact_getorcreate($params) {
 function _civicrm_api3_contact_getorcreate_spec(&$params) {
   $params['contact_type'] = array(
       'name'         => 'contact_type',
-      'api.required' => 1,
+      'api.default'  => 'Individual',
       'type'         => CRM_Utils_Type::T_STRING,
       'title'        => 'Contact Type',
   );
