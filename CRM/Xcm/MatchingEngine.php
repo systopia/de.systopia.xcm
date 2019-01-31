@@ -336,7 +336,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Add a certain entity detail (phone,email,website)
    */
-  protected function addDetailToContact($contact_id, $entity, $data, $as_primary = FALSE, &$data_update = NULL) {
+  protected function addDetailToContact($contact_id, $entity, &$data, $as_primary = FALSE, &$data_update = NULL) {
     if (!empty($data[$entity])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
@@ -380,6 +380,9 @@ class CRM_Xcm_MatchingEngine {
         if ($data_update && is_array($data_update)) {
           $data_update[$attribute] = $data[$entity];
         }
+      } else {
+        // detail already exists -> remove so it doesn't end up in diff
+        unset($data[$entity]);
       }
     }
   }
