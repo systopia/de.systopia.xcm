@@ -36,6 +36,13 @@ class CRM_Xcm_Tools {
   }
 
   /**
+   * return all contact detail fields
+   */
+  public static function getDetailFields() {
+    return ['email', 'url', 'phone'];
+  }
+
+  /**
    * Generate a list of field labels for the given diff
    */
   public static function getFieldLabels($differing_attributes) {
@@ -95,8 +102,8 @@ class CRM_Xcm_Tools {
   /**
    * extract and return everything but the address data
    */
-  public static function stripAddressData($data) {
-    $fields = self::getAddressFields();
+  public static function stripAddressAndDetailData($data) {
+    $fields = array_merge(self::getAddressFields(), self::getDetailFields());
     $remaining_data = array();
     foreach ($data as $field_name => $value) {
       if (!in_array($field_name, $fields)) {
