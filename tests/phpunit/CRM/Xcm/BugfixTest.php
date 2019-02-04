@@ -27,22 +27,36 @@ use Civi\Test\TransactionalInterface;
  */
 class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
+
+  /**
+   * Test bug#36: the location type is ignored for new
+   */
+  public function testBug36PhoneNewContact() {
+    $test_location_type = $this->getNonDefaultLocationType();
+
+    // create a new contact
+    $this->setXCMRules([]);
+    $this->setXCMOption('fill_details', []);
+    $test_contact = $this->assertAPI3('Contact', 'getorcreate', [
+        'contact_type'  => 'Individual',
+        'first_name'    => 'Some',
+        'last_name'     => 'Guy',
+        'location_type' => $test_location_type,
+        'email'         => sha1(microtime() . 'b36') . '@nowhere.nil',
+    ]);
+    $test_contact = $this->assertAPI3('Contact', 'getsingle', ['id' => $test_contact['id']]);
+
+    // check email
+    $email = $this->assertAPI3('Email', 'getsingle', ['contact_id' => $test_contact['id']]);
+    $this->assertEquals($test_location_type, $email['location_type_id'], "Bug#36 still active for new contacts!");
+  }
+
   /**
    * Test bug#36: the location type is ignored for new
    */
   public function testBug36Phone() {
     // get a non-default location type
-    $default_location_type = $this->assertAPI3('LocationType', 'get', ['is_default' => 1]);
-    $this->assertNotEmpty($default_location_type['id'], "Couldn't identify default location type.");
-    $test_location_type = NULL;
-    $location_types = $this->getLocationTypeIDs();
-    foreach ($location_types as $location_type_id => $location_type_name) {
-      if ($location_type_id != $default_location_type['id']) {
-        $test_location_type = $location_type_id;
-        break;
-      }
-    }
-    $this->assertNotEmpty($test_location_type, "Couldn't find non-default location type");
+    $test_location_type = $this->getNonDefaultLocationType();
 
     // set up our test scenario
     $test_contact = $this->createContactWithRandomEmail([
@@ -75,18 +89,7 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
    */
   public function testBug36Email() {
     // get a non-default location type
-    $default_location_type = $this->assertAPI3('LocationType', 'get', ['is_default' => 1]);
-    $this->assertNotEmpty($default_location_type['id'], "Couldn't identify default location type.");
-    $test_location_type = NULL;
-    $location_types = $this->getLocationTypeIDs();
-    foreach ($location_types as $location_type_id => $location_type_name) {
-      if ($location_type_id != $default_location_type['id']) {
-        $test_location_type = $location_type_id;
-        break;
-      }
-    }
-    $this->assertNotEmpty($test_location_type, "Couldn't find non-default location type");
-    $test_location_type = 4;
+    $test_location_type = $this->getNonDefaultLocationType();
 
     // set up our test scenario
     $this->setXCMOption('fill_details', ['phone']);
@@ -116,5 +119,21 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
         'email'      => 'test36@email.test']);
 
     $this->assertEquals($test_location_type, $phone['location_type_id'], "Bug#36 still active!");
+  }
+
+  protected function getNonDefaultLocationType() {
+    // get a non-default location type
+    $default_location_type = $this->assertAPI3('LocationType', 'get', ['is_default' => 1]);
+    $this->assertNotEmpty($default_location_type['id'], "Couldn't identify default location type.");
+    $test_location_type = NULL;
+    $location_types = $this->getLocationTypeIDs();
+    foreach ($location_types as $location_type_id => $location_type_name) {
+      if ($location_type_id != $default_location_type['id']) {
+        $test_location_type = $location_type_id;
+        break;
+      }
+    }
+    $this->assertNotEmpty($test_location_type, "Couldn't find non-default location type");
+    return $test_location_type;
   }
 }

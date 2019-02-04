@@ -111,7 +111,7 @@ class CRM_Xcm_MatchingEngine {
 
     // create contact
     $contact_data['contact_type'] = CRM_Xcm_MatchingRule::getContactType($contact_data);
-    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Tools::stripAddressData($contact_data));
+    $new_contact  = civicrm_api3('Contact', 'create', CRM_Xcm_Tools::stripAddressAndDetailData($contact_data));
 
     // create address separately (see https://github.com/systopia/de.systopia.xcm/issues/6)
     $address_data = CRM_Xcm_Tools::extractAddressData($contact_data);
@@ -124,6 +124,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // create phone number (that used to work...)
+    $this->addDetailToContact($new_contact['id'], 'email',   $contact_data);
     $this->addDetailToContact($new_contact['id'], 'phone',   $contact_data);
     $this->addDetailToContact($new_contact['id'], 'website', $contact_data);
 
@@ -353,8 +354,6 @@ class CRM_Xcm_MatchingEngine {
         $sorting = 'id desc';
       }
 
-
-
       // some value was submitted -> check if there is already an existing one
       $existing_entity = civicrm_api3($entity, 'get', array(
         $attribute     => $data[$entity],
@@ -373,7 +372,7 @@ class CRM_Xcm_MatchingEngine {
           $create_detail_call['is_primary'] = 1;
         }
 
-        // create the deail
+        // create the detail
         civicrm_api3($entity, 'create', $create_detail_call);
 
         // mark in update_data
