@@ -65,4 +65,53 @@ class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterfa
         'phone'      => $phone_2]);
     $this->assertEquals('1', $phone['is_primary'], "Submitted phone was not made primary.");
   }
+
+  /**
+   * Test bug enhancement#36: del
+   */
+  public function testBugEnhancement37() {
+    $email_1 = "643087@test.nil"; // primary
+    $email_2 = "643087@test.nil"; //"643068@test.nil";
+    $email_3 = "643085@test.nil";
+    $email_4 = "92810@test.nil";
+    $email_5 = "623601@test.nil";
+    $emails = [$email_1, $email_2, $email_3, $email_4, $email_5];
+
+    // set up our test scenario
+    $test_contact = $this->assertAPI3('Contact', 'create', [
+        'contact_type' => 'Individual',
+        'first_name'   => 'Aaron',
+        'last_name'    => 'Aaronson'
+    ]);
+    $test_contact = $this->assertAPI3('Contact', 'getsingle', ['id' => $test_contact['id']]);
+    foreach ($emails as $email) {
+      $this->assertAPI3('Email', 'create', [
+          'contact_id' => $test_contact['id'],
+          'email'      => $email,
+          'is_primary' => ($email == $email_1) ? '1' : '0'
+      ]);
+    }
+
+    // test
+    $this->setXCMRules([]);
+    $this->setXCMOption('match_contact_id', 1);
+    $this->setXCMOption('fill_details', ['email']);
+    $this->setXCMOption('fill_details_primary', 1);
+
+    // match contact with second email
+    $this->assertXCMLookup([
+        'email'        => $email_2,
+        'id'           => $test_contact['id'],
+        'first_name'   => 'Aaron',
+        'last_name'    => 'Aaronson',
+    ], $test_contact['id']);
+
+    // see if all emails still exist
+    foreach ($emails as $email) {
+      $first_email_count = $this->assertAPI3('Email', 'getcount', [
+          'contact_id' => $test_contact['id'],
+          'email'      => $email]);
+      $this->assertGreaterThan(0, $first_email_count, "Original E-Mail address has disappeared!");
+    }
+  }
 }
