@@ -234,7 +234,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
   public static function formatUnitSize($size, $checkForPostMax = FALSE) {
     // if the method exists in CiviCRM -> use that!
     if (method_exists('CRM_Utils_Number', 'formatUnitSize')) {
-      return CRM_Utils_Number::formatUnitSize();
+      return CRM_Utils_Number::formatUnitSize($size, $checkForPostMax);
     }
 
     // doesn't exist -> we're probably on CiviCRM 4.6
