@@ -67,9 +67,46 @@ class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterfa
   }
 
   /**
-   * Test bug enhancement#36: del
+   * Test bug enhancement#39: set primary
    */
-  public function testBugEnhancement37() {
+  public function testBugEnhancement39_1() {
+    // create test scenario
+    $contact = $this->assertAPI3('Contact', 'create', [
+        'last_name'    => "Tester",
+        'first_name'   => "Test 2031",
+        'contact_type' => 'Individual']);
+    $email1 = $this->assertAPI3('Email', 'create', [
+        'email'      => 'test1@email2013.org',
+        'contact_id' => $contact['id'],
+        'is_primary' => 1]);
+    $email2 = $this->assertAPI3('Email', 'create', [
+        'email'      => 'test2@email2031.org',
+        'contact_id' => $contact['id'],
+        'is_primary' => 0]);
+
+    // run test
+    $this->setXCMRules([]);
+    $this->setXCMOption('match_contact_id', 1);
+    $this->setXCMOption('fill_details', ['phone']);
+    $this->setXCMOption('fill_details_primary', 1);
+    $this->assertXCMLookup([
+        'id'    => $contact['id'],
+        'email' => 'test2@email2031.org'
+    ], $contact['id']);
+
+    // check if emails have changed
+    $email1_test = $this->assertAPI3('Email', 'getsingle', ['id' => $email1['id']]);
+    $this->assertEquals('test1@email2013.org', $email1_test['email']);
+
+    // check if emails have changed
+    $email2_test = $this->assertAPI3('Email', 'getsingle', ['id' => $email2['id']]);
+    $this->assertEquals('test2@email2031.org', $email2_test['email']);
+  }
+
+  /**
+   * Test bug enhancement#39: set primary
+   */
+  public function testBugEnhancement39_2() {
     $email_1 = "643087@test.nil"; // primary
     $email_2 = "643087@test.nil"; //"643068@test.nil";
     $email_3 = "643085@test.nil";

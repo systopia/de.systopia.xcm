@@ -674,13 +674,11 @@ class CRM_Xcm_MatchingEngine {
         $attribute     => $attribute_value,
         'option.sort'  => "$attribute desc",
         'option.limit' => 1,
-        'return'       => 'is_primary,id'
     ]);
     if (empty($detail['is_primary'])) {
       // detail not yet primary -> set it
-      civicrm_api3($entity, 'create', [
-          'id'         => $detail['id'],
-          'is_primary' => 1]);
+      $detail['is_primary'] = 1;
+      civicrm_api3($entity, 'create', $detail);
     }
   }
 
