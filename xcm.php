@@ -153,6 +153,11 @@ function xcm_civicrm_buildForm($formName, &$form) {
         // not required if we are deleting!
     if ($form->_action != CRM_Core_Action::DELETE) {
       try {
+        // check if status_id field exists. $form->getElement triggers an error
+        // otherwise (doesn't throw an exception!)
+        if (!$form->elementExists('status_id')) {
+          return;
+        }
         // look up activity type id and status_id
         $elem_status_id           = $form->getElement('status_id');
         $current_status_value     = $elem_status_id->getValue();
