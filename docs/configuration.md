@@ -92,10 +92,10 @@ XCM provides some common matching rules itself. Custom rules may be defined as
 deduplicate rules on *Contacts* → *Find and Merge Duplicate Contacts*.
 
 XCM will always start with the first rule and go on to the next one if there was
-no distinct result.
+no result. The matching will stop when at least one contact was found.
 
-If even the last rule does not yield a distinct contact, the
-*Of multiple matches, pick* setting will decide which contact to use.
+If there are multiple matched contacts, the *Of multiple matches, pick* setting
+will decide which contact to use.
 
 This configuration is highly dependent on your scenarios and data.
 
