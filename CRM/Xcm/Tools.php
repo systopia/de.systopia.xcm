@@ -110,6 +110,24 @@ class CRM_Xcm_Tools {
         $remaining_data[$field_name] = $value;
       }
     }
+
+    // let's make sure we didn't remove too much...
+    if (($remaining_data['contact_type'] == 'Organization' && empty($remaining_data['organization_name']))
+     || ($remaining_data['contact_type'] == 'Individual'   && empty($remaining_data['last_name']))
+     || ($remaining_data['contact_type'] == 'Household'    && empty($remaining_data['household_name']))) {
+
+      // set the display name if possible
+      if (empty($remaining_data['display_name'])) {
+        $detail_fields = self::getDetailFields();
+        foreach ($detail_fields as $detail_field) {
+          if (!empty($data[$detail_field])) {
+            $remaining_data['display_name'] = $data[$detail_field];
+            break;
+          }
+        }
+      }
+    }
+
     return $remaining_data;
   }
 
