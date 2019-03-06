@@ -20,7 +20,7 @@
 class CRM_Xcm_Matcher_PhoneOnlyMatcher extends CRM_Xcm_Matcher_SingleAttributeMatcher {
 
   function __construct() {
-    parent::__construct('phone', 'Phone');
+    parent::__construct('phone_numeric', 'Phone');
   }
 
 }
