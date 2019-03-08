@@ -42,7 +42,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
       $this->fields = array(
         'first_name',
         'last_name',
-        'phone',
+        'phone_numeric',
         'email',
         'street_address',
         'postal_code',

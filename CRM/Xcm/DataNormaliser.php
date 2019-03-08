@@ -59,6 +59,25 @@ class CRM_Xcm_DataNormaliser {
     if (!empty($data['birth_date'])) {
       $data['birth_date'] = date('Y-m-d', strtotime($data['birth_date']));
     }
+
+    if (!empty($data['phone']) && empty($data['phone_numeric'])) {
+      $phone = $data['phone'];
+      // use com.cividesk.normalize to normalize phone numbers prior to matching
+      // this is necessary if prefixing with +[country_code] is enabled, otherwise
+      // no incoming phone numbers without the prefix will match
+      if (method_exists('CRM_Utils_Normalize', 'normalize_phone')) {
+        $normalized_phone = [
+          'phone_type_id' => 1,
+          'phone' => $data['phone'],
+        ];
+        $normalizer = new CRM_Utils_Normalize();
+        $normalizer->normalize_phone($normalized_phone);
+        $phone = $normalized_phone['phone'];
+      }
+
+      // strip non-numeric characters
+      $data['phone_numeric'] = preg_replace('#[^0-9]#', '', $phone);
+    }
   }
 
   /**
