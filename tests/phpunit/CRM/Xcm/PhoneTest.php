@@ -13,7 +13,6 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
 use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
@@ -27,7 +26,10 @@ class CRM_Xcm_PhoneTest extends CRM_Xcm_TestBase implements HeadlessInterface, H
 
   public function testPhoneNumeric() {
     // set up our test scenario
-    $this->setXCMOption('fill_details', ['phone']);
+    $this->setXCMOption('fill_details', ['email', 'phone']);
+    $this->setXCMOption('fill_details_primary', 1);
+    $this->enableDiffActivity('testPhoneNumeric');
+
     $test_contact = $this->createContactWithRandomEmail([
       'first_name' => 'John',
       'last_name'  => 'Doe',
@@ -58,6 +60,34 @@ class CRM_Xcm_PhoneTest extends CRM_Xcm_TestBase implements HeadlessInterface, H
     $this->assertXCMLookup([
       'phone'            => '+43 680 1 337 19 9',
     ], $test_contact['id']);
+
+    // no diff activity should be created
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testPhoneNumeric');
+    $this->assertEquals(0, $activity_count, 'Unexpected diff activity');
+
+    // match via email to test diff handling of NEW phone
+    $this->setXCMRules(['CRM_Xcm_Matcher_EmailLastnameMatcher']);
+    $this->assertXCMLookup([
+      'phone' => '+43 680 5 337 19 9',
+      'email' => $test_contact['email'],
+      'last_name'  => 'Doe',
+    ], $test_contact['id']);
+
+    // no diff activity should be created
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testPhoneNumeric');
+    $this->assertEquals(0, $activity_count, 'Unexpected diff activity');
+
+    // match via email to test diff handling of existing non-primary phone
+    $this->setXCMRules(['CRM_Xcm_Matcher_EmailLastnameMatcher']);
+    $this->assertXCMLookup([
+      'phone' => '+43 680 1 337 19 9',
+      'email' => $test_contact['email'],
+      'last_name'  => 'Doe',
+    ], $test_contact['id']);
+
+    // no diff activity should be created
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testPhoneNumeric');
+    $this->assertEquals(0, $activity_count, 'Unexpected diff activity');
   }
 
 }
