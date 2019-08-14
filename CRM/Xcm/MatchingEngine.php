@@ -405,6 +405,12 @@ class CRM_Xcm_MatchingEngine {
         // mark in update_data
         if ($data_update && is_array($data_update)) {
           $data_update[$attribute] = $data[$entity];
+
+          // if we're dealing with a phone number, update phone_numeric as well
+          // to avoid unnecessary diff activities
+          if ($entity == 'phone') {
+            $data_update['phone_numeric'] = $data['phone_numeric'];
+          }
         }
       } else {
         // there already is a detail withe same value...
@@ -414,6 +420,10 @@ class CRM_Xcm_MatchingEngine {
         }
         // also make sure, it doesn't end up in diff:
         unset($data[$entity]);
+        // if we're dealing with phone, also do so for phone_numeric
+        if ($entity == 'phone') {
+          unset($data['phone_numeric']);
+        }
       }
     }
   }
