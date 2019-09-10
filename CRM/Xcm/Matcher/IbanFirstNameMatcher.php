@@ -14,23 +14,23 @@
 +--------------------------------------------------------*/
 
 /*
- * Matches on first name, last name and address
+ * Matches on IBAN (CiviBanking or CiviSEPA) + first name
  */
-class CRM_Xcm_Matcher_NameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher {
+class CRM_Xcm_Matcher_IbanFirstNameMatcher extends CRM_Xcm_Matcher_IbanMatcher {
 
-  protected function __construct() {
-    parent::__construct(['last_name', 'first_name']);
+  public function __construct() {
+    parent::__construct(['first_name']);
   }
 
   /**
    * Add more parameters to the final contact query. The filters for
-   *  the address are already in there
+   *  the iban are already in there
    *
    * @param $contact_query array the current query
    * @param $contact_data  array the submitted contact data
    */
   public function refineContactQuery(&$contact_query, $contact_data) {
     $contact_query['first_name'] = $contact_data['first_name'];
-    $contact_query['last_name']  = $contact_data['last_name'];
   }
+
 }

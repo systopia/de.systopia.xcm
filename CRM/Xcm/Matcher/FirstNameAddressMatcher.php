@@ -14,12 +14,12 @@
 +--------------------------------------------------------*/
 
 /*
- * Matches on first name, last name and address
+ * Matches on first name and address
  */
-class CRM_Xcm_Matcher_NameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher {
+class CRM_Xcm_Matcher_FirstNameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher {
 
-  protected function __construct() {
-    parent::__construct(['last_name', 'first_name']);
+  public function __construct() {
+    parent::__construct(['first_name']);
   }
 
   /**
@@ -31,6 +31,5 @@ class CRM_Xcm_Matcher_NameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher 
    */
   public function refineContactQuery(&$contact_query, $contact_data) {
     $contact_query['first_name'] = $contact_data['first_name'];
-    $contact_query['last_name']  = $contact_data['last_name'];
   }
 }
