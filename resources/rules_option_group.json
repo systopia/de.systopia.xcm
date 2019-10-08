@@ -57,9 +57,49 @@
     {
       "_lookup": ["name"],
       "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_IbanFirstNameMatcher",
+      "value": "CRM_Xcm_Matcher_IbanFirstNameMatcher",
+      "label": "First Name and IBAN (CiviSEPA or CiviBanking)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_IbanLastNameMatcher",
+      "value": "CRM_Xcm_Matcher_IbanLastNameMatcher",
+      "label": "Last Name and IBAN (CiviSEPA or CiviBanking)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
       "name": "CRM_Xcm_Matcher_NameAddressMatcher",
       "value": "CRM_Xcm_Matcher_NameAddressMatcher",
       "label": "First name, last name, and (any) address",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_FirstNameAddressMatcher",
+      "value": "CRM_Xcm_Matcher_FirstNameAddressMatcher",
+      "label": "First name and (any) address",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_LastNameAddressMatcher",
+      "value": "CRM_Xcm_Matcher_LastNameAddressMatcher",
+      "label": "Last name and (any) address",
       "filter": "0",
       "is_reserved": "1",
       "is_active": "1"
