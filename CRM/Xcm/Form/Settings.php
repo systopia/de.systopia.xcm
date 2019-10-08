@@ -84,7 +84,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->addElement('select',
                       'fill_fields',
                       E::ts('Fill Fields'),
-                      $this->getContactFields() + $this->getCustomFields(),
+                      self::getContactFields() + self::getCustomFields(),
                       array(// 'style'    => 'width:450px; height:100%;',
                             'multiple' => 'multiple',
                             'class'    => 'crm-select2 huge'));
@@ -92,7 +92,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->addElement('select',
         'override_fields',
         E::ts('Override Fields'),
-        $this->getContactFields() + $this->getCustomFields(),
+        self::getContactFields() + self::getCustomFields(),
         array(// 'style'    => 'width:450px; height:100%;',
               'multiple' => 'multiple',
               'class'    => 'crm-select2 huge'));
@@ -470,7 +470,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * get a list of custom fields eligible for submission.
    * those are all custom fields that belong to a contact in general
    */
-  protected function getCustomFields() {
+  public static function getCustomFields() {
     $custom_fields = array();
 
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
@@ -503,7 +503,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * get a list of custom fields eligible for submission.
    * those are all custom fields that belong to a contact in general
    */
-  protected function getContactFields() {
+  public static function getContactFields() {
     return array(
       'display_name'                   => E::ts("Display Name"),
       'household_name'                 => E::ts("Household Name"),
