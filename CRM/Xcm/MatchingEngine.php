@@ -333,13 +333,35 @@ class CRM_Xcm_MatchingEngine {
   }
 
   protected function addContactToGroup($contact_id, $group_id) {
-    // TODO: error handling
-    civicrm_api3('GroupContact', 'create', array('contact_id' => $contact_id, 'group_id' => $group_id));
+    $contact_id = (int) $contact_id;
+    $group_id = (int) $group_id;
+    if ($contact_id && $group_id) {
+      try {
+        civicrm_api3('GroupContact', 'create', ['contact_id' => $contact_id, 'group_id' => $group_id]);
+      } catch (Exception $ex) {
+        // this shouldn't happen
+        error_log("Error when adding contact to group: " . $ex->getMessage());
+      }
+    }
   }
 
+  /**
+   * Tag the contact with the given tag
+   *
+   * @param $contact_id integer contact ID
+   * @param $tag_id     integer tag ID
+   */
   protected function addContactToTag($contact_id, $tag_id) {
-    // TODO: error handling
-    civicrm_api3('EntityTag', 'create', array('entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact'));
+    $contact_id = (int) $contact_id;
+    $tag_id = (int) $tag_id;
+    if ($contact_id && $tag_id) {
+      try {
+        civicrm_api3('EntityTag', 'create', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+      } catch (Exception $ex) {
+        // tag probably already exists with the contact, or contact doesn't exist
+        //  no need to worry.
+      }
+    }
   }
 
   protected function addActivityToContact($contact_id, $activity_type_id, $subject, $template_id, &$contact_data) {
