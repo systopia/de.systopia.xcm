@@ -1,7 +1,7 @@
 <?php
 /*-------------------------------------------------------+
 | Extended Contact Matcher XCM                           |
-| Copyright (C) 2016 SYSTOPIA                            |
+| Copyright (C) 2016-2019 SYSTOPIA                       |
 | Author: B. Endres (endres@systopia.de)                 |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
@@ -14,7 +14,19 @@
 +--------------------------------------------------------*/
 
 require_once 'xcm.civix.php';
+
 use CRM_Xcm_ExtensionUtil as E;
+
+use \Symfony\Component\DependencyInjection\ContainerBuilder;
+
+/**
+ * Implements hook_civicrm_container()
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
+ */
+function xcm_civicrm_container(ContainerBuilder $container) {
+  $container->addCompilerPass(new Civi\Xcm\ActionProvider\Action\ContactGetOrCreate());
+}
 
 /**
  * Implements hook_civicrm_config().
