@@ -24,6 +24,9 @@
     <ver>5.10</ver>
   </compatibility>
   <comments></comments>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi" />
+  </classloader>
   <civix>
     <namespace>CRM/Xcm</namespace>
   </civix>
