@@ -73,7 +73,7 @@ class ContactGetOrCreate extends AbstractAction implements CompilerPassInterface
       $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, false);
     }
 
-    return new SpecificationBag($contact_specs + [
+    return new SpecificationBag(array_merge($contact_specs, [
         // special fields
         new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
         new Specification('xcm_submitted_contact_id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
@@ -98,7 +98,7 @@ class ContactGetOrCreate extends AbstractAction implements CompilerPassInterface
         new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false),
         new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
         new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
-   ]);
+   ]));
   }
 
   /**
