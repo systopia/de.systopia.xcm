@@ -25,7 +25,7 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
   // restrictions for search, e.g. array('is_billing' => '0')
   protected $restrictions = array();
 
-  function __construct($other_contact_fields = NULL) {
+  public function __construct($other_contact_fields = NULL) {
     if (is_array($other_contact_fields)) {
       $this->other_contact_fields = $other_contact_fields;
     } else {
