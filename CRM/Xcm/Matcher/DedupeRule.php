@@ -21,7 +21,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
 
   protected $dedupe_group_bao = NULL;
 
-  function __construct($dedupe_group_id) {
+  public function __construct($dedupe_group_id) {
     $this->dedupe_group_bao = new CRM_Dedupe_BAO_RuleGroup();
     $this->dedupe_group_bao->get('id', $dedupe_group_id);
 

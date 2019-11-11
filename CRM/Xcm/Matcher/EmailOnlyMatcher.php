@@ -19,7 +19,7 @@
  */
 class CRM_Xcm_Matcher_EmailOnlyMatcher extends CRM_Xcm_Matcher_SingleAttributeMatcher {
 
-  function __construct() {
+  public function __construct() {
     parent::__construct('email', 'Email');
   }
 

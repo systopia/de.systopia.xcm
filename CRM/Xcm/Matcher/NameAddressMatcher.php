@@ -18,7 +18,7 @@
  */
 class CRM_Xcm_Matcher_NameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher {
 
-  protected function __construct() {
+  public function __construct() {
     parent::__construct(['last_name', 'first_name']);
   }
 

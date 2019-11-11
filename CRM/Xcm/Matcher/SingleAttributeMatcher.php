@@ -32,7 +32,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
   protected $fields = NULL;
 
 
-  function __construct($attribute, $entity, $fields = NULL) {
+  public function __construct($attribute, $entity, $fields = NULL) {
     $this->attribute = $attribute;
     $this->entity = $entity;
     if (is_array($fields)) {
