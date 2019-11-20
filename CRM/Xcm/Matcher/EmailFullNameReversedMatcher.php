@@ -14,10 +14,10 @@
 +--------------------------------------------------------*/
 
 /*
- * Matches on (any) email and first_name and last name
+ * Matches on (any) email and first_name and last name... BUT only when they're reversed!
  */
-class CRM_Xcm_Matcher_EmailFullNameMatcher extends CRM_Xcm_Matcher_EmailMatcher {
+class CRM_Xcm_Matcher_EmailFullNameReversedMatcher extends CRM_Xcm_Matcher_EmailMatcher {
   public function __construct() {
-    parent::__construct(['first_name' => 'first_name', 'last_name' => 'last_name', 'contact_type' => 'contact_type']);
+    parent::__construct(['first_name' => 'last_name', 'last_name' => 'first_name', 'contact_type' => 'contact_type']);
   }
 }

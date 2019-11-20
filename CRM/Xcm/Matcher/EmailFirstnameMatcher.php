@@ -18,6 +18,6 @@
  */
 class CRM_Xcm_Matcher_EmailFirstnameMatcher extends CRM_Xcm_Matcher_EmailMatcher {
   public function __construct() {
-    parent::__construct(array('first_name', 'contact_type'));
+    parent::__construct(['first_name' => 'first_name', 'contact_type' => 'contact_type']);
   }
 }
