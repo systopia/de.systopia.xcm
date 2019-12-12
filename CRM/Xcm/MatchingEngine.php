@@ -337,7 +337,10 @@ class CRM_Xcm_MatchingEngine {
     $group_id = (int) $group_id;
     if ($contact_id && $group_id) {
       try {
-        civicrm_api3('GroupContact', 'create', ['contact_id' => $contact_id, 'group_id' => $group_id]);
+        $is_group_member = civicrm_api3('GroupContact', 'getcount', ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']);
+        if (!$is_group_member) {
+          civicrm_api3('GroupContact', 'create', ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']);
+        }
       } catch (Exception $ex) {
         // this shouldn't happen
         error_log("Error when adding contact to group: " . $ex->getMessage());
@@ -356,7 +359,10 @@ class CRM_Xcm_MatchingEngine {
     $tag_id = (int) $tag_id;
     if ($contact_id && $tag_id) {
       try {
-        civicrm_api3('EntityTag', 'create', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+        $is_tagged = civicrm_api3('EntityTag', 'getcount', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+        if (!$is_tagged) {
+          civicrm_api3('EntityTag', 'create', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+        }
       } catch (Exception $ex) {
         // tag probably already exists with the contact, or contact doesn't exist
         //  no need to worry.
