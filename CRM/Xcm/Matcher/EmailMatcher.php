@@ -23,13 +23,13 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
   protected $other_contact_fields = NULL;
 
   // restrictions for search, e.g. array('is_billing' => '0')
-  protected $restrictions = array();
+  protected $restrictions = [];
 
   public function __construct($other_contact_fields = NULL) {
     if (is_array($other_contact_fields)) {
       $this->other_contact_fields = $other_contact_fields;
     } else {
-      $this->other_contact_fields = array('contact_type');
+      $this->other_contact_fields = ['contact_type' => 'contact_type'];
     }
   }
 
@@ -45,8 +45,8 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // make sure the other fields are there
-    foreach ($this->other_contact_fields as $field_name) {
-      if (!isset($contact_data[$field_name])) {
+    foreach ($this->other_contact_fields as $contact_field_name => $submitted_field_name) {
+      if (!isset($contact_data[$submitted_field_name])) {
         return $this->createResultUnmatched();
       }
     }
@@ -57,7 +57,7 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     $email_query['return'] = 'contact_id';
     $email_query['option.limit'] = 0;
     $emails_found = civicrm_api3('Email', 'get', $email_query);
-    $email_contact_ids = array();
+    $email_contact_ids = [];
     foreach ($emails_found['values'] as $email) {
       $email_contact_ids[] = $email['contact_id'];
     }
@@ -73,11 +73,11 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
       'is_deleted'   => 0,
       'option.limit' => 0,
       'return'       => 'id');
-    foreach ($this->other_contact_fields as $field_name) {
-      $contact_search[$field_name] = $contact_data[$field_name];
+    foreach ($this->other_contact_fields as $contact_field_name => $submitted_field_name) {
+      $contact_search[$contact_field_name] = $contact_data[$submitted_field_name];
     }
     $contacts = civicrm_api3('Contact', 'get', $contact_search);
-    $contact_matches = array();
+    $contact_matches = [];
     foreach ($contacts['values'] as $contact) {
       $contact_matches[] = $contact['id'];
     }
