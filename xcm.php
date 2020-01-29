@@ -25,10 +25,7 @@ use \Symfony\Component\DependencyInjection\ContainerBuilder;
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
 function xcm_civicrm_container(ContainerBuilder $container) {
-  if ( class_exists("Civi\ActionProvider\Action\AbstractAction")
-    && class_exists("Civi\Xcm\ActionProvider\Action\ContactGetOrCreate")) {
-    $container->addCompilerPass(new Civi\Xcm\ActionProvider\Action\ContactGetOrCreate());
-  }
+  $container->addCompilerPass(new Civi\Xcm\ContainerSpecs());
 }
 
 /**

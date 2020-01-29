@@ -1,9 +1,8 @@
 <?php
 /*-------------------------------------------------------+
-| SYSTOPIA CUSTOM DATA HELPER                            |
-| Copyright (C) 2019 SYSTOPIA                            |
+| Extended Contact Matcher XCM                           |
+| Copyright (C) 2020 SYSTOPIA                            |
 | Author: B. Endres (endres@systopia.de)                 |
-| Source: https://github.com/systopia/Custom-Data-Helper |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
 | Affero GPL license. You can redistribute it and/or     |
@@ -23,24 +22,8 @@ use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ContactGetOrCreate extends AbstractAction implements CompilerPassInterface {
-
-  /**
-   * Register this one action: XcmGetOrCreate
-   */
-  public function process(ContainerBuilder $container) {
-    if (!$container->hasDefinition('action_provider')) {
-      return;
-    }
-    $typeFactoryDefinition = $container->getDefinition('action_provider');
-    $typeFactoryDefinition->addMethodCall('addAction', ['XcmGetOrCreate', 'Civi\Xcm\ActionProvider\Action\ContactGetOrCreate', E::ts('Extended Contact Matcher (XCM)'), [
-        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-        AbstractAction::DATA_RETRIEVAL_TAG
-    ]]);
-  }
+class ContactGetOrCreate extends AbstractAction {
 
   /**
    * Returns the specification of the configuration options for the actual action.
