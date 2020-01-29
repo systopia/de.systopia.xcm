@@ -227,9 +227,21 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                         E::ts('Subject'));
 
       $this->addElement('select',
+                        "{$mode}_add_activity_status",
+                        E::ts('Status'),
+                        $this->getActivityStatuses(),
+                        array('class' => 'crm-select2'));
+
+      $this->addElement('select',
                         "{$mode}_add_activity_template",
                         E::ts('Template'),
                         $this->getTemplates(),
+                        array('class' => 'crm-select2'));
+
+      $this->addElement('select',
+                        "{$mode}_add_activity_campaign",
+                        E::ts('Campaign'),
+                        $this->getCampaigns(),
                         array('class' => 'crm-select2'));
     }
 
@@ -347,7 +359,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // store the postprocessing
     $postprocessing = array();
     foreach (array('matched', 'created') as $mode) {
-      foreach (array('group', 'tag', 'activity', 'activity_subject', 'activity_template') as $type) {
+      foreach (array('group', 'tag', 'activity', 'activity_subject', 'activity_template', 'activity_status', 'activity_campaign') as $type) {
         $key = "{$mode}_add_{$type}";
         $postprocessing[$key] = CRM_Utils_Array::value($key, $values);
       }
@@ -404,7 +416,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       $activity_list[0] = E::ts('None, thank you');
     }
 
-    $activities = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_type', 'option.limit' => 9999));
+    $activities = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_type', 'option.limit' => 0));
     foreach ($activities['values'] as $activity) {
       $activity_list[$activity['value']] = $activity['label'];
     }
@@ -412,10 +424,33 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     return $activity_list;
   }
 
+  protected function getActivityStatuses() {
+    $activity_status_list = array();
+    $statuses = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_status', 'option.limit' => 0));
+    foreach ($statuses['values'] as $status) {
+      $activity_status_list[$status['value']] = $status['label'];
+    }
+
+    return $activity_status_list;
+  }
+
+  protected function getCampaigns() {
+    $campaign_list = array(
+        ''      => E::ts("No Campaign"),
+        'input' => E::ts("From Input (campaign_id)"),
+    );
+    $campaigns = civicrm_api3('Campaign', 'get', array('is_active' => 1, 'option.limit' => 0));
+    foreach ($campaigns['values'] as $campaign) {
+      $campaign_list[$campaign['id']] = $campaign['name'];
+    }
+
+    return $campaign_list;
+  }
+
   protected function getTags() {
     $tag_list = array(0 => E::ts('None, thank you'));
 
-    $tags = civicrm_api3('Tag', 'get', array('is_active' => 1, 'option.limit' => 9999));
+    $tags = civicrm_api3('Tag', 'get', array('is_active' => 1, 'option.limit' => 0));
     foreach ($tags['values'] as $tag) {
       $tag_list[$tag['id']] = $tag['name'];
     }
@@ -425,7 +460,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getTemplates() {
     $template_list = array(0 => E::ts('No content'));
 
-    $templates = civicrm_api3('MessageTemplate', 'get', array('is_active' => 1, 'is_reserved' => 0, 'option.limit' => 9999));
+    $templates = civicrm_api3('MessageTemplate', 'get', array('is_active' => 1, 'is_reserved' => 0, 'option.limit' => 0));
     foreach ($templates['values'] as $template) {
       $template_list[$template['id']] = $template['msg_title'];
     }
@@ -435,7 +470,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getGroups() {
     $group_list = array(0 => E::ts('None, thank you'));
 
-    $groups = civicrm_api3('Group', 'get', array('is_active' => 1, 'option.limit' => 9999));
+    $groups = civicrm_api3('Group', 'get', array('is_active' => 1, 'option.limit' => 0));
     foreach ($groups['values'] as $group) {
       $group_list[$group['id']] = $group['title'];
     }
@@ -476,7 +511,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
       'extends'      => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
       'is_active'    => 1,
-      'option.limit' => 9999,
+      'option.limit' => 0,
       'is_multiple'  => 0,
       'is_reserved'  => 0,
       'return'       => 'id'));
@@ -489,7 +524,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       $custom_field_query = civicrm_api3('CustomField', 'get', array(
         'custom_group_id'  => array('IN' => $custom_group_ids),
         'is_active'        => 1,
-        'option.limit'     => 9999,
+        'option.limit'     => 0,
         'return'           => 'id,label'));
       foreach ($custom_field_query['values'] as $custom_field) {
         $custom_fields["custom_{$custom_field['id']}"] = "{$custom_field['label']} [{$custom_field['id']}]";

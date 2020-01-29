@@ -141,8 +141,14 @@
       <div class="label">{$form.matched_add_activity_subject.label}</div>
       <div class="content">{$form.matched_add_activity_subject.html}</div>
       <div class="clear"></div>
+      <div class="label">{$form.matched_add_activity_status.label}</div>
+      <div class="content">{$form.matched_add_activity_status.html}</div>
+      <div class="clear"></div>
       <div class="label">{$form.matched_add_activity_template.label}</div>
       <div class="content">{$form.matched_add_activity_template.html}</div>
+      <div class="clear"></div>
+      <div class="label">{$form.matched_add_activity_campaign.label}</div>
+      <div class="content">{$form.matched_add_activity_campaign.html}</div>
     </div>
     <div class="clear"></div>
   </div>
@@ -167,8 +173,14 @@
       <div class="label">{$form.created_add_activity_subject.label}</div>
       <div class="content">{$form.created_add_activity_subject.html}</div>
       <div class="clear"></div>
+      <div class="label">{$form.created_add_activity_status.label}</div>
+      <div class="content">{$form.created_add_activity_status.html}</div>
+      <div class="clear"></div>
       <div class="label">{$form.created_add_activity_template.label}</div>
       <div class="content">{$form.created_add_activity_template.html}</div>
+      <div class="clear"></div>
+      <div class="label">{$form.created_add_activity_campaign.label}</div>
+      <div class="content">{$form.created_add_activity_campaign.html}</div>
     </div>
     <div class="clear"></div>
   </div>
