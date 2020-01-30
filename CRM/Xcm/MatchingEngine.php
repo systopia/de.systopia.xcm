@@ -205,6 +205,8 @@ class CRM_Xcm_MatchingEngine {
       $this->addActivityToContact($new_contact['id'],
                                   $postprocessing['created_add_activity'],
                                   $postprocessing['created_add_activity_subject'],
+                                  $postprocessing['created_add_activity_status'],
+                                  $postprocessing['created_add_activity_campaign'],
                                   $postprocessing['created_add_activity_template'],
                                   $contact_data);
     }
@@ -229,6 +231,8 @@ class CRM_Xcm_MatchingEngine {
       $this->addActivityToContact($result['contact_id'],
                                   $postprocessing['matched_add_activity'],
                                   $postprocessing['matched_add_activity_subject'],
+                                  $postprocessing['matched_add_activity_status'],
+                                  $postprocessing['matched_add_activity_campaign'],
                                   $postprocessing['matched_add_activity_template'],
                                   $submitted_contact_data);
     }
@@ -370,23 +374,45 @@ class CRM_Xcm_MatchingEngine {
     }
   }
 
-  protected function addActivityToContact($contact_id, $activity_type_id, $subject, $template_id, &$contact_data) {
+  /**
+   * Create a marker activity with the given contact
+   *
+   * @param $contact_id         int contact ID
+   * @param $activity_type_id   int activity type id
+   * @param $subject            string subject
+   * @param $status_id          int activity status id
+   * @param $campaign           string campaign: empty string (no campaign), 'input' (take from input), campaign_id otherwise
+   * @param $template_id        int template ID
+   * @param $contact_data       array contact data
+   */
+  protected function addActivityToContact($contact_id, $activity_type_id, $subject, $status_id, $campaign, $template_id, &$contact_data) {
+    if (empty($status_id)) {
+      $status_id = $this->config->defaultActivityStatus();
+    }
+    if ($campaign == 'input') {
+      $campaign = CRM_Utils_Array::value('campaign_id', $contact_data);
+    }
+
     $activity_data = array(
         'activity_type_id'   => $activity_type_id,
         'subject'            => $subject,
-        'status_id'          => $this->config->defaultActivityStatus(),
+        'status_id'          => $status_id,
         'activity_date_time' => date("YmdHis"),
         'target_contact_id'  => (int) $contact_id,
         'source_contact_id'  => (int) $contact_id,
-        'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
+        'campaign_id'        => $campaign,
     );
 
-    if ($template_id) {
-      $template = civicrm_api3('MessageTemplate', 'getsingle', array('id' => $template_id));
-      $activity_data['details'] = $this->renderTemplate('string:' . $template['msg_text'], $contact_data);
-    }
+    try {
+      if ($template_id) {
+        $template = civicrm_api3('MessageTemplate', 'getsingle', array('id' => $template_id));
+        $activity_data['details'] = $this->renderTemplate('string:' . $template['msg_text'], $contact_data);
+      }
 
-    $activity = CRM_Activity_BAO_Activity::create($activity_data);
+      $activity = CRM_Activity_BAO_Activity::create($activity_data);
+    } catch (Exception $ex) {
+      CRM_Core_Error::debug_log_message("XCM: failed to create activity: " . $ex->getMessage());
+    }
   }
 
   /**
