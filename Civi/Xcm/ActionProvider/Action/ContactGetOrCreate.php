@@ -76,7 +76,7 @@ class ContactGetOrCreate extends AbstractAction implements CompilerPassInterface
     return new SpecificationBag(array_merge($contact_specs, [
         // special fields
         new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
-        new Specification('xcm_submitted_contact_id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
+        new Specification('id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
 
         // detail fields
         new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
