@@ -67,6 +67,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
 
     $locationTypes = $this->getLocationTypes();
+    $phoneTypes = $this->getPhoneTypes();
 
     // add general options
     $this->addElement('select',
@@ -80,7 +81,18 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       E::ts('Default Location Type'),
                       $locationTypes,
                       array('class' => 'crm-select2 huge'));
-
+    $this->add('select',
+                      'primary_phone_type',
+                      E::ts('Primary Phone Type'),
+                      $phoneTypes,
+                      true,
+                      array('class' => 'crm-select2 huge'));
+    $this->add('select',
+                      'secondary_phone_type',
+                      E::ts('Secondary Phone Type'),
+                      $phoneTypes,
+                      false,
+                      array('class' => 'crm-select2 huge', 'placeholder' => E::ts('Secondary phone not used')));
     $this->addElement('select',
                       'fill_fields',
                       E::ts('Fill Fields'),
@@ -333,6 +345,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'override_details'           => CRM_Utils_Array::value('override_details', $values),
       'override_details_primary'   => CRM_Utils_Array::value('override_details_primary', $values),
       'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
+      'primary_phone_type'         => CRM_Utils_Array::value('primary_phone_type', $values),
+      'secondary_phone_type'       => CRM_Utils_Array::value('secondary_phone_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
       'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
@@ -406,6 +420,15 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $result = civicrm_api3('LocationType', 'get', array('is_active' => 1));
     foreach ($result['values'] as $type) {
       $types[$type['id']] = $type['display_name'];
+    }
+    return $types;
+  }
+
+  protected function getPhoneTypes() {
+    $types = array();
+    $result = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'phone_type', 'option.limit' => 0));
+    foreach ($result['values'] as $type) {
+      $types[$type['value']] = $type['label'];
     }
     return $types;
   }

@@ -152,7 +152,10 @@ class CRM_Xcm_MatchingEngine {
 
     // create phone number (that used to work...)
     $this->addDetailToContact($new_contact['id'], 'email',   $contact_data);
-    $this->addDetailToContact($new_contact['id'], 'phone',   $contact_data);
+    $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone', $this->config->primaryPhoneType());
+    if ($this->config->secondaryPhoneType()) {
+      $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone2', $this->config->secondaryPhoneType());
+    }
     $this->addDetailToContact($new_contact['id'], 'website', $contact_data);
 
     return $new_contact;
@@ -267,7 +270,14 @@ class CRM_Xcm_MatchingEngine {
       if (!empty($options['override_details']) && is_array($options['override_details'])) {
         //  caution: will override detail data
         foreach ($options['override_details'] as $entity_type) {
-          $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
+          if ($entity_type == 'phone') {
+            $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone', $this->config->primaryPhoneType());
+            if ($this->config->secondaryPhoneType()) {
+              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType());
+            }
+          } else {
+            $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
+          }
         }
       }
 
@@ -280,7 +290,14 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DETAILS
       if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
-          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
+          if ($entity == 'phone') {
+            $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data);
+            if ($this->config->secondaryPhoneType()) {
+              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data);
+            }
+          } else {
+            $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
+          }
         }
       }
 
@@ -483,6 +500,84 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
+   * Add a phone number to the contact
+   *
+   * @param int $contact_id
+   * @param array $data
+   *   Submitted data.
+   * @param $attribute
+   *  Either 'phone' or 'phone2'. This the atttribute in the $submitted data which holds the phone number
+   * @param $phone_type_id
+   * @param $as_primary
+   *  Mark the phone as primary
+   * @param $data_update
+   *  The current contact data
+   * @throws \CiviCRM_API3_Exception
+   */
+  protected function addPhoneToContact($contact_id, &$data, $attribute='phone', $phone_type_id=null, $as_primary = FALSE, &$data_update = NULL) {
+    if (!empty($data[$attribute])) {
+      // sort out location type
+      if (empty($data['location_type_id'])) {
+        $location_type_id = $this->config->defaultLocationType();
+      } else {
+        $location_type_id = $data['location_type_id'];
+      }
+
+      $api_query = [
+        'phone'     => $data[$attribute],
+        'contact_id'   => $contact_id,
+        'options' => [
+          'sort'  => 'is_primary desc',
+          'limit' => 1
+        ]
+      ];
+      if ($phone_type_id) {
+        $api_query['phone_type_id'] = $phone_type_id;
+      }
+
+      // some value was submitted -> check if there is already an existing one
+      $existing_entity = civicrm_api3('Phone', 'get', $api_query);
+      if (empty($existing_entity['count'])) {
+        // there is none -> create
+        $create_detail_call = array(
+          'phone'         => $data[$attribute],
+          'contact_id'       => $contact_id,
+          'location_type_id' => $location_type_id);
+
+        // mark as primary if requested
+        if ($as_primary) {
+          $create_detail_call['is_primary'] = 1;
+        }
+        if ($phone_type_id) {
+          $create_detail_call['phone_type_id'] = $phone_type_id;
+        }
+
+        // create the detail
+        civicrm_api3('Phone', 'create', $create_detail_call);
+
+        // mark in update_data
+        if ($data_update && is_array($data_update)) {
+          $data_update[$attribute] = $data[$attribute];
+
+          // if we're dealing with a phone number, update phone_numeric as well
+          // to avoid unnecessary diff activities
+          $data_update[$attribute.'_numeric'] = $data['phone_numeric'];
+        }
+      } else {
+        // there already is a detail withe same value...
+        if ($as_primary) {
+          // ...and config says it should be primary -> make it sure it's primary:
+          $this->makeExistingDetailPrimary($contact_id, 'Phone', 'phone', $data[$attribute]);
+        }
+        // also make sure, it doesn't end up in diff:
+        unset($data[$attribute]);
+        // if we're dealing with phone, also do so for phone_numeric
+        unset($data[$attribute.'_numeric']);
+      }
+    }
+  }
+
+  /**
    * Load the matched contact with all data, including the
    * custom fields in the submitted data
    */
@@ -511,6 +606,19 @@ class CRM_Xcm_MatchingEngine {
       }
     }
 
+    // Load second phone
+    if ($this->config->secondaryPhoneType()) {
+      try {
+        $phone = civicrm_api3('Phone', 'getvalue', [
+          'contact_id' => $contact_id,
+          'phone_type_id' => $this->config->secondaryPhoneType(),
+          'return' => 'phone'
+        ]);
+        $contact['phone2'] = $phone;
+      } catch (CiviCRM_API3_Exception $e) {
+        // Do nothing
+      }
+    }
     return $contact;
   }
 
@@ -724,6 +832,68 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
+   * Will override the given detail entity in the database,
+   *  and update the $current_contact_data accordingly
+   *
+   * It will only overwrite entities with the same location type,
+   *  and not overwrite primary entries, unless $override_details_primary is TRUE
+   */
+  protected function overrideContactPhone(&$current_contact_data, $submitted_contact_data, $attribute, $phone_type_id) {
+    $has_primary = TRUE;
+
+    $data_present = FALSE;
+    if (!empty($submitted_contact_data[$attribute])) {
+      $data_present = TRUE;
+    }
+    if (!$data_present) {
+      return;
+    }
+
+    // find current entries and replace the first match
+    try {
+      $options = $this->config->getOptions();
+      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
+      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      if (empty($submitted_contact_data['location_type_id'])) {
+        $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
+      }
+
+      // query existing entities
+      $entity_query_params = [
+        'contact_id'       => $current_contact_data['id'],
+        'location_type_id' => $submitted_contact_data['location_type_id'],
+        'phone_type_id'    => $phone_type_id,
+        'option.limit'     => 0];
+      $entity_query = civicrm_api3('Phone', 'get', $entity_query_params);
+
+      // find the first matching one, and overwrite
+      foreach ($entity_query['values'] as $entity_data) {
+        $entity_data[$attribute] = $entity_data['phone'];
+        if ($this->attributesDiffer([$attribute], $entity_data, $submitted_contact_data, $case_insensitive)) {
+          if (empty($entity_data['is_primary']) || $override_details_primary || !$has_primary) {
+            // this is the one that will be overwritten - i.e. deleted an newly created, so...
+            // FIRST: delete existing one
+            civicrm_api3('Phone', 'delete', ['id' => $entity_data['id']]);
+
+            // THEN: compile a new one
+            $new_entity = [
+              'contact_id' => $entity_data['contact_id'],
+              'location_type_id' => $submitted_contact_data['location_type_id'],
+              'phone_type_id'    => $phone_type_id,
+              'phone' => $submitted_contact_data[$attribute],
+            ];
+            $result = civicrm_api3('Phone', 'create', $new_entity);
+            break;
+          }
+        }
+      }
+    } catch (Exception $ex) {
+      // something went wrong
+      error_log("de.systopia.xcm: error when trying to override Phone with type ".$phone_type_id.": " . $ex->getMessage());
+    }
+  }
+
+  /**
    * Will make an existing detail primary, if it isn't already
    *
    * @param $contact_id
@@ -868,7 +1038,7 @@ class CRM_Xcm_MatchingEngine {
       // create activity
       $data = array(
         'differing_attributes' => $differing_attributes,
-        'fieldlabels'          => CRM_Xcm_Tools::getFieldLabels($differing_attributes),
+        'fieldlabels'          => CRM_Xcm_Tools::getFieldLabels($differing_attributes, $this->config),
         'existing_contact'     => $contact,
         'location_types'       => $location_types,
         'submitted_data'       => $contact_data
