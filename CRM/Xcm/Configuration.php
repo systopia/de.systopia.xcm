@@ -104,7 +104,7 @@ class CRM_Xcm_Configuration {
    */
   protected static function &getAllProfiles() {
     if (self::$_all_profiles === NULL) {
-      self::$_all_profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
+      self::$_all_profiles = Civi::settings()->get('xcm_config_profiles');
       if (!is_array(self::$_all_profiles) || empty(self::$_all_profiles)) {
         self::$_all_profiles = array('default' => array());
       }
@@ -117,7 +117,7 @@ class CRM_Xcm_Configuration {
    */
   public static function storeAllProfiles() {
     if (is_array(self::$_all_profiles)) {
-      CRM_Core_BAO_Setting::setItem(self::$_all_profiles, 'de.systopia.xcm', 'xcm_config_profiles');
+      Civi::settings()->set('xcm_config_profiles', self::$_all_profiles);
     }
   }
 

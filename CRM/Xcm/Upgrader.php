@@ -95,4 +95,11 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
     return TRUE;
   }
 
+  public function upgrade_0171() {
+    // Change the way how settings are stored.
+    $_all_profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
+    Civi::settings()->set('xcm_config_profiles', $_all_profiles);
+    return TRUE;
+  }
+
 }
