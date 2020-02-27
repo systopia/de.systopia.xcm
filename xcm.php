@@ -25,7 +25,9 @@ use \Symfony\Component\DependencyInjection\ContainerBuilder;
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
 function xcm_civicrm_container(ContainerBuilder $container) {
-  $container->addCompilerPass(new Civi\Xcm\ContainerSpecs());
+  if (class_exists('Civi\Xcm\ContainerSpecs')) {
+    $container->addCompilerPass(new Civi\Xcm\ContainerSpecs());
+  }
 }
 
 /**
