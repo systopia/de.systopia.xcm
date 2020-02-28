@@ -48,6 +48,12 @@
   <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and websites.{/ts}</p>
 {/htxt}
 
+{htxt id='id-phone-type'}
+  <p>{ts domain="de.systopia.xcm"}The phone type is used for newly created phone numbers.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}There are two numbers possible and therefor two phone types.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If no secondary phone type is explicitly submitted then the second phone is not used.{/ts}</p>
+{/htxt}
+
 {htxt id='id-diff-activity'}
   <p>{ts domain="de.systopia.xcm"}This feature enables you to track and process all submitted data when a contact has been identified - but not changed.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}The activity will contain an overview of the differing attributes for contact, and will be linked to that contact.{/ts}</p>

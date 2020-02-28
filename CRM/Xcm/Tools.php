@@ -44,10 +44,13 @@ class CRM_Xcm_Tools {
 
   /**
    * Generate a list of field labels for the given diff
+   *
+   * @param array
+   * @param \CRM_Xcm_Configuration $config
    */
-  public static function getFieldLabels($differing_attributes) {
+  public static function getFieldLabels($differing_attributes, CRM_Xcm_Configuration $config) {
     $field_labels = array();
-    $all_labels = self::getKnownFieldLabels();
+    $all_labels = self::getKnownFieldLabels($config);
     foreach ($differing_attributes as $field_name) {
       if (isset($all_labels[$field_name])) {
         $field_labels[$field_name] = $all_labels[$field_name];
@@ -60,25 +63,50 @@ class CRM_Xcm_Tools {
 
   /**
    * return all field labels
+   *
+   * @param \CRM_Xcm_Configuration $config
    */
-  public static function getKnownFieldLabels() {
-    return array(
-      'first_name'             => ts('First Name'),
-      'last_name'              => ts('Last Name'),
-      'middle_name'            => ts('Middle Name'),
-      'prefix_id'              => ts('Prefix'),
-      'suffix_id'              => ts('Suffix'),
-      'phone'                  => ts('Phone'),
-      'email'                  => ts('Email'),
-      'street_address'         => ts('Street Address'),
-      'city'                   => ts('City'),
-      'country_id'             => ts('Country'),
-      'state_province_id'      => ts('State/Province'),
-      'postal_code'            => ts('Postal Code'),
-      'supplemental_address_1' => ts('Supplemental Address 1'),
-      'supplemental_address_2' => ts('Supplemental Address 2'),
-      'supplemental_address_3' => ts('Supplemental Address 3')
-    );
+  public static function getKnownFieldLabels(CRM_Xcm_Configuration $config) {
+    static $data = null;
+    if (!$data) {
+      $data = [
+        'first_name' => ts('First Name'),
+        'last_name' => ts('Last Name'),
+        'middle_name' => ts('Middle Name'),
+        'prefix_id' => ts('Prefix'),
+        'suffix_id' => ts('Suffix'),
+        'email' => ts('Email'),
+        'street_address' => ts('Street Address'),
+        'city' => ts('City'),
+        'country_id' => ts('Country'),
+        'state_province_id' => ts('State/Province'),
+        'postal_code' => ts('Postal Code'),
+        'supplemental_address_1' => ts('Supplemental Address 1'),
+        'supplemental_address_2' => ts('Supplemental Address 2'),
+        'supplemental_address_3' => ts('Supplemental Address 3')
+      ];
+      try {
+        $data['phone'] = civicrm_api3('OptionValue', 'getvalue', [
+          'return' => 'label',
+          'option_group_id' => 'phone_type',
+          'value' => $config->primaryPhoneType()
+        ]);
+      } catch (CiviCRM_API3_Exception $e) {
+        $data['phone'] = ts('Phone');
+      }
+      if ($config->secondaryPhoneType()) {
+        try {
+          $data['phone2'] = civicrm_api3('OptionValue', 'getvalue', [
+            'return' => 'label',
+            'option_group_id' => 'phone_type',
+            'value' => $config->secondaryPhoneType()
+          ]);
+        } catch (CiviCRM_API3_Exception $e) {
+          $data['phone2'] = ts('Phone 2');
+        }
+      }
+    }
+    return $data;
   }
 
   /**

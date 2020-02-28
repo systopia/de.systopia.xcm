@@ -345,6 +345,22 @@ class CRM_Xcm_Configuration {
     return (int) CRM_Utils_Array::value('default_location_type', $options);
   }
 
+  /**
+   * Get primary phone type
+   */
+  public function primaryPhoneType() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('primary_phone_type', $options);
+  }
+
+  /**
+   * Get secondary phone type
+   */
+  public function secondaryPhoneType() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('secondary_phone_type', $options);
+  }
+
 
   /**
    * Get location type to be used for new addresses

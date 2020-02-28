@@ -48,6 +48,18 @@
     <div class="clear"></div>
   </div>
 
+  <div class="crm-section">
+    <div class="label">{$form.primary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Primary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.primary_phone_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.secondary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Secondary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.secondary_phone_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
 </div>
 
 <div>
