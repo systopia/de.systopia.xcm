@@ -50,12 +50,7 @@ class ContactGetOrCreate extends AbstractAction {
    */
   public function getParameterSpecification() {
     // add contact specs
-    $contact_specs = [];
-    $contact_fields = CRM_Xcm_Form_Settings::getContactFields() + CRM_Xcm_Form_Settings::getCustomFields();
-    foreach ($contact_fields as $contact_field_name => $contact_field_label) {
-      $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, false);
-    }
-
+    $contact_specs = array_merge(CRM_Xcm_Form_Settings::getContactFields(), CRM_Xcm_Form_Settings::getCustomFields());
     return new SpecificationBag(array_merge($contact_specs, [
         // special fields
         new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
@@ -108,16 +103,29 @@ class ContactGetOrCreate extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $params = $parameters->toArray();
+    $apiParams = array();
+    foreach($this->getParameterSpecification() as $spec) {
+      if ($parameters->doesParameterExists($spec->getName())) {
+        if ($spec->getApiFieldName()) {
+          $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+        } else {
+          $apiParams[$spec->getName()] = $parameters->getParameter($spec->getName());
+        }
+      } elseif ($spec->getApiFieldName() && $parameters->doesParameterExists($spec->getApiFieldName())) {
+        // Use above statement so that custom_1 still works.
+        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getApiFieldName());
+      }
+    }
+
     // override if necessary
     foreach (['xcm_profile', 'contact_type'] as $field_name) {
-      if (empty($params[$field_name])) {
-        $params[$field_name] = $this->configuration->getParameter($field_name);
+      if (empty($apiParams[$field_name])) {
+        $apiParams[$field_name] = $this->configuration->getParameter($field_name);
       }
     }
 
     // execute
-    $result = \civicrm_api3('Contact', 'getorcreate', $params);
+    $result = \civicrm_api3('Contact', 'getorcreate', $apiParams);
     $output->setParameter('contact_id', $result['id']);
   }
 }
