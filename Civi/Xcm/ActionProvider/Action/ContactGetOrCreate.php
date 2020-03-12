@@ -22,6 +22,7 @@ use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
+use \Civi\ActionProvider\Utils\CustomField;
 
 class ContactGetOrCreate extends AbstractAction {
 
@@ -51,10 +52,11 @@ class ContactGetOrCreate extends AbstractAction {
   public function getParameterSpecification() {
     // add contact specs
     $contact_specs = [];
-    $contact_fields = CRM_Xcm_Form_Settings::getContactFields() + CRM_Xcm_Form_Settings::getCustomFields();
+    $contact_fields = CRM_Xcm_Form_Settings::getContactFields();
     foreach ($contact_fields as $contact_field_name => $contact_field_label) {
       $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, false);
     }
+    $contact_specs = array_merge($contact_specs, self::getCustomFields());
 
     return new SpecificationBag(array_merge($contact_specs, [
         // special fields
@@ -83,6 +85,39 @@ class ContactGetOrCreate extends AbstractAction {
         new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
         new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
    ]));
+  }
+
+  /**
+   * Returns the custom fields as a Specification array.
+   *
+   * @return array
+   * @throws \CiviCRM_API3_Exception
+   */
+  private static function getCustomFields() {
+    $specs = array();
+    $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
+      'extends'      => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
+      'is_active'    => 1,
+      'option.limit' => 0,
+      'is_multiple'  => 0,
+      'is_reserved'  => 0));
+    $custom_group_ids   = array();
+    $custom_groups = array();
+    foreach ($custom_group_query['values'] as $custom_group) {
+      $custom_group_ids[] = (int) $custom_group['id'];
+      $custom_groups[$custom_group['id']] = $custom_group;
+    }
+
+    if (!empty($custom_group_ids)) {
+      $custom_field_query = civicrm_api3('CustomField', 'get', array(
+        'custom_group_id'  => array('IN' => $custom_group_ids),
+        'is_active'        => 1,
+        'option.limit'     => 0));
+      foreach ($custom_field_query['values'] as $custom_field) {
+        $specs[] = CustomField::getSpecFromCustomField($custom_field, $custom_groups[$custom_field['custom_group_id']]['title'].': ', false);
+      }
+    }
+    return $specs;
   }
 
   /**
