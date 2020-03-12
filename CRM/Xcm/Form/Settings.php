@@ -15,9 +15,6 @@
 
 require_once 'CRM/Core/Form.php';
 
-use Civi\ActionProvider\Parameter\Specification;
-use Civi\ActionProvider\Parameter\SpecificationBag;
-use Civi\ActionProvider\Utils\CustomField;
 use CRM_Xcm_ExtensionUtil as E;
 
 define('XCM_MAX_RULE_COUNT', 9);
@@ -530,35 +527,34 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   /**
    * get a list of custom fields eligible for submission.
    * those are all custom fields that belong to a contact in general
-   *
-   * @return array
-   * @throws \Exception
    */
   public static function getCustomFields() {
-    $specs = array();
+    $custom_fields = array();
+
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
       'extends'      => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
       'is_active'    => 1,
       'option.limit' => 0,
       'is_multiple'  => 0,
-      'is_reserved'  => 0));
+      'is_reserved'  => 0,
+      'return'       => 'id'));
     $custom_group_ids   = array();
-    $custom_groups = array();
     foreach ($custom_group_query['values'] as $custom_group) {
       $custom_group_ids[] = (int) $custom_group['id'];
-      $custom_groups[$custom_group['id']] = $custom_group;
     }
 
     if (!empty($custom_group_ids)) {
       $custom_field_query = civicrm_api3('CustomField', 'get', array(
         'custom_group_id'  => array('IN' => $custom_group_ids),
         'is_active'        => 1,
-        'option.limit'     => 0));
+        'option.limit'     => 0,
+        'return'           => 'id,label'));
       foreach ($custom_field_query['values'] as $custom_field) {
-        $specs[] = CustomField::getSpecFromCustomField($custom_field, $custom_groups[$custom_field['custom_group_id']]['title'].': ', false);
+        $custom_fields["custom_{$custom_field['id']}"] = "{$custom_field['label']} [{$custom_field['id']}]";
       }
     }
-    return $specs;
+
+    return $custom_fields;
   }
 
   /**
@@ -567,29 +563,29 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   public static function getContactFields() {
     return array(
-      new Specification('display_name', 'String', E::ts("Display Name")),
-      new Specification('household_name', 'String', E::ts("Household Name")),
-      new Specification('organization_name', 'String', E::ts("Organization Name")),
-      new Specification('first_name', 'String', E::ts("First Name")),
-      new Specification('last_name', 'String', E::ts("Last Name")),
-      new Specification('middle_name', 'String', E::ts("Middle Name")),
-      new Specification('nick_name', 'String', E::ts("Nick Name")),
-      new Specification('legal_name', 'String', E::ts("Legal Name")),
-      new Specification('prefix_id', 'String', E::ts("Prefix")),
-      new Specification('suffix_id', 'String', E::ts("Suffix")),
-      new Specification('birth_date', 'String', E::ts("Birth Date")),
-      new Specification('gender_id', 'String', E::ts("Gender")),
-      new Specification('formal_title', 'String', E::ts("Formal Title")),
-      new Specification('job_title', 'String', E::ts("Job Title")),
-      new Specification('do_not_email', 'String', E::ts("Do not Email")),
-      new Specification('do_not_phone', 'String', E::ts("Do not Phone")),
-      new Specification('do_not_sms', 'String', E::ts("Do not SMS")),
-      new Specification('do_not_trade', 'String', E::ts("Do not Trade")),
-      new Specification('is_opt_out', 'String', E::ts("Opt-Out")),
-      new Specification('preferred_language', 'String', E::ts("Preferred Language")),
-      new Specification('preferred_communication_method', 'String', E::ts("Preferred Communication Method")),
-      new Specification('legal_identifier', 'String', E::ts("Legal Identifier")),
-      new Specification('external_identifier', 'String', E::ts("External Identifier")),
+      'display_name'                   => E::ts("Display Name"),
+      'household_name'                 => E::ts("Household Name"),
+      'organization_name'              => E::ts("Organization Name"),
+      'first_name'                     => E::ts("First Name"),
+      'last_name'                      => E::ts("Last Name"),
+      'middle_name'                    => E::ts("Middle Name"),
+      'nick_name'                      => E::ts("Nick Name"),
+      'legal_name'                     => E::ts("Legal Name"),
+      'prefix_id'                      => E::ts("Prefix"),
+      'suffix_id'                      => E::ts("Suffix"),
+      'birth_date'                     => E::ts("Birth Date"),
+      'gender_id'                      => E::ts("Gender"),
+      'formal_title'                   => E::ts("Formal Title"),
+      'job_title'                      => E::ts("Job Title"),
+      'do_not_email'                   => E::ts("Do not Email"),
+      'do_not_phone'                   => E::ts("Do not Phone"),
+      'do_not_sms'                     => E::ts("Do not SMS"),
+      'do_not_trade'                   => E::ts("Do not Trade"),
+      'is_opt_out'                     => E::ts("Opt-Out"),
+      'preferred_language'             => E::ts("Preferred Language"),
+      'preferred_communication_method' => E::ts("Preferred Communication Method"),
+      'legal_identifier'               => E::ts("Legal Identifier"),
+      'external_identifier'            => E::ts("External Identifier"),
     );
   }
 }
