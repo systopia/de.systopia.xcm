@@ -143,16 +143,29 @@ class ContactGetOrCreate extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $params = $parameters->toArray();
+    $apiParams = array();
+    foreach($this->getParameterSpecification() as $spec) {
+      if ($parameters->doesParameterExists($spec->getName())) {
+        if ($spec->getApiFieldName()) {
+          $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+        } else {
+          $apiParams[$spec->getName()] = $parameters->getParameter($spec->getName());
+        }
+      } elseif ($spec->getApiFieldName() && $parameters->doesParameterExists($spec->getApiFieldName())) {
+        // Use above statement so that custom_1 still works.
+        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getApiFieldName());
+      }
+    }
+
     // override if necessary
     foreach (['xcm_profile', 'contact_type'] as $field_name) {
-      if (empty($params[$field_name])) {
-        $params[$field_name] = $this->configuration->getParameter($field_name);
+      if (empty($apiParams[$field_name])) {
+        $apiParams[$field_name] = $this->configuration->getParameter($field_name);
       }
     }
 
     // execute
-    $result = \civicrm_api3('Contact', 'getorcreate', $params);
+    $result = \civicrm_api3('Contact', 'getorcreate', $apiParams);
     $output->setParameter('contact_id', $result['id']);
   }
 }
