@@ -31,7 +31,7 @@ class CRM_Xcm_Tools {
   public static function getAddressFields() {
     return array(
       'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3',
-      'street_address', 'city', 'country_id', 'state_province_id', 'postal_code',
+      'street_address', 'city', 'country_id', 'state_province_id', 'county_id', 'postal_code',
       'is_billing', 'geo_code_1', 'geo_code_2');
   }
 
@@ -74,6 +74,7 @@ class CRM_Xcm_Tools {
       'city'                   => ts('City'),
       'country_id'             => ts('Country'),
       'state_province_id'      => ts('State/Province'),
+      'county_id'              => ts('County'),
       'postal_code'            => ts('Postal Code'),
       'supplemental_address_1' => ts('Supplemental Address 1'),
       'supplemental_address_2' => ts('Supplemental Address 2'),
