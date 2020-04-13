@@ -2,7 +2,7 @@ site_name: Extended Contact Matcher (XCM)
 repo_url: https://github.com/systopia/de.systopia.xcm
 theme: material
 
-pages:
+nav:
 - 'Introduction': index.md
 - 'Configuration': configuration.md
 - 'Contact Import': contact-import.md
