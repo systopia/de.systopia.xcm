@@ -115,7 +115,10 @@ class ContactGetOrCreate extends AbstractAction {
         'is_active'        => 1,
         'option.limit'     => 0));
       foreach ($custom_field_query['values'] as $custom_field) {
-        $specs[] = CustomField::getSpecFromCustomField($custom_field, $custom_groups[$custom_field['custom_group_id']]['title'].': ', false);
+        $spec = CustomField::getSpecFromCustomField($custom_field, $custom_groups[$custom_field['custom_group_id']]['title'].': ', false);
+        if ($spec) {
+          $specs[] = $spec;
+        }
       }
     }
     return $specs;
