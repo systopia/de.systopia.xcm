@@ -85,6 +85,8 @@ class ContactGetOrCreate extends AbstractAction {
         new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
         new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
         new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
+
+        new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
    ]));
   }
 
