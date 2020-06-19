@@ -516,6 +516,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $diff_handlers = array();
     $diff_handlers['none'] = E::ts("Don't do anything");
     $diff_handlers['diff'] = E::ts("Diff Activity");
+    $diff_handlers['updated_diff'] = E::ts("Update and Difference Activity");
 
     if (function_exists('i3val_civicrm_install')) {
       $diff_handlers['i3val'] = E::ts("I3Val Handler");

@@ -292,7 +292,7 @@ cj("#diff_handler").change(function() {
   if (value == 'i3val') {
     cj("div.xcm-diff-common").show();
     cj("div.xcm-diff-diff-only").hide();
-  } else if (value == 'diff') {
+  } else if (value == 'diff' || value == 'updated_diff') {
     cj("div.xcm-diff-common").show();
     cj("div.xcm-diff-diff-only").show();
   } else {

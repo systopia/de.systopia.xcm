@@ -342,11 +342,14 @@ class CRM_Xcm_MatchingEngine {
       // HANDLE DIFFERENCES
       switch ($diff_handler) {
         case 'diff':
+          $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          break;
+        case 'updated_diff':
           $this->createDiffActivity($original_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
           break;
 
         case 'i3val':
-          $this->createI3ValActivity($original_contact_data, $submitted_contact_data);
+          $this->createI3ValActivity($current_contact_data, $submitted_contact_data);
 
         default:
           break;
