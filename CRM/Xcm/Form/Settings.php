@@ -167,6 +167,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       E::ts('Activity Type'),
                       $this->getActivities(FALSE),
                       array('class' => 'crm-select2'));
+    $this->addElement('select',
+      'diff_activity_status',
+      E::ts('Activity Status'),
+      $this->getActivityStatuses(),
+      array('class' => 'crm-select2'));
 
     $this->addElement('text',
                       "diff_activity_subject",
@@ -352,6 +357,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
       'diff_handler'               => CRM_Utils_Array::value('diff_handler', $values),
       'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
+      'diff_activity_status'       => CRM_Utils_Array::value('diff_activity_status', $values),
       'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
       'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
       'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
@@ -515,8 +521,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getDiffHandlers() {
     $diff_handlers = array();
     $diff_handlers['none'] = E::ts("Don't do anything");
-    $diff_handlers['diff'] = E::ts("Diff Activity");
-    $diff_handlers['updated_diff'] = E::ts("Update and Difference Activity");
+    $diff_handlers['diff'] = E::ts("Only changes requiring review (Diff Activity)");
+    $diff_handlers['updated_diff'] = E::ts("All changes (Difference and Update Activity)");
 
     if (function_exists('i3val_civicrm_install')) {
       $diff_handlers['i3val'] = E::ts("I3Val Handler");

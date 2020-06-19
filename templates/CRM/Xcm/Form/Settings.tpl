@@ -227,6 +227,12 @@
   </div>
 
   <div class="crm-section xcm-diff-common">
+    <div class="label">{$form.diff_activity_status.label}</div>
+    <div class="content">{$form.diff_activity_status.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-common">
     <div class="label">{$form.diff_activity_subject.label}</div>
     <div class="content">{$form.diff_activity_subject.html}</div>
     <div class="clear"></div>

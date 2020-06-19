@@ -1051,7 +1051,7 @@ class CRM_Xcm_MatchingEngine {
       $activity_data = array(
           'activity_type_id'   => $options['diff_activity'],
           'subject'            => $subject,
-          'status_id'          => $this->config->defaultActivityStatus(),
+          'status_id'          => !empty($options['diff_activity_status']) ? $options['diff_activity_status'] : $this->config->defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
           'target_contact_id'  => (int) $contact['id'],
           'source_contact_id'  => $this->config->getCurrentUserID($contact['id']),
