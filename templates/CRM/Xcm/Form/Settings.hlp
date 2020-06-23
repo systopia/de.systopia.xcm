@@ -57,7 +57,7 @@
 {htxt id='id-diff-activity'}
   <p>{ts domain="de.systopia.xcm"}This feature enables you to track and process all submitted data when a contact has been identified - but not changed.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}The activity will contain an overview of the differing attributes for contact, and will be linked to that contact.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}The handler Update and Difference activity will also record the updated changes. Whlist the Diff Activity will only record the differences and you have to apply the changes manually.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}The handler Contact Value Comparison will record all changes. Whlist the Unresolved Differences handler will only record the unresolved differences which need to be manually applied.{/ts}</p>
 {/htxt}
 
 {htxt id='id-override-details'}
