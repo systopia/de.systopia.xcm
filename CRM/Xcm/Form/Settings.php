@@ -562,7 +562,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * those are all custom fields that belong to a contact in general
    */
   public static function getContactFields() {
-    return array(
+    return [
       'display_name'                   => E::ts("Display Name"),
       'household_name'                 => E::ts("Household Name"),
       'organization_name'              => E::ts("Organization Name"),
@@ -578,6 +578,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'formal_title'                   => E::ts("Formal Title"),
       'job_title'                      => E::ts("Job Title"),
       'do_not_email'                   => E::ts("Do not Email"),
+      'do_not_mail'                    => E::ts("Do not Mail"),
       'do_not_phone'                   => E::ts("Do not Phone"),
       'do_not_sms'                     => E::ts("Do not SMS"),
       'do_not_trade'                   => E::ts("Do not Trade"),
@@ -586,6 +587,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'preferred_communication_method' => E::ts("Preferred Communication Method"),
       'legal_identifier'               => E::ts("Legal Identifier"),
       'external_identifier'            => E::ts("External Identifier"),
-    );
+    ];
   }
 }
