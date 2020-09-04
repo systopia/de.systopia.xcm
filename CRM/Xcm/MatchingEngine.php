@@ -941,19 +941,34 @@ class CRM_Xcm_MatchingEngine {
       // Check whether the field is multi-value, statically cache results.
       static $custom_field_definitions = array();
       if (empty($custom_field_definitions)) {
-        $custom_field_definitions = civicrm_api3(
-          'CustomField',
-          'get',
-          array(
-            'html_type' => array('IN' => array(
-              'CheckBox',
-              'Multi-Select',
-              'Multi-Select State/Province',
-              'Multi-Select Country',
-            )),
-            'return' => array('name', 'html_type', 'option_group_id')
-          )
-        );
+        // see https://github.com/systopia/de.systopia.xcm/issues/68
+        if (version_compare(CRM_Utils_System::version(), '5.27', '<')) {
+          $custom_field_definitions = civicrm_api3(
+              'CustomField',
+              'get',
+              array(
+                  'html_type' => array(
+                      'IN' => array(
+                          'CheckBox',
+                          'Multi-Select',
+                          'Multi-Select State/Province',
+                          'Multi-Select Country',
+                      )
+                  ),
+                  'return'    => array('name', 'html_type', 'option_group_id')
+              )
+          );
+        } else {
+          $custom_field_definitions = civicrm_api3(
+              'CustomField',
+              'get',
+              [
+                  'html_type'  => 'Select',
+                  'serialized' => 1,
+                  'return'     => ['name', 'html_type', 'option_group_id']
+             ]
+          );
+        }
         if (!empty($custom_field_definitions['values'])) {
           $custom_field_definitions = $custom_field_definitions['values'];
         }
