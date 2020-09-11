@@ -1033,6 +1033,12 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // special case for phones
+    if (!in_array('phone', $differing_attributes) && (isset($contact['phone']) || isset($contact_data['phone']))) {
+      $differing_attributes[] = 'phone';
+    }
+    if ($this->config->secondaryPhoneType() && !in_array('phone2', $differing_attributes) && (isset($contact['phone2']) || isset($contact_data['phone2']))) {
+      $differing_attributes[] = 'phone2';
+    }
 
     // filter attributes
     // TODO:
