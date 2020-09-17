@@ -193,20 +193,66 @@ function xcm_civicrm_buildForm($formName, &$form) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
 function xcm_civicrm_navigationMenu(&$menu) {
-  $menu_item_search = array(
-    'name' => 'Import Contacts',
-  );
-  $menu_items = array();
+  // ADD 'Import Contacts' item (if it doesn't exist elsewhere)
+  $menu_item_search = ['name' => 'Import Contacts'];
+  $menu_items = [];
   CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
-  _xcm_civix_insert_navigation_menu($menu, 'Contacts', array(
-    'label' => E::ts('Import contacts (XCM)', array('domain' => 'de.systopia.xcm')),
+  _xcm_civix_insert_navigation_menu($menu, 'Contacts', [
+    'label' => E::ts('Import contacts (XCM)'),
     'name' => 'Import contacts (XCM)',
     'url' => 'civicrm/import/contact/xcm',
     'permission' => 'import contacts',
     'operator' => 'OR',
     'separator' => 0,
     // See https://github.com/civicrm/civicrm-core/pull/11772 for weight.
-    'weight' => $menu_items['weight'],
-  ));
+    'weight' => $menu_items['weight'] + 1,
+  ]);
+
+  // ADD configure XCM
+  if (!_xcm_menu_exists($menu, 'Administer/automation')) {
+    _xcm_civix_insert_navigation_menu($menu, 'Administer', [
+        'label' => E::ts('Automation'),
+        'name' => 'automation',
+        'url' => NULL,
+        'permission' => 'administer CiviCRM',
+        'operator' => NULL,
+        'separator' => 0,
+    ]);
+  }
+  _xcm_civix_insert_navigation_menu($menu, 'Administer/automation', [
+      'label' => E::ts('Extended Contact Matcher (XCM)'),
+      'name' => 'configure_xcm',
+      'url' => 'civicrm/admin/setting/xcm',
+      'permission' => 'administer CiviCRM',
+      'operator' => NULL,
+  ]);
   _xcm_civix_navigationMenu($menu);
+}
+
+/**
+ * Checks whether a navigation menu item exists.
+ *  (copied from form processor, code by Jaap)
+ *
+ * @param array $menu - menu hierarchy
+ * @param string $path - path to parent of this item, e.g. 'my_extension/submenu'
+ *    'Mailing', or 'Administer/System Settings'
+ * @return bool
+ */
+function _xcm_menu_exists(&$menu, $path) {
+  // Find an recurse into the next level down
+  $found = FALSE;
+  $path = explode('/', $path);
+  $first = array_shift($path);
+  foreach ($menu as $key => &$entry) {
+    if ($entry['attributes']['name'] == $first) {
+      if (empty($path)) {
+        return true;
+      }
+      $found = _xcm_menu_exists($entry['child'], implode('/', $path));
+      if ($found) {
+        return false;
+      }
+    }
+  }
+  return $found;
 }

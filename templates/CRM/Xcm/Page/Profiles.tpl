@@ -12,6 +12,11 @@
 | written permission from the original author(s).        |
 +-------------------------------------------------------*}
 
+{capture assign=token_url}{crmURL p="civicrm/import/contact/xcm"}{/capture}
+<div>{ts domain="de.systopia.xcm"}The "Extended Contact Matcher" allows you to map incoming contact data an existing contact, and even update some of the attributes right away. If the contact doesn't exist, a new contact will be created instead.{/ts}</div>
+<div>{ts domain="de.systopia.xcm" 1=$token_url}The functionality can be accessed via the <code>Contact.getorcreate</code> API command, with the ContactGetOrCreate action provided, or via the <a href="%1">Contact Importer</a>.{/ts}</div>
+<br/>
+
 <div>{ts domain="de.systopia.xcm"}This is a list of the different XCM configurations. You might be perfectly fine with just the default configuration, but if you're using XCM in multiple contexts, different configuration profiles might come in handy.{/ts}</div>
 <br/>
 
