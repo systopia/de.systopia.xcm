@@ -208,7 +208,7 @@ function xcm_civicrm_navigationMenu(&$menu) {
     'weight' => $menu_items['weight'] + 1,
   ]);
 
-  // ADD configure XCM
+  // ADD configure XCM to automation tab
   if (!_xcm_menu_exists($menu, 'Administer/automation')) {
     _xcm_civix_insert_navigation_menu($menu, 'Administer', [
         'label' => E::ts('Automation'),
@@ -250,7 +250,7 @@ function _xcm_menu_exists(&$menu, $path) {
       }
       $found = _xcm_menu_exists($entry['child'], implode('/', $path));
       if ($found) {
-        return false;
+        return true;
       }
     }
   }
