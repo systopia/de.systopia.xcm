@@ -122,6 +122,14 @@ class CRM_Xcm_Configuration {
   }
 
   /**
+   * Flush the local profile cache.
+   * Caution! This might lose current changes
+   */
+  public static function flushProfileCache() {
+    self::$_all_profiles = null;
+  }
+
+  /**
    * Mark the default profile
    *
    * @param $default_profile_name string name of the profile to be set default
