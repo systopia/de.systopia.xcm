@@ -54,6 +54,10 @@ class CRM_Xcm_MatchingEngine {
    * @throws exception  if anything goes wrong during matching/contact creation
    */
   public function getOrCreateContact(&$contact_data) {
+    // first things first: sanitise data
+    $sanitiser_setting = CRM_Xcm_DataSanitiser::getSetting($this->config->getOptions());
+    CRM_Xcm_DataSanitiser::sanitise($contact_data, $sanitiser_setting);
+
     // first: resolve custom fields to custom_xx notation
     CRM_Xcm_Tools::resolveCustomFields($contact_data);
 

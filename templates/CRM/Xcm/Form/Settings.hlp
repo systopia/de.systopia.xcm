@@ -70,3 +70,8 @@
   <p>{ts domain="de.systopia.xcm"}Warning: You might change the primary means of communication to an untrusted value. This could lead to e.g. a confidential email going out to the wrong email address.{/ts}</p>
   <p>{ts domain="de.systopia.xcm"}Remark: This does not apply to websites, where no primary flag is used.{/ts}</p>
 {/htxt}
+
+{htxt id='id-input-sanitation'}
+  <p>{ts domain="de.systopia.xcm"}Should the input be sanitised?{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}Use this if you're having trouble with incoming data, e.g. UTF8 4-Byte characters that mysql used to have issues with.{/ts}</p>
+{/htxt}

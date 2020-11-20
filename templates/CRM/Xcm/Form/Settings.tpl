@@ -37,6 +37,12 @@
   </div>
 
   <div class="crm-section">
+    <div class="label">{$form.input_sanitation.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Input Sanitation{/ts}", {literal}{"id":"id-input-sanitation","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.input_sanitation.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
     <div class="label">{$form.case_insensitive.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Case Sensitivity{/ts}", {literal}{"id":"id-case-sensitive","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.case_insensitive.html}</div>
     <div class="clear"></div>
