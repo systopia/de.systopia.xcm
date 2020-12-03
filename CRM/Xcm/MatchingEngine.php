@@ -1082,7 +1082,7 @@ class CRM_Xcm_MatchingEngine {
   /**
    * compare two values of the given attribute name
    *
-   * @return TRUE if atttributes differ
+   * @return boolean if attributes differ
    */
   protected function attributesDiffer($data_attributes, $original_values, $submitted_values, $case_insensitive) {
     // TODO: collapse double spaces?
@@ -1090,6 +1090,11 @@ class CRM_Xcm_MatchingEngine {
     foreach ($data_attributes as $data_attribute) {
       $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
       $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+
+      // mitigate api quirk: sometimes a single value is returned as a 1-array
+      if (is_array($original_value) && count($original_value) == 1 && is_string($submitted_value)) {
+        $original_value = reset($original_value);
+      }
 
       // trim values first
       if (is_string($original_value)) {
@@ -1101,12 +1106,22 @@ class CRM_Xcm_MatchingEngine {
 
       // compare
       if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
-        if (strtolower($original_value) != strtolower($submitted_value)) {
-          return TRUE;
+        if (strtolower($original_value) == strtolower($submitted_value)) {
+          // these seem to differ as strings, but do they also differ as a (successfully parsed) date/time?
+          $original_value_as_time = strtotime($original_value);
+          $submitted_value_as_time = strtotime($submitted_value);
+          if ($original_value_as_time && $submitted_value_as_time && ($original_value_as_time != $submitted_value_as_time)) {
+            return true;
+          }
         }
       } else {
         if ($original_value != $submitted_value) {
-          return TRUE;
+          // these seem to differ as strings, but do they also differ as a (successfully parsed) date/time?
+          $original_value_as_time = strtotime($original_value);
+          $submitted_value_as_time = strtotime($submitted_value);
+          if ($original_value_as_time && $submitted_value_as_time && ($original_value_as_time != $submitted_value_as_time)) {
+            return true;
+          }
         }
       }
     }
