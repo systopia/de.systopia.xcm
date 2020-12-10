@@ -55,6 +55,7 @@ class CRM_Xcm_MatchingEngine {
    */
   public function getOrCreateContact(&$contact_data) {
     // first things first: sanitise data
+    unset($contact_data['contact_id']); // see XCM-72
     $sanitiser_setting = CRM_Xcm_DataSanitiser::getSetting($this->config->getOptions());
     CRM_Xcm_DataSanitiser::sanitise($contact_data, $sanitiser_setting);
 
