@@ -72,13 +72,16 @@ class CRM_Xcm_MatchingEngine {
 
     if (empty($result['contact_id'])) {
       // the matching failed
-      $new_contact = $this->createContact($contact_data);
-      $result['contact_id'] = $new_contact['id'];
-      // TODO: add more data? how?
 
-      // do the post-processing
-      $this->postProcessNewContact($new_contact, $contact_data);
+      if (empty($contact_data['match_only'])) {
+        // Create contact (the "orcreate" bit), unless match_only was set.
+        $new_contact = $this->createContact($contact_data);
+        $result['contact_id'] = $new_contact['id'];
+        // TODO: add more data? how?
 
+        // do the post-processing
+        $this->postProcessNewContact($new_contact, $contact_data);
+      }
     } else {
       // the matching was successful
       $this->postProcessContactMatch($result, $contact_data);

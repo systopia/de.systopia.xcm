@@ -51,5 +51,12 @@ function _civicrm_api3_contact_getorcreate_spec(&$params) {
       'type'         => CRM_Utils_Type::T_STRING,
       'title'        => 'Which profile should be used for matching?',
   );
+  $params['match_only'] = [
+    'name' => 'match_only',
+    'type' => CRM_Utils_Type::T_BOOLEAN,
+    'title' => 'Match only',
+    'api.default' => 0,
+    'description' => 'Either return the matched contact, or nothing; do not create a contact.'
+  ];
 }
 

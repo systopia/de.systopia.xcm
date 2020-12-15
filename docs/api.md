@@ -53,3 +53,14 @@ $result = civicrm_api3('Contact', 'getorcreate', array(
 ```
 
 They were found and no duplicate contact was created.
+
+## Special use case: `match_only` parameter
+
+The normal function is to get-or-create a contact. However there are times
+when you’d like to check before creating a contact; XCM is very handy for
+searching on a number of queries.
+
+Passing `match_only=1` will mean that if there is no match no contact will
+be created, and instead an error will be returned: "Unknown matching
+error.". However, if a match is found, all the normal processing will
+occur; so this is not a read-only operation.
