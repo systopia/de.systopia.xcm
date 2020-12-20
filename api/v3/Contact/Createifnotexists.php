@@ -12,6 +12,32 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+use CRM_Xcm_ExtensionUtil as E;
+
+/**
+ * API3 action specs
+ */
+function _civicrm_api3_contact_Createifnotexists_spec(&$spec) {
+  $spec['contact_type'] = [
+      'name'         => 'contact_type',
+      'api.default'  => 'Individual',
+      'type'         => CRM_Utils_Type::T_STRING,
+      'title'        => 'Contact Type',
+  ];
+  $spec['xcm_profile'] = [
+      'name'         => 'xcm_profile',
+      'api.required' => 0,
+      'type'         => CRM_Utils_Type::T_STRING,
+      'title'        => 'Which profile should be used for matching?',
+  ];
+  $spec['match_only'] = [
+    'type'        => CRM_Utils_Type::T_BOOLEAN,
+    'title'       => 'Match only',
+    'api.default' => 0,
+    'description' => 'Either return the matched contact, or nothing; do not create a contact.'
+  ];
+}
+
 /**
  * Get or create a contact for the given data
  *
@@ -28,36 +54,12 @@
  *
  * @throws Exception
  */
-function civicrm_api3_contact_createifnotexists($params) {
+function civicrm_api3_contact_Createifnotexists($params) {
   $profile = CRM_Utils_Array::value('xcm_profile', $params, NULL);
   $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->createIfNotExists($params);
 
   return civicrm_api3_create_success($result);
-}
-
-/**
- * API3 action specs
- */
-function _civicrm_api3_contact_createifnotexists(&$params) {
-  $params['contact_type'] = [
-      'name'         => 'contact_type',
-      'api.default'  => 'Individual',
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Contact Type',
-  ];
-  $params['xcm_profile'] = [
-      'name'         => 'xcm_profile',
-      'api.required' => 0,
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Which profile should be used for matching?',
-  ];
-  $params['match_only'] = [
-    'type'        => CRM_Utils_Type::T_BOOLEAN,
-    'title'       => 'Match only',
-    'api.default' => 0,
-    'description' => 'Either return the matched contact, or nothing; do not create a contact.'
-  ];
 }
 
 
