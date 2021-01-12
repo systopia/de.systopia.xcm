@@ -963,9 +963,9 @@ class CRM_Xcm_MatchingEngine {
               'CustomField',
               'get',
               [
-                  'html_type'  => 'Select',
-                  'serialized' => 1,
-                  'return'     => ['name', 'html_type', 'option_group_id']
+                  'html_type' => 'Select',
+                  'serialize' => 1,
+                  'return'    => ['name', 'html_type', 'option_group_id']
              ]
           );
         }
