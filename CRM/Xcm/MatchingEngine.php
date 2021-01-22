@@ -1080,16 +1080,35 @@ class CRM_Xcm_MatchingEngine {
   }
 
   /**
-   * compare two values of the given attribute name
+   * Compare two values of the given attribute name
    *
-   * @return TRUE if atttributes differ
+   * @param array $data_attributes
+   *   list of attributes to check in both data sets
+   *
+   * @param array $original_values
+   *   values of the current/original contact data
+   *
+   * @param array $submitted_values
+   *   values of the new/desired/submitted contact data
+   *
+   * @param boolean $case_insensitive
+   *   conduct the test in a case agnostic matter?
+   *
+   * @todo collapse double spaces?
+   *
+   * @return boolean
+   *    true if any one of these attributes differ
    */
   protected function attributesDiffer($data_attributes, $original_values, $submitted_values, $case_insensitive) {
-    // TODO: collapse double spaces?
-
     foreach ($data_attributes as $data_attribute) {
+      // let's find out if data differs for this particular attribute
       $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
       $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+
+      // mitigate api quirk: sometimes a single value is returned as a 1-array
+      if (is_array($original_value) && count($original_value) == 1 && is_string($submitted_value)) {
+        $original_value = reset($original_value);
+      }
 
       // trim values first
       if (is_string($original_value)) {
@@ -1099,20 +1118,34 @@ class CRM_Xcm_MatchingEngine {
         $submitted_value = trim($submitted_value);
       }
 
-      // compare
-      if ($case_insensitive && is_string($original_value) && is_string($submitted_value)) {
-        if (strtolower($original_value) != strtolower($submitted_value)) {
-          return TRUE;
+      // generic comparison
+      $attribute_differs = ($original_value != $submitted_value);
+
+      // case agnostic comparison (if different)
+      if ($attribute_differs && $case_insensitive && is_string($original_value) && is_string($submitted_value)) {
+        $attribute_differs = (strtolower($original_value) != strtolower($submitted_value));
+      }
+
+      // time comparison (if still different)
+      if ($attribute_differs) {
+        $original_value_as_time = strtotime($original_value);
+        $submitted_value_as_time = strtotime($submitted_value);
+        if ($original_value_as_time && $original_value_as_time) {
+          $attribute_differs = ($original_value_as_time != $submitted_value_as_time);
         }
-      } else {
-        if ($original_value != $submitted_value) {
-          return TRUE;
-        }
+      }
+
+      // todo: further exceptions here?
+
+
+      // if still different after all, we can return the fact that at least one attribute differs (this one)
+      if ($attribute_differs) {
+        return true;
       }
     }
 
     // all are equal? good
-    return FALSE;
+    return false;
   }
 
 
