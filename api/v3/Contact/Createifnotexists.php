@@ -59,7 +59,11 @@ function civicrm_api3_contact_Createifnotexists($params) {
   $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->createIfNotExists($params);
 
-  return civicrm_api3_create_success($result);
+  $reply = array(
+    'contact_id' => $result['contact_id'],
+    'was_created' => $result['was_created'],
+  );
+  return civicrm_api3_create_success(array($result['contact_id'] => $reply));
 }
 
 
