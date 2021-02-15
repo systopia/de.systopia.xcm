@@ -4,9 +4,9 @@ The Extended Contact manager (XCM) provides two CiviCRM API actions
 `getorcreate` and `createifnotexists` for the `Contact` entity, which both
 perform similar functions:
 
-- `getorcreate` *always* returns a contact.
+- `getorcreate` *always* returns a contact ID.
 
-- `createifnotexists` returns an array with the contact and whether it had to
+- `createifnotexists` returns an array with the contact ID and whether it had to
    be created. It also has an option that prevents creating a contact if one
    cannot be found.
 
@@ -38,7 +38,7 @@ The actions also take these optional parameters
 - `contact_type` without this the default for the profile is used.
 
 - `match_only` **only for `createifnotexists`**. If set to truthy (e.g.
-  TRUE or 1) and no contact is found by the matching, no contact is
+  `TRUE` or `1`) and no contact is found by the matching, no contact is
   created. In this case the return array will be  
    ```
    [ 'contact_id' => NULL, 'was_created' => FALSE ]
