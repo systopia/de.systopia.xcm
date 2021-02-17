@@ -63,7 +63,14 @@ function civicrm_api3_contact_Createifnotexists($params) {
     'contact_id' => $result['contact_id'],
     'was_created' => $result['was_created'],
   );
-  return civicrm_api3_create_success(array($result['contact_id'] => $reply));
+  return civicrm_api3_create_success(
+    array($result['contact_id'] => $reply),
+    $params,
+    'Contact',
+    'createifnotexists',
+    $dao = NULL,
+    $reply
+  );
 }
 
 
