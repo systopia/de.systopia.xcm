@@ -71,11 +71,15 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     // add general options
     $this->addElement('select',
+                      'input_sanitation',
+                      E::ts('Input Sanitation'),
+                      CRM_Xcm_DataSanitiser::getDataSanitationOptions(),
+                      array('class' => 'crm-select2 huge'));
+    $this->addElement('select',
                       'picker',
                       E::ts('Of multiple matches, pick:'),
                       $this->getPickers(),
                       array('class' => 'crm-select2 huge'));
-
     $this->addElement('select',
                       'default_location_type',
                       E::ts('Default Location Type'),
@@ -348,6 +352,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'primary_phone_type'         => CRM_Utils_Array::value('primary_phone_type', $values),
       'secondary_phone_type'       => CRM_Utils_Array::value('secondary_phone_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
+      'input_sanitation'           => CRM_Utils_Array::value('input_sanitation', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
       'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
       'diff_handler'               => CRM_Utils_Array::value('diff_handler', $values),
