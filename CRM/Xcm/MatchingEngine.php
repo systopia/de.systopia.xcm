@@ -92,6 +92,70 @@ class CRM_Xcm_MatchingEngine {
     return $result;
   }
 
+  /**
+   * Try to find/match the contact with the given data.
+   * If that fails, a new contact will be created with that data
+   *
+   * This offers an alternative contract to getOrCreateContact in that this
+   * supports the optional match_only parameter to suppress contact creation,
+   * and returns whether a contact was created as well as the contact_id.
+   *
+   * @throws exception  if anything goes wrong during matching/contact creation
+   *
+   * @param Array $params
+   *
+   * @return Array with keys:
+   *   - contact_id  int|null
+   *   - was_created TRUE|FALSE whether the contact had to be created
+   */
+  public function createIfNotExists(&$params) {
+    // first: resolve custom fields to custom_xx notation
+    CRM_Xcm_Tools::resolveCustomFields($params);
+
+    // also: do some sanitation and formatting
+    CRM_Xcm_DataNormaliser::normaliseFieldnames($params);
+    CRM_Xcm_DataNormaliser::normaliseData($params);
+    CRM_Xcm_DataNormaliser::resolveData($params);
+
+    // set defaults
+    if (empty($params['contact_type'])) {
+      $params['contact_type'] = CRM_Xcm_MatchingRule::getContactType($params);
+    }
+
+    // then: match
+    $result = $this->matchContact($params);
+
+    if (empty($result['contact_id'])) {
+      // The matching failed.
+
+      if (empty($params['match_only'])) {
+        // Create contact now.
+        $new_contact = $this->createContact($params);
+        $result = [
+          'contact_id' => $new_contact['id'],
+          'was_created' => TRUE,
+        ];
+
+        // do the post-processing
+        $this->postProcessNewContact($new_contact, $params);
+      }
+      else {
+        // We have match_only set so do not create a contact.
+        $result = [
+          'contact_id' => NULL,
+          'was_created' => FALSE,
+        ];
+      }
+
+    } else {
+      // The matching was successful.
+      $this->postProcessContactMatch($result, $params);
+      $result['was_created'] = FALSE;
+    }
+
+    return $result;
+  }
+
 
   /**
    * @todo document
