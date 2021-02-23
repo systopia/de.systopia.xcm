@@ -19,7 +19,7 @@ use Civi\Test\TransactionalInterface;
  *
  * @group headless
  */
-class CRM_XCMTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   public $contacts = [];
 
@@ -84,7 +84,7 @@ class CRM_XCMTest extends \PHPUnit_Framework_TestCase implements HeadlessInterfa
    */
   public function configureXcm($params=[]) {
     // Configure XCM.
-    $options = $params + [
+    $toSet = $params + [
       'fill_address'               => NULL,
       'fill_fields_multivalue'     => NULL,
       'fill_details'               => NULL,
@@ -102,9 +102,7 @@ class CRM_XCMTest extends \PHPUnit_Framework_TestCase implements HeadlessInterfa
       'fill_fields'                => ['first_name', 'last_name'],
       'case_insensitive'           => 1,
     ];
-    CRM_Core_BAO_Setting::setItem($options, 'de.systopia.xcm', 'xcm_options');
-
-    $rules = [
+    $matchers = [
       "rule_1" => "CRM_Xcm_Matcher_EmailFullNameMatcher",
       "rule_2" => "CRM_Xcm_Matcher_EmailMatcher",
       "rule_3" => "0",
@@ -115,8 +113,12 @@ class CRM_XCMTest extends \PHPUnit_Framework_TestCase implements HeadlessInterfa
       "rule_8" => "0",
       "rule_9" => "0"
     ];
-    CRM_Core_BAO_Setting::setItem($rules, 'de.systopia.xcm', 'rules');
-    CRM_Core_BAO_Setting::setItem([], 'de.systopia.xcm', 'postprocessing');
+
+    $config = CRM_Xcm_Configuration::getConfigProfile();
+    $options = array_merge($config->getOptions(), $toSet);
+    $config->setOptions($options);
+    $config->setRules($matchers);
+    $config->store();
   }
 
 
