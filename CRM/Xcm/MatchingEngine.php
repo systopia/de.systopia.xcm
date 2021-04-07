@@ -1044,7 +1044,7 @@ class CRM_Xcm_MatchingEngine {
       }
     }
     if ($this->config->secondaryPhoneType() && !in_array('phone2', $differing_attributes) && (isset($contact['phone2']) || isset($contact_data['phone2']))) {
-      if ($this->attributesDiffer(['phone'], $contact, $contact_data, $case_insensitive)) {
+      if ($this->attributesDiffer(['phone2'], $contact, $contact_data, $case_insensitive)) {
         $differing_attributes[] = 'phone2';
       }
     }
