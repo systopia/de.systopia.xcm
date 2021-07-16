@@ -84,7 +84,9 @@ class CRM_Xcm_Tools {
         'postal_code' => ts('Postal Code'),
         'supplemental_address_1' => ts('Supplemental Address 1'),
         'supplemental_address_2' => ts('Supplemental Address 2'),
-        'supplemental_address_3' => ts('Supplemental Address 3')
+        'supplemental_address_3' => ts('Supplemental Address 3'),
+        'gender_id' => ts('Gender'),
+        'birth_date' => ts('Birth date'),
       ];
       try {
         $data['phone'] = civicrm_api3('OptionValue', 'getvalue', [
