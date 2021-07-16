@@ -316,6 +316,7 @@ class CRM_Xcm_MatchingEngine {
         || !empty($options['override_details'])
         || !empty($options['fill_fields'])
         || !empty($options['fill_address'])
+        || !empty($options['fill_phone'])
         || !empty($options['fill_details'])) {
 
       // sort out location type
@@ -359,14 +360,14 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DETAILS
       if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
-          if ($entity == 'phone') {
-            $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data);
-            if ($this->config->secondaryPhoneType()) {
-              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data);
-            }
-          } else {
-            $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
-          }
+          $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
+        }
+      }
+
+      if (!empty($options['fill_phone'])) {
+        $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data, $options['fill_phone']);
+        if ($this->config->secondaryPhoneType()) {
+          $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data, $options['fill_phone']);
         }
       }
 
@@ -581,9 +582,17 @@ class CRM_Xcm_MatchingEngine {
    *  Mark the phone as primary
    * @param $data_update
    *  The current contact data
+   * @param int $fillOption
+   *  Either 0: do nothing
+   *         1: Fill if contact has no phone
+   *         2: Fill if contact has no phone of this type
+   *         3: Fill if contact has not this phone number
    * @throws \CiviCRM_API3_Exception
    */
-  protected function addPhoneToContact($contact_id, &$data, $attribute='phone', $phone_type_id=null, $as_primary = FALSE, &$data_update = NULL) {
+  protected function addPhoneToContact($contact_id, &$data, $attribute='phone', $phone_type_id=null, $as_primary = FALSE, &$data_update = NULL, $fillOption=3) {
+    if (empty($fillOption)) {
+      return;
+    }
     if (!empty($data[$attribute])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
@@ -592,16 +601,22 @@ class CRM_Xcm_MatchingEngine {
         $location_type_id = $data['location_type_id'];
       }
 
+      // Check whether a phone with this location type and phone type already exists.
+      // We dont check whether the numbers are equal.
       $api_query = [
-        'phone'     => $data[$attribute],
         'contact_id'   => $contact_id,
         'options' => [
           'sort'  => 'is_primary desc',
           'limit' => 1
         ]
       ];
-      if ($phone_type_id) {
-        $api_query['phone_type_id'] = $phone_type_id;
+      if ($fillOption == 3) {
+        $api_query['phone'] = $data[$attribute];
+      } elseif ($fillOption == 2) {
+        $api_query['location_type_id'] = $location_type_id;
+        if ($phone_type_id) {
+          $api_query['phone_type_id'] = $phone_type_id;
+        }
       }
 
       // some value was submitted -> check if there is already an existing one
@@ -638,10 +653,6 @@ class CRM_Xcm_MatchingEngine {
           // ...and config says it should be primary -> make it sure it's primary:
           $this->makeExistingDetailPrimary($contact_id, 'Phone', 'phone', $data[$attribute]);
         }
-        // also make sure, it doesn't end up in diff:
-        unset($data[$attribute]);
-        // if we're dealing with phone, also do so for phone_numeric
-        unset($data[$attribute.'_numeric']);
       }
     }
   }
@@ -1114,7 +1125,12 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // filter attributes
-    // TODO:
+    $attributes_to_skip = ['phone_numeric'];
+    foreach($attributes_to_skip as $attr) {
+      if (($key = array_search($attr, $differing_attributes)) !== false) {
+        unset($differing_attributes[$key]);
+      }
+    }
 
     if (!empty($differing_attributes)) {
       // There ARE changes: render the diff activity
