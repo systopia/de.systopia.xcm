@@ -364,6 +364,10 @@ class CRM_Xcm_MatchingEngine {
         }
       }
 
+      if (!empty($options['fill_email'])) {
+        $this->addEmailToContact($result['contact_id'], $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data, $options['fill_email']);
+      }
+
       if (!empty($options['fill_phone'])) {
         $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data, $options['fill_phone']);
         if ($this->config->secondaryPhoneType()) {
@@ -564,6 +568,81 @@ class CRM_Xcm_MatchingEngine {
         // if we're dealing with phone, also do so for phone_numeric
         if ($entity == 'phone') {
           unset($data['phone_numeric']);
+        }
+      }
+    }
+  }
+
+  /**
+   * Add an email address to the contact
+   *
+   * @param int $contact_id
+   * @param array $data
+   *   Submitted data.
+   * @param $as_primary
+   *  Mark the email as primary
+   * @param $data_update
+   *  The current contact data
+   * @param int $fillOption
+   *  Either 0: do nothing
+   *         1: Fill if contact has no email
+   *         2: Fill if contact has no email of this type
+   *         3: Fill if contact has not this email address
+   * @throws \CiviCRM_API3_Exception
+   */
+  protected function addEmailToContact($contact_id, &$data, $as_primary = FALSE, &$data_update = NULL, $fillOption=3) {
+    if (empty($fillOption)) {
+      return;
+    }
+    if (!empty($data['email'])) {
+      // sort out location type
+      if (empty($data['location_type_id'])) {
+        $location_type_id = $this->config->defaultLocationType();
+      } else {
+        $location_type_id = $data['location_type_id'];
+      }
+
+      // Check whether a phone with this location type and phone type already exists.
+      // We dont check whether the numbers are equal.
+      $api_query = [
+        'contact_id'   => $contact_id,
+        'options' => [
+          'sort'  => 'is_primary desc',
+          'limit' => 1
+        ]
+      ];
+      if ($fillOption == 3) {
+        $api_query['email'] = $data['email'];
+      } elseif ($fillOption == 2) {
+        $api_query['location_type_id'] = $location_type_id;
+      }
+
+      // some value was submitted -> check if there is already an existing one
+      $existing_entity = civicrm_api3('Email', 'get', $api_query);
+      if (empty($existing_entity['count'])) {
+        // there is none -> create
+        $create_detail_call = array(
+          'email'         => $data['email'],
+          'contact_id'       => $contact_id,
+          'location_type_id' => $location_type_id);
+
+        // mark as primary if requested
+        if ($as_primary) {
+          $create_detail_call['is_primary'] = 1;
+        }
+
+        // create the detail
+        civicrm_api3('Email', 'create', $create_detail_call);
+
+        // mark in update_data
+        if ($data_update && is_array($data_update)) {
+          $data_update['email'] = $data['email'];
+        }
+      } else {
+        // there already is a detail withe same value...
+        if ($as_primary) {
+          // ...and config says it should be primary -> make it sure it's primary:
+          $this->makeExistingDetailPrimary($contact_id, 'Email', 'email', $data['email']);
         }
       }
     }
