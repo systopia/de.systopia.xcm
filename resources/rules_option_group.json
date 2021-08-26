@@ -173,6 +173,26 @@
       "filter": "0",
       "is_reserved": "1",
       "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_WebsiteMatcher",
+      "value": "CRM_Xcm_Matcher_WebsiteMatcher",
+      "label": "Website (exact)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_WebsiteOnlyMatcher",
+      "value": "CRM_Xcm_Matcher_WebsiteOnlyMatcher",
+      "label": "Website (if only website submitted)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
     }
   ]
 }
