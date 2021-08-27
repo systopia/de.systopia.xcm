@@ -102,4 +102,17 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Add website rules
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0190() {
+    $this->ctx->log->info('Adding website matching rules.');
+    $customData = new CRM_Xcm_CustomData(E::LONG_NAME);
+    $customData->syncOptionGroup(E::path('/resources/rules_option_group.json'));
+    return TRUE;
+  }
+
 }
