@@ -39,7 +39,7 @@ class CRM_Xcm_Tools {
    * return all contact detail fields
    */
   public static function getDetailFields() {
-    return ['email', 'url', 'phone'];
+    return ['email', 'url', 'phone', 'website'];
   }
 
   /**
