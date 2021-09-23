@@ -19,7 +19,7 @@ use CRM_XCM_ExtensionUtil as E;
  * This analyser will use the XCM's facilities to get or create a contact based on the contact
  *   data in the transaction - typically
  */
-class CRM_Banking_PluginImpl_Matcher_GentOrCreateContactAnalyser extends CRM_Banking_PluginModel_Analyser {
+class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Banking_PluginModel_Analyser {
 
   /**
    * Contact Get-Or-Create Analyser. Configuration options:
@@ -219,5 +219,33 @@ class CRM_Banking_PluginImpl_Matcher_GentOrCreateContactAnalyser extends CRM_Ban
 
     // now simply
     return isset($all_first_names[$name]);
+  }
+
+  /**
+   * Register this module IF CiviBanking is installed and detected
+   */
+  public static function registerModule()
+  {
+    if (function_exists('banking_civicrm_install_options')) {
+      // extension is enabled, let's see if our module is there
+      $exists = civicrm_api3('OptionValue', 'getcount', [
+          'option_group_id' => 'civicrm_banking.plugin_types',
+          'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser'
+      ]);
+      if (!$exists) {
+        // register new item
+        civicrm_api3('OptionValue', 'create', [
+            'option_group_id' => 'civicrm_banking.plugin_types',
+            'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser',
+            'label' => E::ts('Create Contact Analyser (XCM)'),
+            'name' => 'analyser_xcm',
+            'description' => E::ts("Uses XCM to create a potentially missing contact before reconciliation."),
+        ]);
+        CRM_Core_Session::setStatus(
+            E::ts("Registered new XCM CiviBanking module 'Create Contact Analyser'"),
+            E::ts("Registered CiviBanking Module!"),
+            'info');
+      }
+    }
   }
 }
