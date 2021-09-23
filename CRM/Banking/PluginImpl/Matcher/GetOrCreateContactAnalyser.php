@@ -158,6 +158,8 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   protected function applyNameExtraction($btx, &$xcm_values, $name_mode)
   {
     $btx_name = $btx->getDataParsed()['name'] ?? '';
+    if (!$btx_name) return;
+
     $name_bits = preg_split('/ +/', $btx_name);
     $this->logMessage("Extracting names from '{$btx_name}', mode is '{$name_mode}'", 'debug');
 
