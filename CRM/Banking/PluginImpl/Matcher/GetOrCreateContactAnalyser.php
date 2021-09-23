@@ -224,7 +224,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     }
 
     // now simply
-    return isset($all_first_names[$name]);
+    return isset($all_first_names[strtolower($name)]);
   }
 
   /**
