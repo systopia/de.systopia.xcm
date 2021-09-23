@@ -81,7 +81,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     $this->applyMapping($btx, $xcm_values, $config->mapping);
 
     // step 3: run XCM
-    $contact_id = $this->runXCM($btx, $config->xcm_profile, $xcm_values);
+    $contact_id = $this->runXCM($btx, $xcm_values);
     $this->logMessage("Contact identified by XCM: " . $contact_id, 'debug');
 
     // step 4: apply contact ID
@@ -108,7 +108,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @return integer
    *     contact ID
    */
-  protected function runXCM($btx, $xcm_profile, $xcm_values)
+  protected function runXCM($btx, $xcm_values)
   {
     // first add some config values
     $config = $this->_plugin_config;
