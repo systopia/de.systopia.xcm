@@ -218,7 +218,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
         while ($data->fetch()) {
           $all_first_names[$data->name] = 1;
         }
-        $this->logTime('load_first_names', "loaded all first names");
+        $this->logTime("Loading all first names", 'load_first_names');
         CRM_Core_BAO_Cache::setItem($all_first_names,'civibanking', 'plugin/analyser_xcm');
       }
     }
