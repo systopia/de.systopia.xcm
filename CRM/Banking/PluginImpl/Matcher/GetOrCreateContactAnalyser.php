@@ -21,6 +21,9 @@ use CRM_XCM_ExtensionUtil as E;
  */
 class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Banking_PluginModel_Analyser {
 
+  const FIRST_NAME_CACHE_KEY = 'banking_xcm_analyser_db_first_name_list';
+  const FIRST_NAME_CACHE_TTL = 60 * 60 * 24 * 7; // one week
+
   /**
    * Contact Get-Or-Create Analyser. Configuration options:
    *   'xcm_profile':
@@ -206,15 +209,18 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   public function isDBFirstName($name) {
     static $all_first_names = null;
     if ($all_first_names === null) {
-      // load all first names from the database
-      // todo: use civicrm cache not just static var
-      $all_first_names = [];
-      $this->logger->setTimer('load_first_names');
-      $data = CRM_Core_DAO::executeQuery("SELECT DISTINCT(LOWER(first_name)) AS name FROM civicrm_contact WHERE is_deleted = 0;");
-      while ($data->fetch()) {
-        $all_first_names[$data->name] = 1;
+      $all_first_names = CRM_Core_BAO_Cache::getItem('civibanking', 'plugin/analyser_xcm');
+      if ($all_first_names === null) {
+        // load all first names from the database
+        $all_first_names = [];
+        $this->logger->setTimer('load_first_names');
+        $data = CRM_Core_DAO::executeQuery("SELECT DISTINCT(LOWER(first_name)) AS name FROM civicrm_contact WHERE is_deleted = 0;");
+        while ($data->fetch()) {
+          $all_first_names[$data->name] = 1;
+        }
+        $this->logTime('load_first_names', "loaded all first names");
+        CRM_Core_BAO_Cache::setItem($all_first_names,'civibanking', 'plugin/analyser_xcm');
       }
-      $this->logTime('load_first_names', "loaded all first names");
     }
 
     // now simply
