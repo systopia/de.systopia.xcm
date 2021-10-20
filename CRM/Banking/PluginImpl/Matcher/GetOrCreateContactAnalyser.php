@@ -120,6 +120,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     }
 
     try {
+      $this->logMessage('Calling XCM with parameters: ' . json_encode($xcm_values), 'debug');
       $xcm_result = civicrm_api3('Contact', 'getorcreate', $xcm_values);
       return $xcm_result['id'];
     } catch (CiviCRM_API3_Exception $ex) {
