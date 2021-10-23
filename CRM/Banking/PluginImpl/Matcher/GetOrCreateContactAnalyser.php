@@ -46,17 +46,22 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    *
    *   'output_field':
    *       field to which the resulting contact ID is written. Default is 'contact_id'
+   *
+   *   'ucwords_fields':
+   *       array (or comma separated string) of fields, that should be normalised before being passed
+   *       to the XCM as follows: all lower case with the first letter capitalised (strtolower + ucwords)
    */
   function __construct($config_name) {
     parent::__construct($config_name);
 
     // read config, set defaults
     $config = $this->_plugin_config;
-    if (!isset($config->xcm_profile))   $config->xcm_profile  = null; // i.e. default
-    if (!isset($config->name_mode))     $config->name_mode    = 'first';
-    if (!isset($config->contact_type))  $config->contact_type = 'Individual';
-    if (!isset($config->mapping))       $config->mapping      = [];
-    if (!isset($config->output_field))  $config->output_field = 'contact_id';
+    if (!isset($config->xcm_profile))     $config->xcm_profile    = null; // i.e. default
+    if (!isset($config->name_mode))       $config->name_mode      = 'first';
+    if (!isset($config->contact_type))    $config->contact_type   = 'Individual';
+    if (!isset($config->mapping))         $config->mapping        = [];
+    if (!isset($config->output_field))    $config->output_field   = 'contact_id';
+    if (!isset($config->ucwords_fields))  $config->ucwords_fields = [];
   }
 
   /**
@@ -79,6 +84,9 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
 
     // step 2: apply mapping
     $this->applyMapping($btx, $xcm_values, $config->mapping);
+
+    // step 3: apply value formatting
+    $this->applyNormalisation($btx, $xcm_values);
 
     // step 3: run XCM
     $contact_id = $this->runXCM($btx, $xcm_values);
@@ -143,6 +151,32 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   {
     foreach ($mapping as $from_field => $to_field) {
       $xcm_values[$to_field] = $this->getPropagationValue($btx, NULL, $from_field);
+    }
+  }
+
+  /**
+   * Apply the configured normalisation to the xcm paramters
+   *
+   * @param CRM_Banking_BAO_BankTransaction $btx
+   *     the current transaction
+   * @param array $xcm_values
+   *     the current list of values to be passed to XCM to be extended
+   */
+  protected function applyNormalisation($btx, &$xcm_values)
+  {
+    $config = $this->_plugin_config;
+
+    // extract ucwords normalisation
+    if (!empty($config->ucwords_fields)) {
+      if (!is_array($config->ucwords_fields)) {
+        $config->ucwords_fields = explode(',', $config->ucwords_fields);
+      }
+      $config->ucwords_fields = array_map('trim', $config->ucwords_fields);
+      foreach ($config->ucwords_fields as $field_name) {
+        if (isset($xcm_values[$field_name])) {
+          $xcm_values[$field_name] = ucwords(strtolower($xcm_values[$field_name]));
+        }
+      }
     }
   }
 
