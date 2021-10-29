@@ -163,7 +163,10 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   protected function applyMapping($btx, &$xcm_values, $mapping)
   {
     foreach ($mapping as $from_field => $to_field) {
-      $xcm_values[$to_field] = $this->getPropagationValue($btx, NULL, $from_field);
+      $value = $this->getPropagationValue($btx, NULL, $from_field);
+      if (isset($value)) {
+        $xcm_values[$to_field] = $value;
+      }
     }
   }
 
