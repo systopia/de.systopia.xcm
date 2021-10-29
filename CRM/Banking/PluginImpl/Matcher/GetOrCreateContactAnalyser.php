@@ -84,7 +84,10 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     if (!$this->requiredValuesPresent($btx)) return null;
 
     // make sure we don't re-create a contact that's already been identified
-    if ($this->contactAlreadyIdentified($btx, $context)) return null;
+    if ($this->contactAlreadyIdentified($btx, $context)) {
+      $this->logMessage("Contact already identified, not running XCM.", 'debug');
+      return null;
+    }
 
     // start compiling the values
     $xcm_values = [
