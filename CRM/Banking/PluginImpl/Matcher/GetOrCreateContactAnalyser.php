@@ -50,18 +50,27 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    *   'ucwords_fields':
    *       array (or comma separated string) of fields, that should be normalised before being passed
    *       to the XCM as follows: all lower case with the first letter capitalised (strtolower + ucwords)
+   *
+   *   'first_name_blacklist':
+   *       array of values that should be excluded from being a first name
+   *
+   *   'name_blacklist':
+   *       array of values that should be excluded from being considered to be part of the name at all,
+   *       e.g. 'Mr' or 'Mrs'
    */
   function __construct($config_name) {
     parent::__construct($config_name);
 
     // read config, set defaults
     $config = $this->_plugin_config;
-    if (!isset($config->xcm_profile))     $config->xcm_profile    = null; // i.e. default
-    if (!isset($config->name_mode))       $config->name_mode      = 'first';
-    if (!isset($config->contact_type))    $config->contact_type   = 'Individual';
-    if (!isset($config->mapping))         $config->mapping        = [];
-    if (!isset($config->output_field))    $config->output_field   = 'contact_id';
-    if (!isset($config->ucwords_fields))  $config->ucwords_fields = [];
+    if (!isset($config->xcm_profile))           $config->xcm_profile          = null; // i.e. default
+    if (!isset($config->name_mode))             $config->name_mode            = 'first';
+    if (!isset($config->contact_type))          $config->contact_type         = 'Individual';
+    if (!isset($config->mapping))               $config->mapping              = [];
+    if (!isset($config->output_field))          $config->output_field         = 'contact_id';
+    if (!isset($config->ucwords_fields))        $config->ucwords_fields       = [];
+    if (!isset($config->name_blacklist))        $config->name_blacklist       = [];
+    if (!isset($config->first_name_blacklist))  $config->first_name_blacklist = [];
   }
 
   /**
@@ -154,6 +163,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     }
   }
 
+
   /**
    * Apply the configured normalisation to the xcm paramters
    *
@@ -192,6 +202,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    */
   protected function applyNameExtraction($btx, &$xcm_values, $name_mode)
   {
+    $config = $this->_plugin_config;
     $btx_name = $btx->getDataParsed()['name'] ?? '';
     if (!$btx_name) return;
 
@@ -200,29 +211,57 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
 
     switch ($name_mode) {
       case 'first':
-        $xcm_values['first_name'] = $name_bits[0] ?? '';
-        if (count($name_bits) > 1) {
-          array_pop($name_bits);
-          $xcm_values['last_name'] = implode(' ', $name_bits);
+        $first_name = null;
+        $last_names = [];
+        foreach ($name_bits as $name_bit) {
+          if (!isset($first_name)) {
+            // still looking for the first name
+            if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist, $config->first_name_blacklist)) {
+              $first_name = $name_bit;
+            }
+          } else {
+            // adding last names
+            if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
+              $last_names[] = $name_bit;
+            }
+          }
         }
+        $xcm_values['first_name'] = $first_name ? $first_name : '';
+        $xcm_values['last_name'] = implode(' ', $last_names);
         break;
 
       case 'last':
-        $xcm_values['last_name'] = $name_bits[0] ?? '';
-        if (count($name_bits) > 1) {
-          array_pop($name_bits);
-          $xcm_values['first_name'] = implode(' ', $name_bits);
+        $last_name = null;
+        $first_names = [];
+        $name_bits = array_reverse($name_bits); // will go from the back to the front
+        foreach ($name_bits as $name_bit) {
+          if (!isset($last_name)) {
+            // still looking for the last name
+            if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
+              $last_name = $name_bit;
+            }
+          } else {
+            // adding first names
+            if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist, $config->first_name_blacklist)) {
+              $first_names[] = $name_bit;
+            }
+          }
         }
+        $xcm_values['last_name'] = $last_name ? $last_name : '';
+        $xcm_values['first_name'] = implode(' ', array_reverse($first_names));
         break;
 
       case 'db':
         $first_names = [];
         $last_names = [];
         foreach ($name_bits as $name_bit) {
-          if ($this->isDBFirstName($name_bit)) {
-            $first_names[] = $name_bit;
-          } else {
-            $last_names[] = $name_bit;
+          if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
+            if ((!$this->isNameBlacklisted($name_bit, $config->first_name_blacklist))
+                && $this->isDBFirstName($name_bit)) {
+              $first_names[] = $name_bit;
+            } else {
+              $last_names[] = $name_bit;
+            }
           }
         }
         $this->logMessage("Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names), 'debug');
@@ -243,7 +282,8 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param $name string
    *  the name sample
    */
-  public function isDBFirstName($name) {
+  public function isDBFirstName($name)
+  {
     static $all_first_names = null;
     if ($all_first_names === null) {
       $all_first_names = CRM_Core_BAO_Cache::getItem('civibanking', 'plugin/analyser_xcm');
@@ -263,6 +303,34 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     // now simply
     return isset($all_first_names[strtolower($name)]);
   }
+
+
+  /**
+   * @param string $name
+   *    name to be checked against the blacklist
+   * @param array $blacklist1
+   *    list strings not to be considered names
+   * @param array $blacklist2
+   *    list strings not to be considered names
+   */
+  public function isNameBlacklisted($name, $blacklist1 = [], $blacklist2 = [])
+  {
+    $name = strtolower($name);
+    foreach ($blacklist1 as $blacklisted_name) {
+      if ($name == strtolower($blacklisted_name)) {
+        return true;
+      }
+    }
+
+    foreach ($blacklist2 as $blacklisted_name) {
+      if ($name == strtolower($blacklisted_name)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
 
   /**
    * Register this module IF CiviBanking is installed and detected
