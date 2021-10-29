@@ -64,6 +64,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     // read config, set defaults
     $config = $this->_plugin_config;
     if (!isset($config->xcm_profile))           $config->xcm_profile          = null; // i.e. default
+    if (!isset($config->threshold))             $config->threshold            = 1.0; // 100% matches
     if (!isset($config->name_mode))             $config->name_mode            = 'first';
     if (!isset($config->contact_type))          $config->contact_type         = 'Individual';
     if (!isset($config->mapping))               $config->mapping              = [];
@@ -81,6 +82,9 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
 
     // You can control/restrict the execution with the required values - just like a matcher
     if (!$this->requiredValuesPresent($btx)) return null;
+
+    // make sure we don't re-create a contact that's already been identified
+    if ($this->contactAlreadyIdentified($btx, $context)) return null;
 
     // start compiling the values
     $xcm_values = [
@@ -331,6 +335,24 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     return false;
   }
 
+  /**
+   * Has the contact already been identified (i.e. confidence >= threshold)?
+   *
+   * @param CRM_Banking_BAO_BankTransaction $btx
+   * @param CRM_Banking_Matcher_Context $context
+   */
+  public function contactAlreadyIdentified(CRM_Banking_BAO_BankTransaction $btx, CRM_Banking_Matcher_Context $context)
+  {
+    $config = $this->_plugin_config;
+    if (isset($config->threshold)) {
+      // check if the contact is already identified with sufficient confidence
+      $data_parsed    = $btx->getDataParsed();
+      $contacts_found = $context->findContacts($config->threshold, $data_parsed['name'] ?? null);
+      return !empty($contacts_found);
+    } else {
+      return false;
+    }
+  }
 
   /**
    * Register this module IF CiviBanking is installed and detected
