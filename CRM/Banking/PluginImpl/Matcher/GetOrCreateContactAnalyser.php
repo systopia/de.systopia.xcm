@@ -188,7 +188,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
       $config->ucwords_fields = array_map('trim', $config->ucwords_fields);
       foreach ($config->ucwords_fields as $field_name) {
         if (isset($xcm_values[$field_name])) {
-          $xcm_values[$field_name] = ucwords(strtolower($xcm_values[$field_name]));
+          $xcm_values[$field_name] = ucwords(strtolower($xcm_values[$field_name]), " \t\r\n\f\v-");
         }
       }
     }
