@@ -50,6 +50,11 @@ class CRM_Xcm_Page_Profiles extends CRM_Core_Page {
       ];
     }
 
+    // trigger the registration of the CiviBanking module(s)
+    if (class_exists('CRM_Banking_PluginModel_Analyser')) {
+      CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser::registerModule();
+    }
+
     $this->assign('profiles', $profile_data);
     parent::run();
   }

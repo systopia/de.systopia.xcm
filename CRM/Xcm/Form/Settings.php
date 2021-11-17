@@ -469,7 +469,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     );
     $campaigns = civicrm_api3('Campaign', 'get', array('is_active' => 1, 'option.limit' => 0));
     foreach ($campaigns['values'] as $campaign) {
-      $campaign_list[$campaign['id']] = $campaign['name'];
+      $campaign_list[$campaign['id']] = $campaign['name'] ?? '';
     }
 
     return $campaign_list;
