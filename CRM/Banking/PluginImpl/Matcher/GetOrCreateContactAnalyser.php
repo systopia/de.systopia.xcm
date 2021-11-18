@@ -354,10 +354,18 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
       // check if the contact is already identified with sufficient confidence
       $data_parsed    = $btx->getDataParsed();
       $contacts_found = $context->findContacts($config->threshold, $data_parsed['name'] ?? null);
-      return !empty($contacts_found);
-    } else {
-      return false;
+      if (!empty($contacts_found)) {
+        // for consistency: set this contact ID to the output field, too
+        $contact_field_value = implode(',', array_keys($contacts_found));
+        if (!isset($data_parsed[$config->output_field]) || $data_parsed[$config->output_field] != $contact_field_value) {
+          $data_parsed[$config->output_field] = $contact_field_value;
+          $btx->setDataParsed($data_parsed);
+          $this->logMessage("Copy already identified contact {$contact_field_value} to output field {$config->output_field}.", 'debug');
+        }
+        return true;
+      }
     }
+    return false;
   }
 
   /**
