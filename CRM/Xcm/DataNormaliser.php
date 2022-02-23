@@ -162,8 +162,8 @@ class CRM_Xcm_DataNormaliser {
           'option.limit'    => 1,
           'return'          => 'value,label',
           'sequential'      => 1));
-        $id_field   = 'value';
-        $name_field = 'label';
+        $id_field    = 'value';
+        $label_field = 'label';
         break;
 
       case 'country':
