@@ -14,15 +14,15 @@
     <url desc="Support">https://github.com/systopia/de.systopia.xcm/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate></releaseDate>
-  <version>1.9-dev</version>
-  <develStage>dev</develStage>
+  <releaseDate>2022-02-23</releaseDate>
+  <version>1.9-alpha4</version>
+  <develStage>alpha</develStage>
   <compatibility>
     <ver>5.0</ver>
     <ver>5.10</ver>
     <ver>5.19</ver>
   </compatibility>
-  <comments></comments>
+  <comments>1.9-alpha3+issue/89</comments>
   <classloader>
     <psr4 prefix="Civi\" path="Civi" />
   </classloader>
