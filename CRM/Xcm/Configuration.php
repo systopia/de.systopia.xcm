@@ -254,7 +254,18 @@ class CRM_Xcm_Configuration {
    * @throws Exception
    */
   public function getOptions() {
-    return $this->getConfigGroup('options');
+    $options = $this->getConfigGroup('options');
+    // Backwards compatibility change fill details email to fill email.
+    if (empty($options['fill_email']) && ($key = array_search('email', $options['fill_details']))!==false) {
+      $options['fill_email'] = 3;
+      unset($options['fill_details'][$key]);
+    }
+    // Backwards compatibility change fill details phone to fill phone.
+    if (empty($options['fill_phone']) && ($key = array_search('phone', $options['fill_details']))!==false) {
+      $options['fill_phone'] = 3;
+      unset($options['fill_details'][$key]);
+    }
+    return $options;
   }
 
   /**
