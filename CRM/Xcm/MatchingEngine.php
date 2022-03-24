@@ -1113,9 +1113,6 @@ class CRM_Xcm_MatchingEngine {
       }
     }
 
-    // filter attributes
-    // TODO:
-
     if (!empty($differing_attributes)) {
       // There ARE changes: render the diff activity
 
@@ -1200,6 +1197,16 @@ class CRM_Xcm_MatchingEngine {
       // generic comparison
       $attribute_differs = ($original_value != $submitted_value);
 
+      // some do not have to be compared if submitted value is empty
+      // @todo should we have a config option for this?
+      // @see https://github.com/systopia/de.systopia.xcm/issues/91
+      if ($attribute_differs) {
+        $emptyIsNotDifferentAttributes = ['phone', 'phone2', 'email', 'website', 'first_name', 'last_name'];
+        if (in_array($data_attribute, $emptyIsNotDifferentAttributes) && empty($submitted_value)) {
+          $attribute_differs = FALSE;
+        }
+      }
+
       // case agnostic comparison (if different)
       if ($attribute_differs && $case_insensitive && is_string($original_value) && is_string($submitted_value)) {
         $attribute_differs = (strtolower($original_value) != strtolower($submitted_value));
@@ -1215,7 +1222,6 @@ class CRM_Xcm_MatchingEngine {
       }
 
       // todo: further exceptions here?
-
 
       // if still different after all, we can return the fact that at least one attribute differs (this one)
       if ($attribute_differs) {
