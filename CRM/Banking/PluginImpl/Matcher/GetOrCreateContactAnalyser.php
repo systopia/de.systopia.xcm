@@ -296,7 +296,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   {
     static $all_first_names = null;
     if ($all_first_names === null) {
-      $all_first_names = CRM_Core_BAO_Cache::getItem('civibanking', 'plugin/analyser_xcm');
+      $all_first_names = Civi::cache('long')->get(self::FIRST_NAME_CACHE_KEY);
       if ($all_first_names === null) {
         // load all first names from the database
         $all_first_names = [];
@@ -306,7 +306,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
           $all_first_names[$data->name] = 1;
         }
         $this->logTime("Loading all first names", 'load_first_names');
-        CRM_Core_BAO_Cache::setItem($all_first_names,'civibanking', 'plugin/analyser_xcm');
+        Civi::cache('long')->set(self::FIRST_NAME_CACHE_KEY, $all_first_names, self::FIRST_NAME_CACHE_TTL);
       }
     }
 
