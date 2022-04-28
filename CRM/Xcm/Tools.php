@@ -122,7 +122,13 @@ class CRM_Xcm_Tools {
       }
     }
 
-    if ($copy_location_type && isset($data['location_type_id']) && !empty($address_data)) {
+    // Return empty array if there is no address data
+    // See issue #93
+    if (empty($address_data)) {
+      return [];
+    }
+
+    if ($copy_location_type && isset($data['location_type_id'])) {
       $address_data['location_type_id'] = $data['location_type_id'];
     }
     return $address_data;
