@@ -122,7 +122,7 @@ class CRM_Xcm_Tools {
       }
     }
 
-    if ($copy_location_type && isset($data['location_type_id'])) {
+    if ($copy_location_type && isset($data['location_type_id']) && !empty($address_data)) {
       $address_data['location_type_id'] = $data['location_type_id'];
     }
     return $address_data;
