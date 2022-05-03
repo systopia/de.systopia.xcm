@@ -54,78 +54,40 @@ class ContactGetOrCreate extends AbstractAction {
     $contact_specs = [];
     $contact_fields = CRM_Xcm_Form_Settings::getContactFields();
     foreach ($contact_fields as $contact_field_name => $contact_field_label) {
-      if ($this->isActionProvider181() && $contact_field_name == "gender_id") {
-        $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, true);
-      } else {
-        $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, false);
-      }
+      $contact_specs[] = new Specification($contact_field_name, 'String', $contact_field_label, false, null, null, null, false);
     }
     $contact_specs = array_merge($contact_specs, self::getCustomFields());
 
-    if ($this->isActionProvider181()) {
-      return new SpecificationBag(array_merge($contact_specs, [
-        // special fields
-        new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
-        new Specification('id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
+    return new SpecificationBag(array_merge($contact_specs, [
+      // special fields
+      new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
+      new Specification('id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
 
-        // detail fields
-        new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
-        new Specification('phone', 'String', E::ts('Primary Phone'), false, null, null, null, false),
-        new Specification('phone2', 'String', E::ts('Secondary Phone'), false, null, null, null, false),
-        new Specification('website', 'String', E::ts('Website'), false, null, null, null, false),
-        new Specification('name', 'String', E::ts('IM Handle'), false, null, null, null, false),
-        new Specification('location_type_id', 'String', E::ts('Location Type ID'), false, null, null, null, false),
-        new Specification('phone_type_id', 'String', E::ts('Phone Type ID'), false, null, null, null, false),
-        new Specification('provider_id', 'String', E::ts('IM Provider ID'), false, null, null, null, false),
-        new Specification('website_type_id', 'String', E::ts('Website Type ID'), false, null, null, null, false),
+      // detail fields
+      new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
+      new Specification('phone', 'String', E::ts('Primary Phone'), false, null, null, null, false),
+      new Specification('phone2', 'String', E::ts('Secondary Phone'), false, null, null, null, false),
+      new Specification('website', 'String', E::ts('Website'), false, null, null, null, false),
+      new Specification('name', 'String', E::ts('IM Handle'), false, null, null, null, false),
+      new Specification('location_type_id', 'String', E::ts('Location Type ID'), false, null, null, null, false),
+      new Specification('phone_type_id', 'String', E::ts('Phone Type ID'), false, null, null, null, false),
+      new Specification('provider_id', 'String', E::ts('IM Provider ID'), false, null, null, null, false),
+      new Specification('website_type_id', 'String', E::ts('Website Type ID'), false, null, null, null, false),
 
-        // address fields
-        new Specification('supplemental_address_1', 'String', E::ts('Supplemental Address 1'), false, null, null, null, false),
-        new Specification('supplemental_address_2', 'String', E::ts('Supplemental Address 2'), false, null, null, null, false),
-        new Specification('supplemental_address_3', 'String', E::ts('Supplemental Address 3'), false, null, null, null, false),
-        new Specification('street_address', 'String', E::ts('Street Address'), false, null, null, null, false),
-        new Specification('city', 'String', E::ts('City'), false, null, null, null, false),
-        new Specification('postal_code', 'String', E::ts('Postal Code'), false, null, null, null, false),
-        new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false),
-        new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
-        new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, true),
-        new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
+      // address fields
+      new Specification('supplemental_address_1', 'String', E::ts('Supplemental Address 1'), false, null, null, null, false),
+      new Specification('supplemental_address_2', 'String', E::ts('Supplemental Address 2'), false, null, null, null, false),
+      new Specification('supplemental_address_3', 'String', E::ts('Supplemental Address 3'), false, null, null, null, false),
+      new Specification('street_address', 'String', E::ts('Street Address'), false, null, null, null, false),
+      new Specification('city', 'String', E::ts('City'), false, null, null, null, false),
+      new Specification('postal_code', 'String', E::ts('Postal Code'), false, null, null, null, false),
+      new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false),
+      new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
+      new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
+      new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
 
-        new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
-      ]));
-    }
-    else {
-      return new SpecificationBag(array_merge($contact_specs, [
-        // special fields
-        new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
-        new Specification('id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
-
-        // detail fields
-        new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
-        new Specification('phone', 'String', E::ts('Primary Phone'), false, null, null, null, false),
-        new Specification('phone2', 'String', E::ts('Secondary Phone'), false, null, null, null, false),
-        new Specification('website', 'String', E::ts('Website'), false, null, null, null, false),
-        new Specification('name', 'String', E::ts('IM Handle'), false, null, null, null, false),
-        new Specification('location_type_id', 'String', E::ts('Location Type ID'), false, null, null, null, false),
-        new Specification('phone_type_id', 'String', E::ts('Phone Type ID'), false, null, null, null, false),
-        new Specification('provider_id', 'String', E::ts('IM Provider ID'), false, null, null, null, false),
-        new Specification('website_type_id', 'String', E::ts('Website Type ID'), false, null, null, null, false),
-
-        // address fields
-        new Specification('supplemental_address_1', 'String', E::ts('Supplemental Address 1'), false, null, null, null, false),
-        new Specification('supplemental_address_2', 'String', E::ts('Supplemental Address 2'), false, null, null, null, false),
-        new Specification('supplemental_address_3', 'String', E::ts('Supplemental Address 3'), false, null, null, null, false),
-        new Specification('street_address', 'String', E::ts('Street Address'), false, null, null, null, false),
-        new Specification('city', 'String', E::ts('City'), false, null, null, null, false),
-        new Specification('postal_code', 'String', E::ts('Postal Code'), false, null, null, null, false),
-        new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false),
-        new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
-        new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, true),
-        new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
-
-        new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
-      ]));
-    }
+      new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
+    ]));
   }
 
   /**
