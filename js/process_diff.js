@@ -29,12 +29,12 @@ CRM.$(function() {
   // add an extra table column, if not there yet...
   address_table.find('tbody tr').each(function(i) {
     var tr = CRM.$(this);
+    var attribute          = tr.attr('attribute-name');
     var column_exists      = (tr.find('#mh_field_' + i).length > 0);
     var faulty_template    = (tr.find('[id^="mh_field_"]').length > 1);
     var contains_response  = (['updated', 'added'].indexOf(tr.find('#mh_field_' + i).text()) > -1);
     var contains_old_value = (tr.children(':nth-child(2)').text().length > 0);
     var contains_new_value = (tr.children(':nth-child(3)').text().length > 0);
-    var attribute          = tr.children(':nth-child(1)').text();
     if (faulty_template) {
       console.log('row ' + i + ' is faulty! stopping.');
       return;
