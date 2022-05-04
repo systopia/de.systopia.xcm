@@ -30,7 +30,7 @@ CRM.$(function() {
   // add an extra table column, if not there yet...
   address_table.find('tbody tr').each(function(i) {
     let tr = CRM.$(this);
-    let attribute          = tr.attr('attribute-name');
+    let attribute          = tr.attr('class').substring(4); // TR class holds 'xcm-' and the attribute name
     let column_exists      = (tr.find('#mh_field_' + i).length > 0);
     let faulty_template    = (tr.find('[id^="mh_field_"]').length > 1);
     let contains_response  = (['updated', 'added'].indexOf(tr.find('#mh_field_' + i).text()) > -1);
@@ -443,7 +443,7 @@ CRM.$(function() {
   }
 
   /**
-   * get the attribute classe ('phone', 'address', 'contact') 
+   * get the attribute class ('phone', 'address', 'contact')
    * from the attribute name
    */
   function getAttributeClass(attribute_name) {
