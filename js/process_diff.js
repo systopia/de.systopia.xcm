@@ -18,6 +18,7 @@
  * and perform all the changes necessary
  */
 CRM.$(function() {
+  let ts = CRM.ts('de.systopia.xcm');
 
   // gather some data
   var ACTIVITY_TARGET_CONTACT_ID = CRM.$('input[name="source_contact_id"').val();
@@ -41,7 +42,7 @@ CRM.$(function() {
     }
 
     // change header (2) title
-    address_table.find('thead tr').children(':nth-child(2)').text("alter Wert");
+    address_table.find('thead tr').children(':nth-child(2)').text(ts('Old Value'));
 
     // add buttons, if this hasn't been processed yet
     if (!contains_response) {
@@ -57,15 +58,13 @@ CRM.$(function() {
           || (attribute_class == 'phone'   && contains_new_value && contains_old_value)
           || (attribute_class == 'address' && contains_new_value && contains_old_value)) 
       {
-        // FIXME: l10n
-        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ov_button" id="mh_ov_btn_' + i + '">' + ts('Adopt', {'domain': 'de.systopia.xcm'}) + '</button>');
+        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ov_button" id="mh_ov_btn_' + i + '">' + ts('Adopt') + '</button>');
       }
 
       // add ADD button
       if (   (attribute_class == 'phone'   && contains_new_value))
       {
-        // FIXME: l10n
-        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ad_button" id="mh_ad_btn_' + i + '">' + ts('Add', {'domain': 'de.systopia.xcm'}) + '</button>');
+        tr.find('#mh_field_' + i).append('<button type="button" class="mh_ad_button" id="mh_ad_btn_' + i + '">' + ts('Add') + '</button>');
       }
     }
   });
@@ -74,7 +73,7 @@ CRM.$(function() {
   var address_data = getAddressData('new', true);
   if (address_data) {
     address_table.find('thead').append(
-      '<button type="button" class="mh_ad_address_btn">' + ts('Add new address', {'domain': 'de.systopia.xcm'}) + '</button>'
+      '<button type="button" class="mh_ad_address_btn">' + ts('Add new address') + '</button>'
     );    
   }
 
@@ -192,7 +191,7 @@ CRM.$(function() {
       'location_type_id': location_type_id,
     }).done(function(result) {
       if (result.is_error) {
-        return onError(ts("The previous phone number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the phone number not possible.", {'domain': 'de.systopia.xcm'}), null);
+        return onError(ts("The previous phone number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the phone number not possible."), null);
       } else {
         // hand the result to the update handler
         updatePhone(data, result);
@@ -258,7 +257,7 @@ CRM.$(function() {
     // lookup address with the old data
     CRM.api3('Address', 'getsingle', address_data).done(function(result) {
       if (result.is_error) {
-        return onError(ts("The previous address number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible.", {'domain': 'de.systopia.xcm'}), null);
+        return onError(ts("The previous address number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible."), null);
       } else {
         // hand the result to the update handler
         updateAddress(data, result);
@@ -272,7 +271,7 @@ CRM.$(function() {
   function addAddress(data) {
     address_data = getAddressData('new', true);
     if (!address_data) {
-      return onError(ts("The address data submitted here is insufficient for the creation of a new address.", {'domain': 'de.systopia.xcm'}), null);
+      return onError(ts("The address data submitted here is insufficient for the creation of a new address."), null);
     }
 
     // create address request
@@ -310,7 +309,7 @@ CRM.$(function() {
       // lookup address with the old data
       CRM.api3('Address', 'getsingle', address_data).done(function(result) {
         if (result.is_error) {
-          return onError(ts("The current primary address couldn't be identified, contact was probably modified in the meantime. Automatic processing not possible.", {'domain': 'de.systopia.xcm'}), null);
+          return onError(ts("The current primary address couldn't be identified, contact was probably modified in the meantime. Automatic processing not possible."), null);
         } else {
           // next step is to add the new address
           demoteOldAddress(data, result);
@@ -330,7 +329,7 @@ CRM.$(function() {
       'location_type_id': CRM.vars['de.systopia.xcm'].location_type_old_address
     }).done(function(result) {
       if (result.is_error) {
-        return onError(ts("The previously used primary address couldn't be demoted.", {'domain': 'de.systopia.xcm'}), null);
+        return onError(ts("The previously used primary address couldn't be demoted."), null);
       } else {
         // next step is to add the new address
         data['attributes'] = ['street_address', 'city', 'postal_code', 'country'];
@@ -396,7 +395,7 @@ CRM.$(function() {
           onError(result.error_message, null);
         } else {
 
-          CRM.alert(ts("Attribute updated.", {'domain': 'de.systopia.xcm'}), ts("Success.", {'domain': 'de.systopia.xcm'}), 'success');
+          CRM.alert(ts("Attribute updated."), ts("Success."), 'success');
         }
       }
     );
