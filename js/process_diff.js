@@ -367,7 +367,7 @@ CRM.$(function() {
 
 
     // remove buttons and store result ("updated" or "added")
-    address_table.find('tr').each(function(i) {
+    address_table.find('tbody tr[class^=xcm]').each(function(i) {
       let row = CRM.$(this);
       let attribute = row.attr('class').substring(4);
       let btn_row   = row.children('td.mh_btn_row');
@@ -516,7 +516,7 @@ CRM.$(function() {
   function getAddressData(mode, complete_or_nothing) {
     // iterate through all rows and collect the address data
     let address_data = {};
-    address_table.find('tr').each(function(i) {
+    address_table.find('tbody tr[class^=xcm]').each(function(i) {
       let row = CRM.$(this);
       let attribute = row.attr('class').substring(4);
       let old_value = row.children(':nth-child(2)').text();
