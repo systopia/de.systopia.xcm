@@ -28,7 +28,7 @@ CRM.$(function() {
   let address_table = details.find('table');
   
   // add an extra table column, if not there yet...
-  address_table.find('tbody tr').each(function(i) {
+  address_table.find('tbody tr[class^=xcm]').each(function(i) {
     let tr = CRM.$(this);
     let attribute          = tr.attr('class').substring(4); // TR class holds 'xcm-' and the attribute name
     let column_exists      = (tr.find('#mh_field_' + i).length > 0);
@@ -113,7 +113,7 @@ CRM.$(function() {
     
     } else {
       // this is a button related to an individual row
-      data['attribute']  = btn.parent().parent().children(':nth-child(1)').text();
+      data['attribute']  = btn.parent().parent().attr('class').substring(4);
       data['left']       = btn.parent().parent().children(':nth-child(2)').text();
       data['right']      = btn.parent().parent().children(':nth-child(3)').text();
       data['old']        = data['left'];
@@ -369,7 +369,7 @@ CRM.$(function() {
     // remove buttons and store result ("updated" or "added")
     address_table.find('tr').each(function(i) {
       let row = CRM.$(this);
-      let attribute = row.children(':nth-child(1)').text();
+      let attribute = row.attr('class').substring(4);
       let btn_row   = row.children('td.mh_btn_row');
 
       if (  attribute == data['attribute'] 
@@ -518,7 +518,7 @@ CRM.$(function() {
     let address_data = {};
     address_table.find('tr').each(function(i) {
       let row = CRM.$(this);
-      let attribute = row.children(':nth-child(1)').text();
+      let attribute = row.attr('class').substring(4);
       let old_value = row.children(':nth-child(2)').text();
       let new_value = row.children(':nth-child(3)').text();
 
