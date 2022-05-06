@@ -322,20 +322,22 @@ CRM.$(function() {
    * SUB-HANDLER: demote the old address to 'old'
    */
   function demoteOldAddress(data, address_data) {
-    // lookup address with the old data
-    CRM.api3('Address', 'create', {
-      'id': address_data.id,
-      'is_primary': 0,
-      'location_type_id': CRM.vars['de.systopia.xcm'].location_type_old_address
-    }).done(function(result) {
-      if (result.is_error) {
-        return onError(ts("The previously used primary address couldn't be demoted."), null);
-      } else {
-        // next step is to add the new address
-        data['attributes'] = ['street_address', 'city', 'postal_code', 'country'];
-        updateActivity(data);
-      }
-    });
+    if (CRM.vars['de.systopia.xcm'].location_type_old_address) { // if this is not there, it's disabled.
+      // lookup address with the old data
+      CRM.api3('Address', 'create', {
+        'id': address_data.id,
+        'is_primary': 0,
+        'location_type_id': CRM.vars['de.systopia.xcm'].location_type_old_address
+      }).done(function(result) {
+        if (result.is_error) {
+          return onError(ts("The previously used primary address couldn't be demoted."), null);
+        } else {
+          // next step is to add the new address
+          data['attributes'] = ['street_address', 'city', 'postal_code', 'country'];
+          updateActivity(data);
+        }
+      });
+    }
   }
 
 
