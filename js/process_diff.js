@@ -114,8 +114,8 @@ CRM.$(function() {
     } else {
       // this is a button related to an individual row
       data['attribute']  = btn.parent().parent().attr('class').substring(4);
-      data['left']       = btn.parent().parent().children(':nth-child(2)').text();
-      data['right']      = btn.parent().parent().children(':nth-child(3)').text();
+      data['left']       = cleanValue(btn.parent().parent().children(':nth-child(2)').text());
+      data['right']      = cleanValue(btn.parent().parent().children(':nth-child(3)').text());
       data['old']        = data['left'];
       data['new']        = data['right'];
       data['modus']      = (btn.hasClass("mh_ov_button")?'edit':'add');
@@ -154,7 +154,7 @@ CRM.$(function() {
           onError(result.error_message, null);
         } else {
           let activity_id = CRM.vars['de.systopia.xcm'].targetActivityId;
-          cj("#rowid" + activity_id + " td:nth-child(8)").text("Abgeschlossen");
+          cj("#rowid" + activity_id + " td:nth-child(8)").text(ts("Completed"));
           cj("button[data-identifier=_qf_Activity_cancel]").click();
         }
       }
@@ -285,7 +285,7 @@ CRM.$(function() {
         return onError(result.error_message, null);
       } else {
         // next step is to demote the old address
-        findOldAddress(data, result);
+        findAndDemoteOldAddress(data, result);
       }
     });
   }
@@ -293,9 +293,9 @@ CRM.$(function() {
 
 
   /**
-   * SUB-HANDLER: after adding the new address, identify the old one
+   * SUB-HANDLER: after adding the new address, identify the old one and demote it
    */
-  function findOldAddress(data) {
+  function findAndDemoteOldAddress(data) {
     address_data = getAddressData('current', false);
     if (!address_data) {
       // there is no old address => that's it
@@ -405,7 +405,7 @@ CRM.$(function() {
    * SUB-HANDLER: update an address
    */
   function updateAddress(data, result) {
-    // use the old data..
+    // use the old data...
     address_data       = getAddressData('current', false);
     address_data['id'] = result.id;
 
@@ -438,7 +438,7 @@ CRM.$(function() {
    * handle Errors that occurred during workflow
    */
   function onError(message, metadata) {
-    CRM.alert(message, 'Fehler', 'error');
+    CRM.alert(message, ts('Error'), 'error');
   }
 
   /**
@@ -450,7 +450,10 @@ CRM.$(function() {
       case 'street_address':
       case 'city':
       case 'postal_code':
+      case 'supplemental_address_1':
+      case 'supplemental_address_2':
       case 'country':
+      case 'country_id':
         return 'address';
       case 'phone':
       case 'mobile':
@@ -458,6 +461,7 @@ CRM.$(function() {
       case 'last_name':
       case 'first_name':
       case 'gender':
+      case 'formal_title':
       case 'prefix':
         return 'contact';
       default:
@@ -517,8 +521,8 @@ CRM.$(function() {
     address_table.find('tbody tr[class^=xcm]').each(function(i) {
       let row = CRM.$(this);
       let attribute = row.attr('class').substring(4);
-      let old_value = row.children(':nth-child(2)').text();
-      let new_value = row.children(':nth-child(3)').text();
+      let old_value = cleanValue(row.children(':nth-child(2)').text());
+      let new_value = cleanValue(row.children(':nth-child(3)').text());
 
       if ('address' == getAttributeClass(attribute)) {
         if (mode == 'new') {
@@ -527,8 +531,7 @@ CRM.$(function() {
           address_data[attribute] = old_value;
         } else if (mode == 'current') {
           // now this depends on whether this attribute was already updated
-          // FIXME: l10n
-          if ('updated' == row.children('td.mh_btn_row').text()) {
+          if ('updated' == row.children('td.mh_btn_row').text() || ts('updated') == row.children('td.mh_btn_row').text()) {
             address_data[attribute] = new_value;
           } else {
             address_data[attribute] = old_value;
@@ -555,7 +558,25 @@ CRM.$(function() {
       }
     }
     return address_data;
-  } 
+  }
+
+  /**
+   * Strip certain data from the values
+   *  - trailing/leading empty characters
+   *  - trailing "(location_type)" info
+   *
+   * @param value
+   */
+  function cleanValue(value)
+  {
+    // remove trailing "(location type)"
+    value = value.replace(/\([A-Za-z ]*\)/g, '');
+
+    // trim
+    value = cj.trim(value);
+
+    return value;
+  }
 
 
 }); // end of wrapper function
