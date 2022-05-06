@@ -21,7 +21,7 @@ CRM.$(function() {
   let ts = CRM.ts('de.systopia.xcm');
 
   // gather some data
-  let ACTIVITY_TARGET_CONTACT_ID = CRM.$('input[name="source_contact_id"').val();
+  let ACTIVITY_TARGET_CONTACT_ID = CRM.$('input[name="target_contact_id"').val();
   
   let outer_table   = CRM.$('table.crm-info-panel');
   let details       = outer_table.find('tr.crm-activity-form-block-details td.view-value');
@@ -257,7 +257,7 @@ CRM.$(function() {
     // lookup address with the old data
     CRM.api3('Address', 'getsingle', address_data).done(function(result) {
       if (result.is_error) {
-        return onError(ts("The previous address number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible."), null);
+        return onError(ts("The previous address couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible."), null);
       } else {
         // hand the result to the update handler
         updateAddress(data, result);
@@ -362,8 +362,7 @@ CRM.$(function() {
    * SUB-HANDLER: update table after done
    */
   function updateActivity(data) {
-    // FIXME: l10n
-    let title = ((data['modus'] == 'edit') ? 'updated' : 'added');
+    let title = ((data['modus'] == 'edit') ? ts('updated') : ts('added'));
 
 
     // remove buttons and store result ("updated" or "added")
@@ -473,7 +472,6 @@ CRM.$(function() {
   function clean() {
     let td = CRM.$(this);
     let is_occupied = (td.length > 0);
-    // TODO: l10n
     let contains_response = (['updated', 'added'].indexOf(td.text()) > -1);
     if (is_occupied && !contains_response) {
       td.empty();
@@ -541,20 +539,20 @@ CRM.$(function() {
 
     // look up country
     if ('country' in address_data) {
-      tuple = lookup('country', address_data['country']);
+      let tuple = lookup('country', address_data['country']);
       for (let key in tuple) {
         address_data[key] = tuple[key];
       }
     }
 
-    // if complete_or_nothing, check if all madatory attributes are present
+    // if complete_or_nothing, check if all mandatory attributes are present
     if (complete_or_nothing) {
-      let mandatory_attributes = ['street_address', 'city', 'postal_code', 'country_id'];
+      let mandatory_attributes = ['street_address', 'city', 'postal_code'];
       for (let i = mandatory_attributes.length - 1; i >= 0; i--) {
         if (!(mandatory_attributes[i] in address_data)) {
           return null;
         }
-      };
+      }
     }
     return address_data;
   } 
