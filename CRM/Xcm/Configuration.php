@@ -369,6 +369,14 @@ class CRM_Xcm_Configuration {
     return (int) CRM_Utils_Array::value('secondary_phone_type', $options);
   }
 
+  /**
+   * Get default website type
+   */
+  public function defaultWebsiteType() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('default_website_type', $options);
+  }
+
 
   /**
    * Get location type to be used for new addresses
