@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="de.systopia.xcm" type="module">
   <file>xcm</file>
-  <name>Xtended Contact Matcher</name>
+  <name>Extended Contact Matcher (XCM)</name>
   <description>CiviCRM contact matching extension.</description>
   <license>AGPL-3.0</license>
   <maintainer>
