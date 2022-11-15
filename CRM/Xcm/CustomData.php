@@ -1,7 +1,7 @@
 <?php
 /*-------------------------------------------------------+
 | SYSTOPIA CUSTOM DATA HELPER                            |
-| Copyright (C) 2017 SYSTOPIA                            |
+| Copyright (C) 2018-2020 SYSTOPIA                       |
 | Author: B. Endres (endres@systopia.de)                 |
 | Source: https://github.com/systopia/Custom-Data-Helper |
 +--------------------------------------------------------+
@@ -14,24 +14,22 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-define('CUSTOM_DATA_HELPER_VERSION', '0.5.dev');
-define('CUSTOM_DATA_HELPER_LOG_LEVEL', 1);
-
-// log levels
-define('CUSTOM_DATA_HELPER_LOG_DEBUG', 1);
-define('CUSTOM_DATA_HELPER_LOG_INFO',  3);
-define('CUSTOM_DATA_HELPER_LOG_ERROR', 5);
-
 class CRM_Xcm_CustomData {
+  const CUSTOM_DATA_HELPER_VERSION   = 0.7;
+  const CUSTOM_DATA_HELPER_LOG_LEVEL = 0;
+  const CUSTOM_DATA_HELPER_LOG_DEBUG = 1;
+  const CUSTOM_DATA_HELPER_LOG_INFO  = 3;
+  const CUSTOM_DATA_HELPER_LOG_ERROR = 5;
 
   /** caches custom field data, indexed by group name */
   protected static $custom_group2name       = NULL;
   protected static $custom_group2table_name = NULL;
   protected static $custom_group_cache      = array();
+  protected static $custom_group_spec_cache = array();
   protected static $custom_field_cache      = array();
 
   protected $ts_domain = NULL;
-  protected $version   = CUSTOM_DATA_HELPER_VERSION;
+  protected $version   = self::CUSTOM_DATA_HELPER_VERSION;
 
   public function __construct($ts_domain) {
     $this->ts_domain = $ts_domain;
@@ -41,7 +39,7 @@ class CRM_Xcm_CustomData {
    * Log a message if the log level is high enough
    */
   protected function log($level, $message) {
-    if ($level >= CUSTOM_DATA_HELPER_LOG_LEVEL) {
+    if ($level >= self::CUSTOM_DATA_HELPER_LOG_LEVEL) {
       CRM_Core_Error::debug_log_message("CustomDataHelper {$this->version} ({$this->ts_domain}): {$message}");
     }
   }
@@ -65,7 +63,7 @@ class CRM_Xcm_CustomData {
         $entity = $this->createEntity($data['entity'], $entity_data);
       } elseif ($entity == 'FAILED') {
         // Couldn't identify:
-        $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update {$entity_type}: " . json_encode($entity_data));
+        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update {$data['entity']}: " . json_encode($entity_data));
       } else {
         // update OptionValue
         $this->updateEntity($data['entity'], $entity_data, $entity);
@@ -92,7 +90,7 @@ class CRM_Xcm_CustomData {
       $optionGroup = $this->createEntity('OptionGroup', $data);
     } elseif ($optionGroup == 'FAILED') {
       // Couldn't identify:
-      $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionGroup: " . json_encode($data));
+      $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionGroup: " . json_encode($data));
       return;
     } else {
       // update OptionGroup
@@ -111,7 +109,7 @@ class CRM_Xcm_CustomData {
         $optionValue = $this->createEntity('OptionValue', $optionValueSpec);
       } elseif ($optionValue == 'FAILED') {
         // Couldn't identify:
-        $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionValue: " . json_encode($optionValueSpec));
+        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionValue: " . json_encode($optionValueSpec));
       } else {
         // update OptionValue
         $this->updateEntity('OptionValue', $optionValueSpec, $optionValue, array('is_active'));
@@ -139,11 +137,7 @@ class CRM_Xcm_CustomData {
         $extends_list = array();
         foreach ($data['extends_entity_column_value'] as $activity_type) {
           if (!is_numeric($activity_type)) {
-            $activity_type = CRM_Core_PseudoConstant::getKey(
-              'CRM_Activity_BAO_Activity',
-              'activity_type_id',
-              $activity_type
-            );
+            $activity_type = CRM_Core_OptionGroup::getValue('activity_type', $activity_type, 'name');
           }
           if ($activity_type) {
             $extends_list[] = $activity_type;
@@ -166,7 +160,7 @@ class CRM_Xcm_CustomData {
       $customGroup = $this->createEntity('CustomGroup', $data);
     } elseif ($customGroup == 'FAILED') {
       // Couldn't identify:
-      $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomGroup: " . json_encode($data));
+      $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomGroup: " . json_encode($data));
       return;
     } else {
       // update CustomGroup
@@ -182,7 +176,7 @@ class CRM_Xcm_CustomData {
         // look up custom group id
         $optionGroup = $this->getEntityID('OptionGroup', array('name' => $customFieldSpec['option_group_id']));
         if ($optionGroup == 'FAILED' || $optionGroup==NULL) {
-          $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField, bad option_group: {$customFieldSpec['option_group_id']}");
+          $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField, bad option_group: {$customFieldSpec['option_group_id']}");
           return;
         }
         $customFieldSpec['option_group_id'] = $optionGroup['id'];
@@ -193,7 +187,7 @@ class CRM_Xcm_CustomData {
         $customField = $this->createEntity('CustomField', $customFieldSpec);
       } elseif ($customField == 'FAILED') {
         // Couldn't identify:
-        $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField: " . json_encode($customFieldSpec));
+        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField: " . json_encode($customFieldSpec));
       } else {
         // update CustomField
         $this->updateEntity('CustomField', $customFieldSpec, $customField, array('in_selector', 'is_view', 'is_searchable', 'html_type', 'data_type', 'custom_group_id'));
@@ -216,7 +210,7 @@ class CRM_Xcm_CustomData {
         return $lookup_result['values'][0];
       default:
         // more than one found
-        $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Bad {$entity_type} lookup selector: " . json_encode($selector));
+        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Bad {$entity_type} lookup selector: " . json_encode($selector));
         return 'FAILED';
       case 0:
         // not found
@@ -235,10 +229,10 @@ class CRM_Xcm_CustomData {
         'options'    => array('limit' => 2));
 
     foreach ($data['_lookup'] as $lookup_key) {
-      $lookup_query[$lookup_key] = $data[$lookup_key];
+      $lookup_query[$lookup_key] = CRM_Utils_Array::value($lookup_key, $data, '');
     }
 
-    $this->log(CUSTOM_DATA_HELPER_LOG_DEBUG, "LOOKUP {$entity_type}: " . json_encode($lookup_query));
+    $this->log(self::CUSTOM_DATA_HELPER_LOG_DEBUG, "LOOKUP {$entity_type}: " . json_encode($lookup_query));
     $lookup_result = civicrm_api3($entity_type, 'get', $lookup_query);
     switch ($lookup_result['count']) {
       case 0:
@@ -251,7 +245,7 @@ class CRM_Xcm_CustomData {
 
       default:
         // bad lookup selector
-        $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Bad {$entity_type} lookup selector: " . json_encode($selector));
+        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Bad {$entity_type} lookup selector: " . json_encode($lookup_query));
         return 'FAILED';
     }
   }
@@ -314,7 +308,7 @@ class CRM_Xcm_CustomData {
         }
       }
 
-      $this->log(CUSTOM_DATA_HELPER_LOG_INFO, "UPDATE {$entity_type}: " . json_encode($update_query));
+      $this->log(self::CUSTOM_DATA_HELPER_LOG_INFO, "UPDATE {$entity_type}: " . json_encode($update_query));
       return civicrm_api3($entity_type, 'create', $update_query);
     } else {
       return NULL;
@@ -382,6 +376,44 @@ class CRM_Xcm_CustomData {
       return 'FIELD_NOT_FOUND_' . $field_id;
     }
   }
+
+  /**
+   * Get the specs/definition of the field
+   * @param int $field_id
+   * @return array field specs
+   */
+  public static function getFieldSpecs($field_id) {
+    // just to be on the safe side
+    self::cacheCustomFields(array($field_id));
+
+    // get custom field
+    $custom_field = self::$custom_field_cache[$field_id];
+    if ($custom_field) {
+      return $custom_field;
+    } else {
+      return NULL;
+    }
+  }
+
+  /**
+   * Get the specs/definition of the group
+   *
+   * @param int|string $group_id group id or string
+   * @return array group specs
+   */
+  public static function getGroupSpecs($group_id) {
+    // just to be on the safe side
+    self::cacheCustomGroupSpecs([$group_id]);
+
+    // get custom field
+    $custom_group = self::$custom_group_spec_cache[$group_id];
+    if ($custom_group) {
+      return $custom_group;
+    } else {
+      return NULL;
+    }
+  }
+
 
   /**
    * internal function to replace "<custom_group_name>.<custom_field_name>"
@@ -497,6 +529,34 @@ class CRM_Xcm_CustomData {
   }
 
   /**
+   * Precache a list of custom fields
+   *
+   * @param array $custom_group_ids list of custom group IDs or names
+   */
+  public static function cacheCustomGroupSpecs($custom_group_ids) {
+    // first: check if they are already cached
+    $fields_to_load = array();
+    foreach ($custom_group_ids as $group_id) {
+      if (!array_key_exists($group_id, self::$custom_group_spec_cache)) {
+        $groups_to_load[] = $group_id;
+      }
+    }
+
+    // load missing fields
+    if (!empty($groups_to_load)) {
+      $loaded_groups = civicrm_api3('CustomGroup', 'get', array(
+          'id'           => array('IN' => $groups_to_load),
+          'option.limit' => 0,
+      ));
+      foreach ($loaded_groups['values'] as $group) {
+        self::$custom_group_spec_cache[$group['id']] = $group;
+        self::$custom_group_spec_cache[$group['name']] = $group;
+      }
+    }
+  }
+
+
+  /**
    * Get a mapping: custom_group_id => custom_group_name
    */
   public static function getGroup2Name() {
@@ -557,8 +617,8 @@ class CRM_Xcm_CustomData {
    *
    * @todo make it more efficient?
    *
-   * @param $params      the parameter array as used by the API
-   * @param $group_names list of group names to process. Default is: all
+   * @param array $params      the parameter array as used by the API
+   * @param array $group_names list of group names to process. Default is: all
    */
   public static function unREST(&$params, $group_names = NULL) {
     if ($group_names == NULL || !is_array($group_names)) {
@@ -632,5 +692,76 @@ class CRM_Xcm_CustomData {
     // cache the groups used
     $group_table_name = self::getGroupTable($group_name);
     return "LEFT JOIN `{$group_table_name}` AS {$table_alias} ON {$table_alias}.entity_id = {$join_entity_id}";
+  }
+
+
+
+  /**
+   * Get the current field value from CiviCRM's pre-hook structure
+   *
+   * @param $params pre-hook data
+   * @param $field_id custom field ID
+   * @return mixed the current value
+   */
+  public static function getPreHookCustomDataValue($params, $field_id) {
+    if ($field_id) {
+      if (!empty($params['custom'][$field_id][-1])) {
+        $field_data = $params['custom'][$field_id][-1];
+        return $field_data['value'];
+      } else {
+        // unlikely, but worth a shot:
+        return CRM_Utils_Array::value("custom_{$field_id}", $params, NULL);
+      }
+    }
+    return NULL;
+  }
+
+
+  /**
+   * Set a field value in CiviCRM's pre-hook structure right in the pre hook data
+   *
+   * @param $params pre-hook data
+   * @param $field_id custom field ID
+   * @param $value the new value
+   */
+  public static function setPreHookCustomDataValue(&$params, $field_id, $value) {
+    if ($field_id) {
+      if (isset($params['custom'])) {
+        if (!empty($params['custom'][$field_id][-1])) {
+          // update custom field data record
+          $params['custom'][$field_id][-1]['value'] = $value;
+        } else {
+          // add custom field data record
+          $params['custom'][$field_id][-1] = self::generatePreHookCustomDataRecord($field_id, $value);
+        }
+      } else {
+        // this shouldn't happen based on the pre_hook...
+        // not likely to succeed, but worth a shot:
+        $params["custom_{$field_id}"] = $value;
+      }
+    }
+  }
+
+  /**
+   * @param $field_id
+   * @param $value
+   * @return array
+   */
+  protected static function generatePreHookCustomDataRecord($field_id, $value) {
+    if ($field_id) {
+      $field_specs = self::getFieldSpecs($field_id);
+      $group_specs = self::getGroupSpecs($field_specs['custom_group_id']);
+      return               [
+          'value'           => $value,
+          'type'            => CRM_Utils_Array::value('data_type', $field_specs, 'String'),
+          'custom_field_id' => $field_id,
+          'custom_group_id' => CRM_Utils_Array::value('custom_group_id', $field_specs, NULL),
+          'table_name'      => CRM_Utils_Array::value('table_name', $group_specs, NULL),
+          'column_name'     => CRM_Utils_Array::value('column_name', $field_specs, NULL),
+          'is_multiple'     => CRM_Utils_Array::value('is_multiple', $group_specs, 0),
+      ];
+    } else {
+      return NULL;
+    }
   }
 }
