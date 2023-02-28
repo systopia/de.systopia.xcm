@@ -26,6 +26,9 @@ use \Civi\ActionProvider\Utils\CustomField;
 
 class ContactGetOrCreate extends AbstractAction {
 
+  /** @var int number of arbitrary parameters (where the target names can be defined) */
+  const CUSTOM_PARAMETER_COUNT = 2;
+
   /**
    * Returns the specification of the configuration options for the actual action.
    *
@@ -38,10 +41,15 @@ class ContactGetOrCreate extends AbstractAction {
         'Household'    => E::ts('Household'),
     ];
     $profiles = \CRM_Xcm_Configuration::getProfileList();
-    return new SpecificationBag([
-      new Specification('xcm_profile', 'String', E::ts('XCM Profile'), false, null, null, $profiles, false),
-      new Specification('contact_type', 'String', E::ts('Default Contact Type'), false, 'Individual', null, $contact_types, false),
-    ]);
+    $configuration[] = new Specification('xcm_profile', 'String', E::ts('XCM Profile'), false, null, null, $profiles, false);
+    $configuration[] = new Specification('contact_type', 'String', E::ts('Default Contact Type'), false, 'Individual', null, $contact_types, false);
+
+    // add variable fields
+    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+      $configuration[] = new Specification("variable_target_{$number}", 'String', E::ts('Custom Parameter #%1 (key)', [1 => $number]), false);
+    }
+
+    return new SpecificationBag($configuration);
   }
 
   /**
@@ -58,10 +66,11 @@ class ContactGetOrCreate extends AbstractAction {
     }
     $contact_specs = array_merge($contact_specs, self::getCustomFields());
 
-    return new SpecificationBag(array_merge($contact_specs, [
+    $detail_specs = [
       // special fields
       new Specification('contact_type', 'String', E::ts('Contact Type'), false, 'Individual', null, ['Individual', 'Organization', 'Household'], false),
       new Specification('id', 'Integer', E::ts('Known Contact ID'), false, null, null, null, false),
+      new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
 
       // detail fields
       new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
@@ -85,9 +94,14 @@ class ContactGetOrCreate extends AbstractAction {
       new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
       new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
       new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
+    ];
 
-      new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
-    ]));
+    // add variable fields
+    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+      $detail_specs[] = new Specification("variable_value_{$number}", 'String', E::ts('Custom Parameter #%1', [1 => $number]), false, null, null, null, false);
+    }
+
+    return new SpecificationBag(array_merge($contact_specs, $detail_specs));
   }
 
   /**
@@ -186,6 +200,16 @@ class ContactGetOrCreate extends AbstractAction {
       if (empty($apiParams[$field_name])) {
         $apiParams[$field_name] = $this->configuration->getParameter($field_name);
       }
+    }
+
+    // add additional (custom) parameters
+    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+      $parameter_name = $this->configuration->getParameter("variable_target_{$number}");
+      $parameter_value = $parameters->getParameter("variable_value_{$number}");
+      if (!empty($parameter_name)) {
+        $apiParams[$parameter_name] = $parameter_value;
+      }
+      unset($apiParams["variable_value_{$number}"]);
     }
 
     // execute
