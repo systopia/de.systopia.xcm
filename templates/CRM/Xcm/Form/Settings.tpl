@@ -250,7 +250,7 @@
     <div class="clear"></div>
   </div>
 
-  <div class="crm-section xcm-diff-diff-only"">
+  <div class="crm-section xcm-diff-diff-only">
     <div class="label">{$form.diff_processing.label}</div>
     <div class="content">{$form.diff_processing.html}</div>
     <div class="clear"></div>

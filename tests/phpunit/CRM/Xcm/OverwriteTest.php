@@ -85,6 +85,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
 
       $non_primary = rand(10000000,99999999);
       $primary     = $non_primary . '9';
+      $attribute   = '';
 
       switch (strtolower($entity)) {
         case 'email':
