@@ -74,7 +74,8 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
     $this->setXCMOption('fill_details', []);
     $this->setXCMOption('override_details', $details_to_test);
     $location_type_ids = array_keys($this->getLocationTypeIDs());
-    
+    $additional_create_attributes = [];
+
     foreach ($details_to_test as $entity) {
       // create test contact
       $test_contact = $this->createContactWithRandomEmail([
@@ -84,6 +85,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
 
       $non_primary = rand(10000000,99999999);
       $primary     = $non_primary . '9';
+      $attribute   = '';
 
       switch (strtolower($entity)) {
         case 'email':
@@ -98,6 +100,8 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
           $primary     = "+2 {$primary}";
           $attribute   = 'phone';
           $identifying_attributes = ['location_type_id', 'phone_type_id'];
+          $additional_create_attributes = ['phone_type_id' => 1];
+          $this->setXCMOption('primary_phone_type', '1');
           break;
 
         case 'im':
@@ -135,7 +139,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
           $attribute         => $primary,
           'contact_id'       => $test_contact['id'],
           'location_type_id' => $location_type_ids[1],
-          'is_primary'       => 1]);
+          'is_primary'       => 1] + $additional_create_attributes);
       $primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $primary_detail['id']]);
 
       if ($has_primary) {
@@ -143,7 +147,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
             $attribute         => $non_primary,
             'contact_id'       => $test_contact['id'],
             'location_type_id' => $location_type_ids[0],
-            'is_primary'       => 0]);
+            'is_primary'       => 0] + $additional_create_attributes);
         $non_primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $non_primary_detail['id']]);
       } else {
         $non_primary_detail = $primary_detail;
@@ -157,12 +161,12 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
 
       // test with override primary off and on
       $this->setXCMOption('override_details_primary', 0);
-      $this->assertDetailOverride($entity, $test_contact, $attribute, !$has_primary, $primary_detail, $identifying_attributes, 'a');
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, 'b');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, !$has_primary, $primary_detail, $identifying_attributes, '1');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, '2');
 
       $this->setXCMOption('override_details_primary', 1);
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $primary_detail, $identifying_attributes, 'c');
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, 'd');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $primary_detail, $identifying_attributes, '3');
+      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, '4');
     }
   }
 
@@ -188,11 +192,7 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
         'contact_id' => $test_contact['id'],
         $attribute   => $detail[$attribute] . $suffix]);
 
-    $all_details = $this->assertAPI3($entity, 'get', ['contact_id' => $test_contact['id']]);
-
     $this->assertXCMLookup($lookup_query, $test_contact['id']);
-
-    $all_details = $this->assertAPI3($entity, 'get', ['contact_id' => $test_contact['id']]);
 
     $new_detail_count = $this->assertAPI3($entity, 'getcount', [
         'contact_id' => $test_contact['id'],

@@ -432,7 +432,8 @@ class CRM_Xcm_Configuration {
     }
 
     // check via API key, i.e. when coming through REST-API
-    $api_key = CRM_Utils_Request::retrieve('api_key', 'String', $store, FALSE, NULL, 'REQUEST');
+    $null = null;
+    $api_key = CRM_Utils_Request::retrieve('api_key', 'String', $null, FALSE, NULL, 'REQUEST');
     if (!$api_key || strtolower($api_key) == 'null') {
       return $fallback_id; // nothing we can do
     }

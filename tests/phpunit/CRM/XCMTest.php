@@ -126,7 +126,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
    * Test that a new contact is created.
    */
   public function testNewContactCreatedNotRecreated() {
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $result = $this->getOrCreate(['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']);
     $this->assertContactCountIs($n+1);
     $result = $this->getOrCreate(['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']);
@@ -137,7 +137,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
    * Test that a new contact is created with address.
    */
   public function testNewContactCreatedWithAddress() {
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $address = [
       'street_address' => '1 The Cave',
       'supplemental_address_1' => 'Somewhere',
@@ -158,7 +158,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
   public function testExistingAddressNotOverwritten() {
     $this->testNewContactCreatedWithAddress();
 
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $address = [
       'street_address' => '2 The Cave',
       'supplemental_address_1' => 'Nowhere',
@@ -184,7 +184,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
   public function testAddressAddedToExistingContact() {
     $this->configureXcm(['fill_address' => 1]);
     // Create without address.
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]);
     $this->assertContactCountIs($n+1);
 
@@ -204,7 +204,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
   public function testAddressFillDoesNotMangleExisting() {
     $this->configureXcm(['fill_address' => 1]);
     // Create without address.
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $original_address = [ 'street_address' => '1 The Cave', 'city' => 'Caveton', ];
     $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]+$original_address);
     $this->assertContactCountIs($n+1);
@@ -224,7 +224,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
    */
   public function testNameFill() {
     // Create without last name
-    $n = civicrm_api3('Contact', 'getcount', []);
+    $n = (int) civicrm_api3('Contact', 'getcount', []);
     $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'email' => 'wilma@example.com' ]);
     $this->assertContactCountIs($n+1);
 
@@ -243,7 +243,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
    * @param int $expected;
    */
   public function assertContactCountIs($expected) {
-    $result = civicrm_api3('Contact', 'getcount', []);
+    $result = (int) civicrm_api3('Contact', 'getcount', []);
     $this->assertEquals($expected, $result);
   }
 
