@@ -22,11 +22,16 @@
     <ver>5.10</ver>
     <ver>5.19</ver>
   </compatibility>
-  <comments>1.9-alpha3+issue/89</comments>
+  <comments></comments>
   <classloader>
-    <psr4 prefix="Civi\" path="Civi" />
+    <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
   <civix>
     <namespace>CRM/Xcm</namespace>
+    <format>22.05.2</format>
   </civix>
+  <mixins>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>setting-php@1.0.0</mixin>
+  </mixins>
 </extension>
