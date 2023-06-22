@@ -50,8 +50,8 @@
 
 {htxt id='id-phone-type'}
   <p>{ts domain="de.systopia.xcm"}The phone type is used for newly created phone numbers.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}There are two numbers possible and therefor two phone types.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}If no secondary phone type is explicitly submitted then the second phone is not used.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}There are three numbers possible and therefor three phone types.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}If no secondary or ternary phone type is explicitly submitted then the second/ternary phone is not used.{/ts}</p>
 {/htxt}
 
 {htxt id='id-diff-activity'}

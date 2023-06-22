@@ -369,6 +369,14 @@ class CRM_Xcm_Configuration {
     return (int) CRM_Utils_Array::value('secondary_phone_type', $options);
   }
 
+  /**
+   * Get ternary phone type
+   */
+  public function ternaryPhoneType() {
+    $options = $this->getOptions();
+    return (int) CRM_Utils_Array::value('ternary_phone_type', $options);
+  }
+
 
   /**
    * Get location type to be used for new addresses

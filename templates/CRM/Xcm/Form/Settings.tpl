@@ -66,6 +66,12 @@
     <div class="clear"></div>
   </div>
 
+  <div class="crm-section">
+    <div class="label">{$form.ternary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Ternary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.ternary_phone_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
 </div>
 
 <div>

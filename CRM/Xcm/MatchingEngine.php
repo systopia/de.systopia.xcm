@@ -225,6 +225,9 @@ class CRM_Xcm_MatchingEngine {
     if ($this->config->secondaryPhoneType()) {
       $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone2', $this->config->secondaryPhoneType());
     }
+    if ($this->config->ternaryPhoneType()) {
+      $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone3', $this->config->ternaryPhoneType());
+    }
     $this->addDetailToContact($new_contact['id'], 'website', $contact_data);
 
     return $new_contact;
@@ -344,6 +347,9 @@ class CRM_Xcm_MatchingEngine {
             if ($this->config->secondaryPhoneType()) {
               $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType());
             }
+            if ($this->config->ternaryPhoneType()) {
+              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone3', $this->config->ternaryPhoneType());
+            }
           } else {
             $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
           }
@@ -363,6 +369,9 @@ class CRM_Xcm_MatchingEngine {
             $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data);
             if ($this->config->secondaryPhoneType()) {
               $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data);
+            }
+            if ($this->config->ternaryPhoneType()) {
+              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone3', $this->config->ternaryPhoneType(), FALSE, $current_contact_data);
             }
           } else {
             $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
@@ -575,7 +584,7 @@ class CRM_Xcm_MatchingEngine {
    * @param array $data
    *   Submitted data.
    * @param $attribute
-   *  Either 'phone' or 'phone2'. This the atttribute in the $submitted data which holds the phone number
+   *  Either 'phone' or 'phone2' or 'phone3'. This the atttribute in the $submitted data which holds the phone number
    * @param $phone_type_id
    * @param $as_primary
    *  Mark the phone as primary
@@ -688,6 +697,20 @@ class CRM_Xcm_MatchingEngine {
         // Do nothing
       }
     }
+    // Load third phone
+    if ($this->config->ternaryPhoneType()) {
+      try {
+        $phone = civicrm_api3('Phone', 'getvalue', [
+          'contact_id' => $contact_id,
+          'phone_type_id' => $this->config->ternaryPhoneType(),
+          'return' => 'phone'
+        ]);
+        $contact['phone3'] = $phone;
+      } catch (CiviCRM_API3_Exception $e) {
+        // Do nothing
+      }
+    }
+
     return $contact;
   }
 
@@ -1112,6 +1135,11 @@ class CRM_Xcm_MatchingEngine {
         $differing_attributes[] = 'phone2';
       }
     }
+    if ($this->config->ternaryPhoneType() && !in_array('phone3', $differing_attributes) && (isset($contact['phone3']) || isset($contact_data['phone3']))) {
+      if ($this->attributesDiffer(['phone3'], $contact, $contact_data, $case_insensitive)) {
+        $differing_attributes[] = 'phone3';
+      }
+    }
 
     if (!empty($differing_attributes)) {
       // There ARE changes: render the diff activity
@@ -1201,7 +1229,7 @@ class CRM_Xcm_MatchingEngine {
       // @todo should we have a config option for this?
       // @see https://github.com/systopia/de.systopia.xcm/issues/91
       if ($attribute_differs) {
-        $emptyIsNotDifferentAttributes = ['phone', 'phone2', 'email', 'website', 'first_name', 'last_name'];
+        $emptyIsNotDifferentAttributes = ['phone', 'phone2', 'phone3', 'email', 'website', 'first_name', 'last_name'];
         if (in_array($data_attribute, $emptyIsNotDifferentAttributes) && empty($submitted_value)) {
           $attribute_differs = FALSE;
         }
