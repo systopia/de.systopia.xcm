@@ -14,7 +14,7 @@
 
 <div>
   <h3>{ts domain="de.systopia.xcm"}XCM Matching Profile{/ts}</h3>
-  {$form.clone.label}
+  {if !empty($form.clone)}{$form.clone.label}{/if}
   <div class="crm-section">
     <div class="label">{$form.pid.label}</div>
     <div class="content">{$form.pid.html}</div>
