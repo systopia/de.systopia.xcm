@@ -370,11 +370,11 @@ class CRM_Xcm_Configuration {
   }
 
   /**
-   * Get ternary phone type
+   * Get tertiary phone type
    */
-  public function ternaryPhoneType() {
+  public function tertiaryPhoneType() {
     $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('ternary_phone_type', $options);
+    return (int) CRM_Utils_Array::value('tertiary_phone_type', $options);
   }
 
 

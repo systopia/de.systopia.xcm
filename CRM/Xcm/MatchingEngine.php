@@ -225,8 +225,8 @@ class CRM_Xcm_MatchingEngine {
     if ($this->config->secondaryPhoneType()) {
       $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone2', $this->config->secondaryPhoneType());
     }
-    if ($this->config->ternaryPhoneType()) {
-      $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone3', $this->config->ternaryPhoneType());
+    if ($this->config->tertiaryPhoneType()) {
+      $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone3', $this->config->tertiaryPhoneType());
     }
     $this->addDetailToContact($new_contact['id'], 'website', $contact_data);
 
@@ -347,8 +347,8 @@ class CRM_Xcm_MatchingEngine {
             if ($this->config->secondaryPhoneType()) {
               $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType());
             }
-            if ($this->config->ternaryPhoneType()) {
-              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone3', $this->config->ternaryPhoneType());
+            if ($this->config->tertiaryPhoneType()) {
+              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone3', $this->config->tertiaryPhoneType());
             }
           } else {
             $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
@@ -370,8 +370,8 @@ class CRM_Xcm_MatchingEngine {
             if ($this->config->secondaryPhoneType()) {
               $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data);
             }
-            if ($this->config->ternaryPhoneType()) {
-              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone3', $this->config->ternaryPhoneType(), FALSE, $current_contact_data);
+            if ($this->config->tertiaryPhoneType()) {
+              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone3', $this->config->tertiaryPhoneType(), FALSE, $current_contact_data);
             }
           } else {
             $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
@@ -698,11 +698,11 @@ class CRM_Xcm_MatchingEngine {
       }
     }
     // Load third phone
-    if ($this->config->ternaryPhoneType()) {
+    if ($this->config->tertiaryPhoneType()) {
       try {
         $phone = civicrm_api3('Phone', 'getvalue', [
           'contact_id' => $contact_id,
-          'phone_type_id' => $this->config->ternaryPhoneType(),
+          'phone_type_id' => $this->config->tertiaryPhoneType(),
           'return' => 'phone'
         ]);
         $contact['phone3'] = $phone;
@@ -1135,7 +1135,7 @@ class CRM_Xcm_MatchingEngine {
         $differing_attributes[] = 'phone2';
       }
     }
-    if ($this->config->ternaryPhoneType() && !in_array('phone3', $differing_attributes) && (isset($contact['phone3']) || isset($contact_data['phone3']))) {
+    if ($this->config->tertiaryPhoneType() && !in_array('phone3', $differing_attributes) && (isset($contact['phone3']) || isset($contact_data['phone3']))) {
       if ($this->attributesDiffer(['phone3'], $contact, $contact_data, $case_insensitive)) {
         $differing_attributes[] = 'phone3';
       }

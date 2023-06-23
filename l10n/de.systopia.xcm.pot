@@ -151,11 +151,11 @@ msgid "Secondary phone not used"
 msgstr ""
 
 #: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
-msgid "Ternary Phone Type"
+msgid "Tertiary Phone Type"
 msgstr ""
 
 #: ./CRM/Xcm/Form/Settings.php
-msgid "Ternary phone not used"
+msgid "Tertiary phone not used"
 msgstr ""
 
 #: ./CRM/Xcm/Form/Settings.php
@@ -559,7 +559,7 @@ msgid "Secondary Phone"
 msgstr ""
 
 #: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-msgid "Ternary Phone"
+msgid "Tertiary Phone"
 msgstr ""
 
 #: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
@@ -731,7 +731,7 @@ msgid "There are three numbers possible and therefor three phone types."
 msgstr ""
 
 #: ./templates/CRM/Xcm/Form/Settings.hlp
-msgid "If no secondary or ternary phone type is explicitly submitted then the second/ternary phone is not used."
+msgid "If no secondary or tertiary phone type is explicitly submitted then the second/tertiary phone is not used."
 msgstr ""
 
 #: ./templates/CRM/Xcm/Form/Settings.hlp
