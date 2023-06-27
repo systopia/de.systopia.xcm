@@ -76,6 +76,7 @@ class ContactGetOrCreate extends AbstractAction {
       new Specification('email', 'String', E::ts('Email'), false, null, null, null, false),
       new Specification('phone', 'String', E::ts('Primary Phone'), false, null, null, null, false),
       new Specification('phone2', 'String', E::ts('Secondary Phone'), false, null, null, null, false),
+      new Specification('phone3', 'String', E::ts('Tertiary Phone'), false, null, null, null, false),
       new Specification('website', 'String', E::ts('Website'), false, null, null, null, false),
       new Specification('name', 'String', E::ts('IM Handle'), false, null, null, null, false),
       new Specification('location_type_id', 'String', E::ts('Location Type ID'), false, null, null, null, false),

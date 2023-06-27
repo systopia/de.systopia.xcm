@@ -97,6 +97,12 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       $phoneTypes,
                       false,
                       array('class' => 'crm-select2 huge', 'placeholder' => E::ts('Secondary phone not used')));
+    $this->add('select',
+                      'tertiary_phone_type',
+                      E::ts('Tertiary Phone Type'),
+                      $phoneTypes,
+                      false,
+                      array('class' => 'crm-select2 huge', 'placeholder' => E::ts('Tertiary phone not used')));
     $this->addElement('select',
                       'fill_fields',
                       E::ts('Fill Fields'),
@@ -351,6 +357,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
       'primary_phone_type'         => CRM_Utils_Array::value('primary_phone_type', $values),
       'secondary_phone_type'       => CRM_Utils_Array::value('secondary_phone_type', $values),
+      'tertiary_phone_type'        => CRM_Utils_Array::value('tertiary_phone_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'input_sanitation'           => CRM_Utils_Array::value('input_sanitation', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),

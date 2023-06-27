@@ -106,6 +106,17 @@ class CRM_Xcm_Tools {
           $data['phone2'] = ts('Phone 2');
         }
       }
+      if ($config->tertiaryPhoneType()) {
+        try {
+          $data['phone3'] = civicrm_api3('OptionValue', 'getvalue', [
+            'return' => 'label',
+            'option_group_id' => 'phone_type',
+            'value' => $config->tertiaryPhoneType()
+          ]);
+        } catch (CiviCRM_API3_Exception $e) {
+          $data['phone3'] = ts('Phone 3');
+        }
+      }
     }
     return $data;
   }
