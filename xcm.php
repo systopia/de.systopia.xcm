@@ -147,24 +147,8 @@ function xcm_civicrm_navigationMenu(&$menu) {
     'weight' => $menu_items['weight'] + 1,
   ]);
 
-  // ADD configure XCM to automation tab
-  if (!_xcm_menu_exists($menu, 'Administer/automation')) {
-    _xcm_civix_insert_navigation_menu($menu, 'Administer', [
-        'label' => E::ts('Automation'),
-        'name' => 'automation',
-        'url' => NULL,
-        'permission' => 'administer CiviCRM',
-        'operator' => NULL,
-        'separator' => 0,
-    ]);
-  }
-  _xcm_civix_insert_navigation_menu($menu, 'Administer/automation', [
-      'label' => E::ts('Extended Contact Matcher (XCM)'),
-      'name' => 'configure_xcm',
-      'url' => 'civicrm/admin/setting/xcm',
-      'permission' => 'administer CiviCRM',
-      'operator' => NULL,
-  ]);
+  // Note: "Configure XCM" in "Automation" sub-menu is being taken care of by
+  // managed entities, see /managed/Navigation__configure_xcm.mgd.php.
   _xcm_civix_navigationMenu($menu);
 }
 
