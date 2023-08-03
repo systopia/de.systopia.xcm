@@ -506,7 +506,7 @@ class CRM_Xcm_MatchingEngine {
 
       $activity = CRM_Activity_BAO_Activity::create($activity_data);
     } catch (Exception $ex) {
-      CRM_Core_Error::debug_log_message("XCM: failed to create activity: " . $ex->getMessage());
+      Civi::log()->debug("XCM: failed to create activity: " . $ex->getMessage());
     }
   }
 

@@ -114,7 +114,7 @@ abstract class CRM_Xcm_MatchingRule {
         ));
       }
     } catch (Exception $e) {
-      CRM_Core_Error::debug_log_message("de.systopia.xcm: Failed to create duplicates activity, check your settings! Error was " . $e->getMessage());
+      Civi::log()->debug("de.systopia.xcm: Failed to create duplicates activity, check your settings! Error was " . $e->getMessage());
     }
 
     $picker  = CRM_Utils_Array::value('picker', $options, 'min');
