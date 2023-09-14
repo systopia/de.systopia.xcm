@@ -14,7 +14,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-class CRM_YOURPROJECTNSHERE_CustomData {
+class CRM_Xcm_CustomData {
   const CUSTOM_DATA_HELPER_VERSION   = '0.9-dev';
   const CUSTOM_DATA_HELPER_LOG_LEVEL = 0;
   const CUSTOM_DATA_HELPER_LOG_DEBUG = 1;
