@@ -18,6 +18,7 @@
 <br/>
 
 <div>{ts domain="de.systopia.xcm"}This is a list of the different XCM configurations. You might be perfectly fine with just the default configuration, but if you're using XCM in multiple contexts, different configuration profiles might come in handy.{/ts}</div>
+<div>{ts domain="de.systopia.xcm"}In order to add a new profile, use the "copy" link next to an existing profile.{/ts}</div>
 <br/>
 
 <table>

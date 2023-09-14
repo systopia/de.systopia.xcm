@@ -406,7 +406,7 @@ msgstr ""
 msgid "Birth Date"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
 msgid "Gender"
 msgstr ""
 
@@ -503,6 +503,10 @@ msgid "Supplemental Address 3"
 msgstr ""
 
 #: ./CRM/Xcm/Tools.php
+msgid "Birth date"
+msgstr ""
+
+#: ./CRM/Xcm/Tools.php
 msgid "Phone 2"
 msgstr ""
 
@@ -594,7 +598,7 @@ msgstr ""
 msgid "Contact ID"
 msgstr ""
 
-#: ./Civi/Xcm/ContainerSpecs.php ./xcm.php
+#: ./Civi/Xcm/ContainerSpecs.php ./managed/Navigation__configure_xcm.mgd.php
 msgid "Extended Contact Matcher (XCM)"
 msgstr ""
 
@@ -660,6 +664,10 @@ msgstr ""
 
 #: ./js/process_diff.js
 msgid "Error"
+msgstr ""
+
+#: ./managed/Navigation__configure_xcm.mgd.php
+msgid "Automation"
 msgstr ""
 
 #: ./templates/CRM/Xcm/Form/Settings.hlp
@@ -835,6 +843,10 @@ msgid "This is a list of the different XCM configurations. You might be perfectl
 msgstr ""
 
 #: ./templates/CRM/Xcm/Page/Profiles.tpl
+msgid "In order to add a new profile, use the \"copy\" link next to an existing profile."
+msgstr ""
+
+#: ./templates/CRM/Xcm/Page/Profiles.tpl
 msgid "Name"
 msgstr ""
 
@@ -888,9 +900,5 @@ msgstr ""
 
 #: ./xcm.php
 msgid "Import contacts (XCM)"
-msgstr ""
-
-#: ./xcm.php
-msgid "Automation"
 msgstr ""
 
