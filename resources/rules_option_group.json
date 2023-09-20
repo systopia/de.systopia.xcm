@@ -193,36 +193,6 @@
       "filter": "0",
       "is_reserved": "1",
       "is_active": "1"
-    },
-    {
-      "_lookup": ["name"],
-      "_translate": ["label"],
-      "name": "CRM_Xcm_Matcher_EmailFirstNameBirthdateMatcher",
-      "value": "CRM_Xcm_Matcher_EmailFirstNameBirthdateMatcher",
-      "label": "First name, birthday, and (any) email",
-      "filter": "0",
-      "is_reserved": "1",
-      "is_active": "1"
-    },
-    {
-      "_lookup": ["name"],
-      "_translate": ["label"],
-      "name": "CRM_Xcm_Matcher_EmailLastNameBirthdateMatcher",
-      "value": "CRM_Xcm_Matcher_EmailLastNameBirthdateMatcher",
-      "label": "Last name, birthday, and (any) email",
-      "filter": "0",
-      "is_reserved": "1",
-      "is_active": "1"
-    },
-    {
-      "_lookup": ["name"],
-      "_translate": ["label"],
-      "name": "CRM_Xcm_Matcher_EmailBirthdateMatcher",
-      "value": "CRM_Xcm_Matcher_EmailBirthdateMatcher",
-      "label": "Birthday and (any) email",
-      "filter": "0",
-      "is_reserved": "1",
-      "is_active": "1"
     }
   ]
 }
