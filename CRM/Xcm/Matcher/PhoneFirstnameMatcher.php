@@ -14,7 +14,7 @@
 +--------------------------------------------------------*/
 
 /*
- * Matches on (any) email and first_name
+ * Matches on (any) phone and first_name
  */
 class CRM_Xcm_Matcher_PhoneFirstnameMatcher extends CRM_Xcm_Matcher_PhoneMatcher {
   public function __construct() {
