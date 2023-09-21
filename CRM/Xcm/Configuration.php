@@ -552,7 +552,7 @@ class CRM_Xcm_Configuration {
           'script' => file_get_contents(__DIR__ . '/../../js/process_diff.js')
       ));
     } catch (Exception $ex) {
-      CRM_Core_Error::debug_log_message("DiffHelper injection failed: " . $ex->getMessage());
+      Civi::log()->debug("DiffHelper injection failed: " . $ex->getMessage());
     }
   }
 
