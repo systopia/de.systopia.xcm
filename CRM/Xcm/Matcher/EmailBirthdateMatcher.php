@@ -1,7 +1,7 @@
 <?php
 /*-------------------------------------------------------+
 | Extended Contact Matcher XCM                           |
-| Copyright (C) 2018 SYSTOPIA                            |
+| Copyright (C) 2023 SYSTOPIA                            |
 | Author: B. Endres (endres@systopia.de)                 |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
@@ -14,10 +14,10 @@
 +--------------------------------------------------------*/
 
 /*
- * Matches on (any) phone and first_name
+ * Matches on (any) email and birth date
  */
-class CRM_Xcm_Matcher_PhoneFirstnameMatcher extends CRM_Xcm_Matcher_PhoneMatcher {
+class CRM_Xcm_Matcher_EmailBirthdateMatcher extends CRM_Xcm_Matcher_EmailMatcher {
   public function __construct() {
-    parent::__construct(array('first_name', 'contact_type'));
+    parent::__construct(['birth_date' => 'birth_date', 'contact_type' => 'contact_type']);
   }
 }

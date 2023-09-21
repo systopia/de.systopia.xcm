@@ -115,4 +115,17 @@ class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Add 3 new birthday rules
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0200() {
+    $this->ctx->log->info('Adding 3 new birthday matching rules.');
+    $customData = new CRM_Xcm_CustomData(E::LONG_NAME);
+    $customData->syncOptionGroup(E::path('/resources/rules_option_group.json'));
+    return TRUE;
+  }
+
 }
