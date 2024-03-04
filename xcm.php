@@ -49,15 +49,6 @@ function xcm_civicrm_install() {
 }
 
 /**
- * Implements hook_civicrm_uninstall().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
- */
-function xcm_civicrm_uninstall() {
-  _xcm_civix_civicrm_uninstall();
-}
-
-/**
  * Implements hook_civicrm_enable().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
@@ -68,31 +59,6 @@ function xcm_civicrm_enable() {
   require_once 'CRM/Xcm/CustomData.php';
   $customData = new CRM_Xcm_CustomData('de.systopia.xcm');
   $customData->syncOptionGroup(__DIR__ . '/resources/rules_option_group.json');
-}
-
-/**
- * Implements hook_civicrm_disable().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
- */
-function xcm_civicrm_disable() {
-  _xcm_civix_civicrm_disable();
-}
-
-/**
- * Implements hook_civicrm_upgrade().
- *
- * @param $op string, the type of operation being performed; 'check' or 'enqueue'
- * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
- *
- * @return mixed
- *   Based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
- *                for 'enqueue', returns void
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
- */
-function xcm_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _xcm_civix_civicrm_upgrade($op, $queue);
 }
 
 /**
@@ -178,22 +144,4 @@ function _xcm_menu_exists(&$menu, $path) {
     }
   }
   return $found;
-}
-
-/**
- * Implements hook_civicrm_postInstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
- */
-function xcm_civicrm_postInstall() {
-  _xcm_civix_civicrm_postInstall();
-}
-
-/**
- * Implements hook_civicrm_entityTypes().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
- */
-function xcm_civicrm_entityTypes(&$entityTypes) {
-  _xcm_civix_civicrm_entityTypes($entityTypes);
 }

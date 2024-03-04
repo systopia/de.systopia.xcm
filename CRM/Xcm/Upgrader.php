@@ -18,7 +18,7 @@ use CRM_Xcm_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Xcm_Upgrader extends CRM_Xcm_Upgrader_Base {
+class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Add new phone rules
