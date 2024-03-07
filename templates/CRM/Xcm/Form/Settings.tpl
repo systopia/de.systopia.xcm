@@ -239,6 +239,12 @@
   </div>
 
   <div class="crm-section xcm-diff-common">
+    <div class="label">{$form.diff_activity_status.label}</div>
+    <div class="content">{$form.diff_activity_status.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section xcm-diff-common">
     <div class="label">{$form.diff_activity_subject.label}</div>
     <div class="content">{$form.diff_activity_subject.html}</div>
     <div class="clear"></div>
@@ -304,7 +310,7 @@ cj("#diff_handler").change(function() {
   if (value == 'i3val') {
     cj("div.xcm-diff-common").show();
     cj("div.xcm-diff-diff-only").hide();
-  } else if (value == 'diff') {
+  } else if (value == 'diff' || value == 'updated_diff') {
     cj("div.xcm-diff-common").show();
     cj("div.xcm-diff-diff-only").show();
   } else {

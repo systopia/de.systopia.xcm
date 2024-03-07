@@ -331,6 +331,7 @@ class CRM_Xcm_MatchingEngine {
       // load contact
       $current_contact_data = $this->loadCurrentContactData($result['contact_id'], $submitted_contact_data);
       CRM_Xcm_DataNormaliser::normaliseData($current_contact_data);
+      $original_contact_data = $current_contact_data;
 
       // OVERRIDE CURRENT CONTACT DATA
       if (!empty($options['override_fields'])) {
@@ -420,6 +421,9 @@ class CRM_Xcm_MatchingEngine {
       switch ($diff_handler) {
         case 'diff':
           $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          break;
+        case 'updated_diff':
+          $this->createDiffActivity($original_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
           break;
 
         case 'i3val':
@@ -1166,7 +1170,7 @@ class CRM_Xcm_MatchingEngine {
       $activity_data = array(
           'activity_type_id'   => $options['diff_activity'],
           'subject'            => $subject,
-          'status_id'          => $this->config->defaultActivityStatus(),
+          'status_id'          => !empty($options['diff_activity_status']) ? $options['diff_activity_status'] : $this->config->defaultActivityStatus(),
           'activity_date_time' => date("YmdHis"),
           'target_contact_id'  => (int) $contact['id'],
           'source_contact_id'  => $this->config->getCurrentUserID($contact['id']),
