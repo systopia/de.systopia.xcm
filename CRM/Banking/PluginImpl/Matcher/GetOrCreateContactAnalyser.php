@@ -267,13 +267,21 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
         foreach ($name_bits as $name_bit) {
           if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
             if ((!$this->isNameBlacklisted($name_bit, $config->first_name_blacklist))
-                && $this->isDBFirstName($name_bit)) {
-              $first_names[] = $name_bit;
+                 && $this->isDBFirstName($name_bit)
+                 && empty($last_names)) {
+                 $first_names[] = $name_bit;
             } else {
               $last_names[] = $name_bit;
             }
           }
         }
+
+        // If we didn't find any last names, but we found more than one first name,
+        // then we assume that the last one is the last name of the contact
+        if (empty($last_names) && count($first_names) > 1) {
+            $last_names[] = array_pop($first_names);
+        }
+
         $this->logMessage("Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names), 'debug');
         $xcm_values['first_name'] = implode(' ', $first_names);
         $xcm_values['last_name'] = implode(' ', $last_names);
