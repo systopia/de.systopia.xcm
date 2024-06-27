@@ -340,6 +340,8 @@ class CRM_Xcm_Configuration {
       return 'i3val';
     } elseif ($handler == 'diff') {
       return 'diff';
+    } elseif ($handler == 'updated_diff') {
+      return 'updated_diff';
     } else {
       return 'none';
     }
