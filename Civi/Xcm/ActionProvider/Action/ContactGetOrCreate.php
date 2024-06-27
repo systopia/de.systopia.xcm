@@ -35,11 +35,11 @@ class ContactGetOrCreate extends AbstractAction {
    * @return SpecificationBag specs
    */
   public function getConfigurationSpecification() {
-    $contact_types = [
-        'Individual'   => E::ts('Individual'),
-        'Organization' => E::ts('Organization'),
-        'Household'    => E::ts('Household'),
-    ];
+    $contactSubTypesApi = civicrm_api3('ContactType', 'get', ['options' => array('limit' => 0)]);
+    foreach ($contactSubTypesApi['values'] as $contactSubType) {
+      $contact_types[$contactSubType['name']] = E::ts($contactSubType['label']);
+    }
+
     $profiles = \CRM_Xcm_Configuration::getProfileList();
     $configuration[] = new Specification('xcm_profile', 'String', E::ts('XCM Profile'), false, null, null, $profiles, false);
     $configuration[] = new Specification('contact_type', 'String', E::ts('Default Contact Type'), false, 'Individual', null, $contact_types, false);
@@ -211,6 +211,15 @@ class ContactGetOrCreate extends AbstractAction {
         $apiParams[$parameter_name] = $parameter_value;
       }
       unset($apiParams["variable_value_{$number}"]);
+    }
+
+    // Handle Contact Subtypes
+    if (!in_array($apiParams['contact_type'], ['Individual', 'Organization', 'Household'])) {
+      $apiParams['contact_sub_type'] = $apiParams['contact_type'];
+      $apiParams['contact_type'] = civicrm_api3('ContactType', 'getvalue', [
+        'return' => 'parent_id.name',
+        'name' => $apiParams['contact_sub_type'],
+      ]);
     }
 
     // execute
