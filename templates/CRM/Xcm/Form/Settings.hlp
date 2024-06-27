@@ -45,7 +45,11 @@
 
 {htxt id='id-location-type'}
   <p>{ts domain="de.systopia.xcm"}If no location type is explicitly submitted, this location type will be assumed.{/ts}</p>
-  <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, phones, and websites.{/ts}</p>
+  <p>{ts domain="de.systopia.xcm"}The location type is used for newly created addresses, emails, and phones.{/ts}</p>
+{/htxt}
+
+{htxt id='id-website-type'}
+  <p>{ts domain="de.systopia.xcm"}If no website type is explicitly submitted, this website type will be assumed.{/ts}</p>
 {/htxt}
 
 {htxt id='id-phone-type'}

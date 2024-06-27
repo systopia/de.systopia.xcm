@@ -72,6 +72,12 @@
     <div class="clear"></div>
   </div>
 
+  <div class="crm-section">
+    <div class="label">{$form.default_website_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Default Website Type{/ts}", {literal}{"id":"id-website-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="content">{$form.default_website_type.html}</div>
+    <div class="clear"></div>
+  </div>
+
 </div>
 
 <div>

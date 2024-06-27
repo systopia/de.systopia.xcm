@@ -519,20 +519,21 @@ class CRM_Xcm_MatchingEngine {
    */
   protected function addDetailToContact($contact_id, $entity, &$data, $as_primary = FALSE, &$data_update = NULL) {
     if (!empty($data[$entity])) {
-      // sort out location type
-      if (empty($data['location_type_id'])) {
-        $location_type_id = $this->config->defaultLocationType();
-      } else {
-        $location_type_id = $data['location_type_id'];
-      }
-
-      // get attribute
-      $attribute = strtolower($entity); // for email and phone that works
-      $sorting = 'is_primary desc';
+      // Params for a possible "create" API call.
+      $create_detail_call['contact_id'] = $contact_id;
+      // sort out location/website type
       if (strtolower($entity) == 'website') {
-        $attribute = 'url';
+        $create_detail_call['website_type_id'] = $data['website_type_id'] ?? $this->config->defaultWebsiteType();
         $sorting = 'id desc';
+        $attribute = 'url';
       }
+      else {
+        $create_detail_call['location_type_id'] = $data['location_type_id'] ?? $this->config->defaultLocationType();
+        $sorting = 'is_primary desc';
+        // for email and phone this works
+        $attribute = strtolower($entity);
+      }
+      $create_detail_call[$attribute] = $data[$entity];
 
       // some value was submitted -> check if there is already an existing one
       $existing_entity = civicrm_api3($entity, 'get', array(
@@ -542,11 +543,6 @@ class CRM_Xcm_MatchingEngine {
         'option.limit' => 1));
       if (empty($existing_entity['count'])) {
         // there is none -> create
-        $create_detail_call = array(
-          $attribute         => $data[$entity],
-          'contact_id'       => $contact_id,
-          'location_type_id' => $location_type_id);
-
         // mark as primary if requested
         if ($as_primary) {
           $create_detail_call['is_primary'] = 1;

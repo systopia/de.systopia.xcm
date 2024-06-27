@@ -68,6 +68,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     $locationTypes = $this->getLocationTypes();
     $phoneTypes = $this->getPhoneTypes();
+    $websiteTypes = $this->getWebsiteTypes();
 
     // add general options
     $this->addElement('select',
@@ -103,6 +104,12 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       $phoneTypes,
                       false,
                       array('class' => 'crm-select2 huge', 'placeholder' => E::ts('Tertiary phone not used')));
+    $this->add('select',
+                      'default_website_type',
+                      E::ts('Default Website Type'),
+                      $websiteTypes,
+                      false,
+                      array('class' => 'crm-select2 huge'));
     $this->addElement('select',
                       'fill_fields',
                       E::ts('Fill Fields'),
@@ -363,6 +370,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'primary_phone_type'         => CRM_Utils_Array::value('primary_phone_type', $values),
       'secondary_phone_type'       => CRM_Utils_Array::value('secondary_phone_type', $values),
       'tertiary_phone_type'        => CRM_Utils_Array::value('tertiary_phone_type', $values),
+      'default_website_type'       => CRM_Utils_Array::value('default_website_type', $values),
       'picker'                     => CRM_Utils_Array::value('picker', $values),
       'input_sanitation'           => CRM_Utils_Array::value('input_sanitation', $values),
       'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
@@ -445,6 +453,15 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   protected function getPhoneTypes() {
     $types = array();
     $result = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'phone_type', 'option.limit' => 0));
+    foreach ($result['values'] as $type) {
+      $types[$type['value']] = $type['label'];
+    }
+    return $types;
+  }
+
+  protected function getWebsiteTypes() {
+    $types = array();
+    $result = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'website_type', 'option.limit' => 0));
     foreach ($result['values'] as $type) {
       $types[$type['value']] = $type['label'];
     }
