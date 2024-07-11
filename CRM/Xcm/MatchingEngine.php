@@ -1241,7 +1241,7 @@ class CRM_Xcm_MatchingEngine {
       }
 
       // time comparison (if still different)
-      if ($attribute_differs) {
+      if ($attribute_differs && is_string($original_value) && is_string($submitted_value)) {
         $original_value_as_time = strtotime($original_value);
         $submitted_value_as_time = strtotime($submitted_value);
         if ($original_value_as_time && $original_value_as_time) {
