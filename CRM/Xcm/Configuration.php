@@ -30,7 +30,7 @@ class CRM_Xcm_Configuration {
    * Get the configuration object with the given name
    *  If name is omitted, returns the default configuration
    *
-   * @param null $profile_name
+   * @param string|null $profile_name
    * @return CRM_Xcm_Configuration
    *
    * @throws Exception
@@ -59,7 +59,7 @@ class CRM_Xcm_Configuration {
    * static way.
    *
    * CRM_Xcm_Configuration constructor.
-   * @param null $profile_name
+   * @param string|null $profile_name
    *
    * @throws Exception
    */
