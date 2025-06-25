@@ -25,6 +25,9 @@ class CRM_Xcm_MatchingEngine {
   /** Configuration for this engine */
   protected $config = NULL;
 
+  /** @var bool  */
+  protected $isStreetAddressParsingEnabled = FALSE;
+
   /**
    * get the singleton instance of the engine
    * @param $profile
@@ -45,6 +48,8 @@ class CRM_Xcm_MatchingEngine {
    */
   protected function __construct($profile) {
     $this->config = CRM_Xcm_Configuration::getConfigProfile($profile);
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $this->isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
   }
 
   /**
@@ -850,6 +855,12 @@ class CRM_Xcm_MatchingEngine {
       case 'address':
         $has_primary = TRUE;
         $data_attributes = ['street_address', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3', 'county_id', 'country_id', 'state_province_id'];
+        if ($this->isStreetAddressParsingEnabled) {
+          $data_attributes[] = 'street_name';
+          $data_attributes[] = 'street_number';
+          $data_attributes[] = 'street_number_suffix';
+          $data_attributes[] = 'street_unit';
+        }
         $identifying_attributes = ['location_type_id'];
         break;
 
@@ -1115,7 +1126,18 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // if there is one address attribute, add all (so the user can later compile a full address)
-    $address_parameters = array('street_address', 'country_id', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2');
+    $address_parameters = array('street_address');
+    if ($this->isStreetAddressParsingEnabled) {
+      $address_parameters[] = 'street_name';
+      $address_parameters[] = 'street_number';
+      $address_parameters[] = 'street_number_suffix';
+      $address_parameters[] = 'street_unit';
+    }
+    $address_parameters[] = 'country_id';
+    $address_parameters[] = 'postal_code';
+    $address_parameters[] = 'city';
+    $address_parameters[] = 'supplemental_address_1';
+    $address_parameters[] = 'supplemental_address_2';
     if (array_intersect($address_parameters, $differing_attributes)) {
       foreach ($address_parameters as $attribute) {
         if (!in_array($attribute, $differing_attributes) && isset($contact[$attribute]) && isset($contact_data[$attribute])) {

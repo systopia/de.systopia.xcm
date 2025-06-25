@@ -21,8 +21,15 @@ abstract class CRM_Xcm_Matcher_AddressMatcher extends CRM_Xcm_MatchingRule {
   protected $required_fields = array('street_address', 'postal_code', 'city');
   protected $additional_fields = NULL;
 
+  /**
+   * @var bool
+   */
+  protected $isStreetAddressParsingEnabled = FALSE;
+
   protected function __construct($additional_fields) {
     $this->additional_fields = $additional_fields;
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $this->isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
   }
 
   /**
@@ -59,6 +66,22 @@ abstract class CRM_Xcm_Matcher_AddressMatcher extends CRM_Xcm_MatchingRule {
       'postal_code'    => $contact_data['postal_code'],
       'city'           => $contact_data['city'],
       );
+    if ($this->isStreetAddressParsingEnabled) {
+      if (empty($address_query['street_address'])) {
+        unset($address_query['street_address']);
+      }
+      if (array_key_exists('street_name', $contact_data)) {
+        $address_query['street_name'] = $contact_data['street_name'];
+      }
+      if (array_key_exists('street_number', $contact_data)) {
+        $address_query['street_number'] = $contact_data['street_number'];
+        $address_query['street_number_suffix'] = $contact_data['street_number_suffix'];
+      }
+      if (array_key_exists('street_unit', $contact_data)) {
+        $address_query['street_unit'] = $contact_data['street_unit'];
+      }
+    }
+
     $addresses = civicrm_api3('Address', 'get', $address_query);
     $potential_contact_ids = array();
     foreach ($addresses['values'] as $address) {
