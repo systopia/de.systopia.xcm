@@ -11,12 +11,12 @@
 | copyright header is strictly prohibited without        |
 | written permission from the original author(s).        |
 +-------------------------------------------------------*}
-<h3>{ts 1=$existing_contact.display_name domain=de.systopia.xcm}Differing attributes for contact "%1" submitted{/ts}</h3>
+<h3>{ts 1=$existing_contact.display_name domain="de.systopia.xcm"}Differing attributes for contact "%1" submitted{/ts}</h3>
 <table>
   <thead>
-    <th>{ts domain=de.systopia.xcm}Attribute{/ts}</th>
-    <th>{ts domain=de.systopia.xcm}Recorded Value{/ts}</th>
-    <th>{ts domain=de.systopia.xcm}Submitted Value{/ts}</th>
+    <th>{ts domain="de.systopia.xcm"}Attribute{/ts}</th>
+    <th>{ts domain="de.systopia.xcm"}Recorded Value{/ts}</th>
+    <th>{ts domain="de.systopia.xcm"}Submitted Value{/ts}</th>
   </thead>
 
   <tbody>
