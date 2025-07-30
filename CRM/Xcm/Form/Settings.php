@@ -152,8 +152,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       'fill_details',
                       E::ts('Fill Details'),
                       array(
-                        'email'   => E::ts('Email'),
-                        'phone'   => E::ts('Phone'),
                         'website' => E::ts('Website')),
                       array(// 'style'    => 'width:450px; height:100%;',
                             'multiple' => 'multiple',
@@ -170,6 +168,23 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                             1 => E::ts('If contact has no address'),
                             2 => E::ts('If contact has no address of that type')),
                       array('class' => 'crm-select2 huge'));
+    $this->addElement('select',
+      'fill_email',
+      E::ts('Fill Email'),
+      array(0 => E::ts('Never'),
+        1 => E::ts('If contact has no email'),
+        2 => E::ts('If contact has no email of that type'),
+        3 => E::ts('If contact has not this email address')),
+      array('class' => 'crm-select2 huge'));
+
+    $this->addElement('select',
+      'fill_phone',
+      E::ts('Fill Phone'),
+      array(0 => E::ts('Never'),
+        1 => E::ts('If contact has no phone'),
+        2 => E::ts('If contact has no phone of that type'),
+        3 => E::ts('If contact has not this phone number')),
+      array('class' => 'crm-select2 huge'));
 
 
     // diff activity options
@@ -361,6 +376,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     // store options
     $options = array(
       'fill_address'               => CRM_Utils_Array::value('fill_address', $values),
+      'fill_email'                 => CRM_Utils_Array::value('fill_email', $values),
+      'fill_phone'                 => CRM_Utils_Array::value('fill_phone', $values),
       'fill_fields_multivalue'     => CRM_Utils_Array::value('fill_fields_multivalue', $values),
       'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
       'fill_details_primary'       => CRM_Utils_Array::value('fill_details_primary', $values),
