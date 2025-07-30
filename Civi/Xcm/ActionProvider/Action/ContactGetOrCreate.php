@@ -58,6 +58,9 @@ class ContactGetOrCreate extends AbstractAction {
    * @return SpecificationBag specs
    */
   public function getParameterSpecification() {
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
+
     // add contact specs
     $contact_specs = [];
     $contact_fields = CRM_Xcm_Form_Settings::getContactFields();
@@ -89,13 +92,19 @@ class ContactGetOrCreate extends AbstractAction {
       new Specification('supplemental_address_2', 'String', E::ts('Supplemental Address 2'), false, null, null, null, false),
       new Specification('supplemental_address_3', 'String', E::ts('Supplemental Address 3'), false, null, null, null, false),
       new Specification('street_address', 'String', E::ts('Street Address'), false, null, null, null, false),
-      new Specification('city', 'String', E::ts('City'), false, null, null, null, false),
-      new Specification('postal_code', 'String', E::ts('Postal Code'), false, null, null, null, false),
-      new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false),
-      new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false),
-      new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false),
-      new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false),
     ];
+    if ($isStreetAddressParsingEnabled) {
+      $detail_specs[] =  new Specification('street_name', 'String', E::ts('Street name'), false, null, null, null, false);
+      $detail_specs[] =  new Specification('street_number', 'String', E::ts('Street number'), false, null, null, null, false);
+      $detail_specs[] =  new Specification('street_unit', 'String', E::ts('Street unit'), false, null, null, null, false);
+    }
+
+    $detail_specs[] =  new Specification('city', 'String', E::ts('City'), false, null, null, null, false);
+    $detail_specs[] =  new Specification('postal_code', 'String', E::ts('Postal Code'), false, null, null, null, false);
+    $detail_specs[] =  new Specification('state_province_id', 'String', E::ts('State/Province'), false, null, null, null, false);
+    $detail_specs[] =  new Specification('county_id', 'String', E::ts('County'), false, null, null, null, false);
+    $detail_specs[] =  new Specification('country_id', 'String', E::ts('Country'), false, null, null, null, false);
+    $detail_specs[] =  new Specification('is_billing', 'Integer', E::ts('Billing?'), false, null, null, null, false);
 
     // add variable fields
     for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
@@ -220,6 +229,18 @@ class ContactGetOrCreate extends AbstractAction {
         'return' => 'parent_id.name',
         'name' => $apiParams['contact_sub_type'],
       ]);
+    }
+    // Split street number in a numeric value and in street number suffix
+    // For example street_number 162A becomes Street number 162 and street number suffix A
+    if (isset($apiParams['street_number'])) {
+      $matches = [];
+      if (preg_match('/^(\d+)(.*)$/', $apiParams['street_number'], $matches)) {
+        $apiParams['street_number'] = $matches[1];
+        $apiParams['street_number_suffix'] = '';
+        if (isset($matches[2])) {
+          $apiParams['street_number_suffix'] = $matches[2];
+        }
+      }
     }
 
     // execute
