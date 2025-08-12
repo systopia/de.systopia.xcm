@@ -68,7 +68,6 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
     $locationTypes = $this->getLocationTypes();
     $phoneTypes = $this->getPhoneTypes();
-    $websiteTypes = $this->getWebsiteTypes();
 
     // add general options
     $this->addElement('select',
@@ -91,7 +90,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       E::ts('Primary Phone Type'),
                       $phoneTypes,
                       true,
-                      array('class' => 'crm-select2 huge'));
+                      array('class' => 'crm-select2 huge', 'placeholder' => TRUE));
     $this->add('select',
                       'secondary_phone_type',
                       E::ts('Secondary Phone Type'),
@@ -107,37 +106,37 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->add('select',
                       'default_website_type',
                       E::ts('Default Website Type'),
-                      $websiteTypes,
-                      false,
-                      array('class' => 'crm-select2 huge'));
+                      $this->getWebsiteTypes(),
+                      true,
+                      array('class' => 'crm-select2 huge', 'placeholder' => TRUE));
     $this->addElement('select',
                       'fill_fields',
                       E::ts('Fill Fields'),
                       self::getContactFields() + self::getCustomFields(),
-                      array(// 'style'    => 'width:450px; height:100%;',
+                      array(
                             'multiple' => 'multiple',
-                            'class'    => 'crm-select2 huge'));
+                            'class' => 'crm-select2 huge'));
 
     $this->addElement('select',
         'override_fields',
         E::ts('Override Fields'),
         self::getContactFields() + self::getCustomFields(),
-        array(// 'style'    => 'width:450px; height:100%;',
+        array(
               'multiple' => 'multiple',
-              'class'    => 'crm-select2 huge'));
+              'class' => 'crm-select2 huge'));
 
     $this->addElement('select',
         'override_details',
         E::ts('Override Details'),
         array(
-            'email'   => E::ts('Email'),
-            'phone'   => E::ts('Phone'),
+            'email' => E::ts('Email'),
+            'phone' => E::ts('Phone'),
             'website' => E::ts('Website'),
-            'im'      => E::ts('IM'),
+            'im' => E::ts('IM'),
             'address' => E::ts('Address')),
-        array(// 'style'    => 'width:450px; height:100%;',
+        array(
               'multiple' => 'multiple',
-              'class'    => 'crm-select2 huge'));
+              'class' => 'crm-select2 huge'));
 
     $this->addElement('checkbox',
         'override_details_primary',
@@ -152,12 +151,12 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
                       'fill_details',
                       E::ts('Fill Details'),
                       array(
-                        'email'   => E::ts('Email'),
-                        'phone'   => E::ts('Phone'),
+                        'email' => E::ts('Email'),
+                        'phone' => E::ts('Phone'),
                         'website' => E::ts('Website')),
-                      array(// 'style'    => 'width:450px; height:100%;',
+                      array(
                             'multiple' => 'multiple',
-                            'class'    => 'crm-select2 huge'));
+                            'class' => 'crm-select2 huge'));
 
     $this->addElement('checkbox',
                       'fill_details_primary',
@@ -314,9 +313,9 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $rules          = $this->config->getRules();
     $postprocessing = $this->config->getPostprocessing();
 
-    if ($options==NULL)        $options = array();
-    if ($rules==NULL)          $rules = array();
-    if ($postprocessing==NULL) $postprocessing = array();
+    if ($options==NULL)        $options = [];
+    if ($rules==NULL)          $rules = [];
+    if ($postprocessing==NULL) $postprocessing = [];
 
     return $options + $rules + $postprocessing;
   }
@@ -359,49 +358,49 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     $this->config->setLabel($values['profile_label']);
 
     // store options
-    $options = array(
-      'fill_address'               => CRM_Utils_Array::value('fill_address', $values),
-      'fill_fields_multivalue'     => CRM_Utils_Array::value('fill_fields_multivalue', $values),
-      'fill_details'               => CRM_Utils_Array::value('fill_details', $values),
-      'fill_details_primary'       => CRM_Utils_Array::value('fill_details_primary', $values),
-      'override_details'           => CRM_Utils_Array::value('override_details', $values),
-      'override_details_primary'   => CRM_Utils_Array::value('override_details_primary', $values),
-      'default_location_type'      => CRM_Utils_Array::value('default_location_type', $values),
-      'primary_phone_type'         => CRM_Utils_Array::value('primary_phone_type', $values),
-      'secondary_phone_type'       => CRM_Utils_Array::value('secondary_phone_type', $values),
-      'tertiary_phone_type'        => CRM_Utils_Array::value('tertiary_phone_type', $values),
-      'default_website_type'       => CRM_Utils_Array::value('default_website_type', $values),
-      'picker'                     => CRM_Utils_Array::value('picker', $values),
-      'input_sanitation'           => CRM_Utils_Array::value('input_sanitation', $values),
-      'duplicates_activity'        => CRM_Utils_Array::value('duplicates_activity', $values),
-      'duplicates_subject'         => CRM_Utils_Array::value('duplicates_subject', $values),
-      'diff_handler'               => CRM_Utils_Array::value('diff_handler', $values),
-      'diff_activity'              => CRM_Utils_Array::value('diff_activity', $values),
-      'diff_activity_status'       => CRM_Utils_Array::value('diff_activity_status', $values),
-      'diff_activity_subject'      => CRM_Utils_Array::value('diff_activity_subject', $values),
-      'diff_processing'            => CRM_Utils_Array::value('diff_processing', $values),
-      'diff_current_location_type' => CRM_Utils_Array::value('diff_current_location_type', $values),
-      'diff_old_location_type'     => CRM_Utils_Array::value('diff_old_location_type', $values),
-      'fill_fields'                => CRM_Utils_Array::value('fill_fields', $values),
-      'override_fields'            => CRM_Utils_Array::value('override_fields', $values),
-      'case_insensitive'           => CRM_Utils_Array::value('case_insensitive', $values),
-      'match_contact_id'           => CRM_Utils_Array::value('match_contact_id', $values),
-      );
+    $options = [
+      'fill_address' => $values['fill_address'] ?? NULL,
+      'fill_fields_multivalue' => $values['fill_fields_multivalue'] ?? NULL,
+      'fill_details' => $values['fill_details'] ?? NULL,
+      'fill_details_primary' => $values['fill_details_primary'] ?? NULL,
+      'override_details' => $values['override_details'] ?? NULL,
+      'override_details_primary' => $values['override_details_primary'] ?? NULL,
+      'default_location_type' => $values['default_location_type'] ?? NULL,
+      'primary_phone_type' => $values['primary_phone_type'],
+      'secondary_phone_type' => $values['secondary_phone_type'] ?? NULL,
+      'tertiary_phone_type' => $values['tertiary_phone_type'] ?? NULL,
+      'default_website_type' => $values['default_website_type'],
+      'picker' => $values['picker'] ?? NULL,
+      'input_sanitation' => $values['input_sanitation'] ?? NULL,
+      'duplicates_activity' => $values['duplicates_activity'] ?? NULL,
+      'duplicates_subject' => $values['duplicates_subject'] ?? NULL,
+      'diff_handler' => $values['diff_handler'] ?? NULL,
+      'diff_activity' => $values['diff_activity'] ?? NULL,
+      'diff_activity_status' => $values['diff_activity_status'] ?? NULL,
+      'diff_activity_subject' => $values['diff_activity_subject'] ?? NULL,
+      'diff_processing' => $values['diff_processing'] ?? NULL,
+      'diff_current_location_type' => $values['diff_current_location_type'] ?? NULL,
+      'diff_old_location_type' => $values['diff_old_location_type'] ?? NULL,
+      'fill_fields' => $values['fill_fields'] ?? NULL,
+      'override_fields' => $values['override_fields'] ?? NULL,
+      'case_insensitive' => $values['case_insensitive'] ?? NULL,
+      'match_contact_id' => $values['match_contact_id'] ?? NULL,
+    ];
     $this->config->setOptions($options);
 
     // store the rules
-    $rules = array();
+    $rules = [];
     for ($i=1; isset($values["rule_$i"]); $i++) {
       $rules["rule_$i"] = $values["rule_$i"];
     }
     $this->config->setRules($rules);
 
     // store the postprocessing
-    $postprocessing = array();
+    $postprocessing = [];
     foreach (array('matched', 'created') as $mode) {
       foreach (array('group', 'tag', 'activity', 'activity_subject', 'activity_template', 'activity_status', 'activity_campaign') as $type) {
         $key = "{$mode}_add_{$type}";
-        $postprocessing[$key] = CRM_Utils_Array::value($key, $values);
+        $postprocessing[$key] = $values[$key] ?? NULL;
       }
     }
     $this->config->setPostprocessing($postprocessing);
@@ -424,11 +423,11 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
     if ($i > 1) {
       $none_option = array(0 => E::ts('None, thank you'));
     } else {
-      $none_option = array();
+      $none_option = [];
     }
 
     // TOOD: add option group rules
-    $rules = array();
+    $rules = [];
     $option_values = civicrm_api3('OptionValue', 'get', array('option_group_id' => 'xcm_matching_rules', 'is_active' => 1));
     foreach ($option_values['values'] as $option_value) {
       $rules[$option_value['value']] = $option_value['label'];
@@ -442,7 +441,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getLocationTypes() {
-    $types = array();
+    $types = [];
     $result = civicrm_api3('LocationType', 'get', array('is_active' => 1));
     foreach ($result['values'] as $type) {
       $types[$type['id']] = $type['display_name'];
@@ -451,7 +450,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getPhoneTypes() {
-    $types = array();
+    $types = [];
     $result = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'phone_type', 'option.limit' => 0));
     foreach ($result['values'] as $type) {
       $types[$type['value']] = $type['label'];
@@ -460,7 +459,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getWebsiteTypes() {
-    $types = array();
+    $types = [];
     $result = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'website_type', 'option.limit' => 0));
     foreach ($result['values'] as $type) {
       $types[$type['value']] = $type['label'];
@@ -469,7 +468,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getActivities($none_option = TRUE) {
-    $activity_list = array();
+    $activity_list = [];
     if ($none_option) {
       $activity_list[0] = E::ts('None, thank you');
     }
@@ -483,7 +482,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
   }
 
   protected function getActivityStatuses() {
-    $activity_status_list = array();
+    $activity_status_list = [];
     $statuses = civicrm_api3('OptionValue', 'get', array('is_active' => 1, 'option_group_id' => 'activity_status', 'option.limit' => 0));
     foreach ($statuses['values'] as $status) {
       $activity_status_list[$status['value']] = $status['label'];
@@ -494,7 +493,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
   protected function getCampaigns() {
     $campaign_list = array(
-        ''      => E::ts("No Campaign"),
+        '' => E::ts("No Campaign"),
         'input' => E::ts("From Input (campaign_id)"),
     );
     $campaigns = civicrm_api3('Campaign', 'get', array('is_active' => 1, 'option.limit' => 0));
@@ -538,8 +537,8 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
 
   protected function getPickers() {
     return array(
-      'min'  => E::ts('the oldest contact'),
-      'max'  => E::ts('the newest contact'),
+      'min' => E::ts('the oldest contact'),
+      'max' => E::ts('the newest contact'),
       'none' => E::ts('none (create new contact)'),
       );
   }
@@ -548,7 +547,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * Get the list of options for diff handlers
    */
   protected function getDiffHandlers() {
-    $diff_handlers = array();
+    $diff_handlers = [];
     $diff_handlers['none'] = E::ts("Don't do anything");
     $diff_handlers['diff'] = E::ts("Unresolved Differences");
     $diff_handlers['updated_diff'] = E::ts("Contact Value Comparison");
@@ -565,26 +564,26 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    * those are all custom fields that belong to a contact in general
    */
   public static function getCustomFields() {
-    $custom_fields = array();
+    $custom_fields = [];
 
     $custom_group_query = civicrm_api3('CustomGroup', 'get', array(
-      'extends'      => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
-      'is_active'    => 1,
+      'extends' => array('IN' => array('Contact', 'Individual', 'Organization', 'Household')),
+      'is_active' => 1,
       'option.limit' => 0,
-      'is_multiple'  => 0,
-      'is_reserved'  => 0,
-      'return'       => 'id'));
-    $custom_group_ids   = array();
+      'is_multiple' => 0,
+      'is_reserved' => 0,
+      'return' => 'id'));
+    $custom_group_ids   = [];
     foreach ($custom_group_query['values'] as $custom_group) {
       $custom_group_ids[] = (int) $custom_group['id'];
     }
 
     if (!empty($custom_group_ids)) {
       $custom_field_query = civicrm_api3('CustomField', 'get', array(
-        'custom_group_id'  => array('IN' => $custom_group_ids),
-        'is_active'        => 1,
-        'option.limit'     => 0,
-        'return'           => 'id,label'));
+        'custom_group_id' => array('IN' => $custom_group_ids),
+        'is_active' => 1,
+        'option.limit' => 0,
+        'return' => 'id,label'));
       foreach ($custom_field_query['values'] as $custom_field) {
         $custom_fields["custom_{$custom_field['id']}"] = "{$custom_field['label']} [{$custom_field['id']}]";
       }
@@ -599,30 +598,30 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
    */
   public static function getContactFields() {
     return [
-      'display_name'                   => E::ts("Display Name"),
-      'household_name'                 => E::ts("Household Name"),
-      'organization_name'              => E::ts("Organization Name"),
-      'first_name'                     => E::ts("First Name"),
-      'last_name'                      => E::ts("Last Name"),
-      'middle_name'                    => E::ts("Middle Name"),
-      'nick_name'                      => E::ts("Nick Name"),
-      'legal_name'                     => E::ts("Legal Name"),
-      'prefix_id'                      => E::ts("Prefix"),
-      'suffix_id'                      => E::ts("Suffix"),
-      'birth_date'                     => E::ts("Birth Date"),
-      'gender_id'                      => E::ts("Gender"),
-      'formal_title'                   => E::ts("Formal Title"),
-      'job_title'                      => E::ts("Job Title"),
-      'do_not_email'                   => E::ts("Do not Email"),
-      'do_not_mail'                    => E::ts("Do not Mail"),
-      'do_not_phone'                   => E::ts("Do not Phone"),
-      'do_not_sms'                     => E::ts("Do not SMS"),
-      'do_not_trade'                   => E::ts("Do not Trade"),
-      'is_opt_out'                     => E::ts("Opt-Out"),
-      'preferred_language'             => E::ts("Preferred Language"),
+      'display_name' => E::ts("Display Name"),
+      'household_name' => E::ts("Household Name"),
+      'organization_name' => E::ts("Organization Name"),
+      'first_name' => E::ts("First Name"),
+      'last_name' => E::ts("Last Name"),
+      'middle_name' => E::ts("Middle Name"),
+      'nick_name' => E::ts("Nick Name"),
+      'legal_name' => E::ts("Legal Name"),
+      'prefix_id' => E::ts("Prefix"),
+      'suffix_id' => E::ts("Suffix"),
+      'birth_date' => E::ts("Birth Date"),
+      'gender_id' => E::ts("Gender"),
+      'formal_title' => E::ts("Formal Title"),
+      'job_title' => E::ts("Job Title"),
+      'do_not_email' => E::ts("Do not Email"),
+      'do_not_mail' => E::ts("Do not Mail"),
+      'do_not_phone' => E::ts("Do not Phone"),
+      'do_not_sms' => E::ts("Do not SMS"),
+      'do_not_trade' => E::ts("Do not Trade"),
+      'is_opt_out' => E::ts("Opt-Out"),
+      'preferred_language' => E::ts("Preferred Language"),
       'preferred_communication_method' => E::ts("Preferred Communication Method"),
-      'legal_identifier'               => E::ts("Legal Identifier"),
-      'external_identifier'            => E::ts("External Identifier"),
+      'legal_identifier' => E::ts("Legal Identifier"),
+      'external_identifier' => E::ts("External Identifier"),
     ];
   }
 }
