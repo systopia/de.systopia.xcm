@@ -44,7 +44,7 @@ class CRM_Xcm_Configuration {
    * @return array profile_name => profile_label
    */
   public static function getProfileList() {
-    $profile_list = array();
+    $profile_list = [];
     $all_profiles = self::getAllProfiles();
     foreach ($all_profiles as $profile_name => $profile_data) {
       $profile = CRM_Xcm_Configuration::getConfigProfile($profile_name);
@@ -106,7 +106,7 @@ class CRM_Xcm_Configuration {
     if (self::$_all_profiles === NULL) {
       self::$_all_profiles = Civi::settings()->get('xcm_config_profiles');
       if (!is_array(self::$_all_profiles) || empty(self::$_all_profiles)) {
-        self::$_all_profiles = array('default' => array());
+        self::$_all_profiles = array('default' => []);
       }
     }
     return self::$_all_profiles;
@@ -189,7 +189,7 @@ class CRM_Xcm_Configuration {
    */
   protected function getConfigGroup($setting_name) {
     $config = $this->getConfiguration();
-    return CRM_Utils_Array::value($setting_name, $config, array());
+    return $config[$setting_name] ?? [];
   }
 
   /**
@@ -215,9 +215,9 @@ class CRM_Xcm_Configuration {
    * @return int 1 if is default
    * @throws Exception
    */
-  public function isDefault() {
+  public function isDefault(): int {
     $profile_data = $this->getConfiguration();
-    return CRM_Utils_Array::value('is_default', $profile_data, '0');return $value;
+    return (int) $profile_data['is_default'] ?? 0;
   }
 
 
@@ -319,8 +319,8 @@ class CRM_Xcm_Configuration {
   /**
    * Get created activity status
    */
-  public function defaultActivityStatus() {
-    return CRM_Core_PseudoConstant::getKey(
+  public function defaultActivityStatus(): int {
+    return (int) CRM_Core_PseudoConstant::getKey(
       'CRM_Activity_BAO_Activity',
       'activity_status_id',
       'Scheduled'
@@ -333,9 +333,9 @@ class CRM_Xcm_Configuration {
    * @return string 'i3val' (see be.aivl.i3val), 'diff' (simple activity) or 'none'
    * @throws Exception
    */
-  public function diffHandler() {
+  public function diffHandler(): string {
     $options = $this->getOptions();
-    $handler = CRM_Utils_Array::value('diff_handler', $options);
+    $handler = $options['diff_handler'] ?? NULL;
     if ($handler == 'i3val' && function_exists('i3val_civicrm_install')) {
       return 'i3val';
     } elseif ($handler == 'diff') {
@@ -350,70 +350,63 @@ class CRM_Xcm_Configuration {
   /**
    * Get default location type
    */
-  public function defaultLocationType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('default_location_type', $options);
+  public function defaultLocationType(): ?int {
+    return $this->getIntOrNull('default_location_type');
   }
 
   /**
    * Get primary phone type
    */
-  public function primaryPhoneType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('primary_phone_type', $options);
+  public function primaryPhoneType(): ?int {
+    return $this->getIntOrNull('primary_phone_type');
   }
 
   /**
    * Get secondary phone type
    */
-  public function secondaryPhoneType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('secondary_phone_type', $options);
+  public function secondaryPhoneType(): ?int {
+    return $this->getIntOrNull('secondary_phone_type');
   }
 
   /**
    * Get tertiary phone type
    */
-  public function tertiaryPhoneType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('tertiary_phone_type', $options);
+  public function tertiaryPhoneType(): ?int {
+    return $this->getIntOrNull('tertiary_phone_type');
   }
 
   /**
    * Get default website type
    */
-  public function defaultWebsiteType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('default_website_type', $options);
+  public function defaultWebsiteType(): ?int {
+    return $this->getIntOrNull('default_website_type');
   }
 
 
   /**
    * Get location type to be used for new addresses
    */
-  public function currentLocationType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_current_location_type', $options);
+  public function currentLocationType(): ?int {
+    return $this->getIntOrNull('diff_current_location_type');
   }
 
   /**
    * Get location type to be used for addresses that are being
    * replaced by new ones
    */
-  public function oldLocationType() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_old_location_type', $options);
+  public function oldLocationType(): ?int {
+    return $this->getIntOrNull('diff_old_location_type');
   }
 
   /**
    * Get generic (landline) phone type
    */
-  public function phoneType() {
+  public function phoneType(): int {
     $options = $this->getOptions();
     if (!empty($options['diff_phone_type'])) {
       return (int) $options['diff_phone_type'];
     } else {
-      return CRM_Core_PseudoConstant::getKey(
+      return (int) CRM_Core_PseudoConstant::getKey(
         'CRM_Core_BAO_Phone',
         'phone_type_id',
         'Phone'
@@ -424,12 +417,12 @@ class CRM_Xcm_Configuration {
   /**
    * Get mobile phone type
    */
-  public function mobileType() {
+  public function mobileType(): int {
     $options = $this->getOptions();
     if (!empty($options['diff_mobile_type'])) {
       return (int) $options['diff_mobile_type'];
     } else {
-      return CRM_Core_PseudoConstant::getKey(
+      return (int) CRM_Core_PseudoConstant::getKey(
         'CRM_Core_BAO_Phone',
         'phone_type_id',
         'Mobile'
@@ -441,12 +434,12 @@ class CRM_Xcm_Configuration {
    * determine the current user ID
    * @see https://github.com/CiviCooP/org.civicoop.apiuidfix
    */
-  public function getCurrentUserID($fallback_id = 2) {
+  public function getCurrentUserID(int $fallback_id = 2): int {
     // try the session first
     $session = CRM_Core_Session::singleton();
     $userId = $session->get('userID');
     if (!empty($userId)) {
-      return $userId;
+      return (int) $userId;
     }
 
     // check via API key, i.e. when coming through REST-API
@@ -462,7 +455,7 @@ class CRM_Xcm_Configuration {
     // If we didn't find a valid user, die
     if (!empty($valid_user)) {
       //now set the UID into the session
-      return $valid_user;
+      return (int) $valid_user;
     }
 
     return $fallback_id;
@@ -512,7 +505,7 @@ class CRM_Xcm_Configuration {
    * @param $status_id
    * @throws Exception
    */
-  public static function injectDiffHelper(&$form, $activity_type_id, $status_id) {
+  public static function injectDiffHelper(&$form, $activity_type_id, $status_id): void {
     try {
       $profile = self::getProfileForDiffActivityHelper($activity_type_id, $status_id);
       if (!$profile) return;
@@ -569,9 +562,9 @@ class CRM_Xcm_Configuration {
   /**
    * See if the enhances (JS) diff processing is enabled
    */
-  public function diffProcessing() {
+  public function diffProcessing(): int {
     $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_processing', $options);
+    return (int) ($options['diff_processing'] ?? NULL);
   }
 
   /**
@@ -579,16 +572,22 @@ class CRM_Xcm_Configuration {
    *
    * @return array
    */
-  public static function diffProcess_warnOnTags() {
-    return array();
+  public static function diffProcess_warnOnTags(): array {
+    return [];
   }
 
   /**
    * Get the activity type ID used for the diff activity
    * If NULL|0|'' the generation is not enabled
    */
-  public function diffActivity() {
-    $options = $this->getOptions();
-    return (int) CRM_Utils_Array::value('diff_activity', $options);
+  public function diffActivity(): ?int {
+    return $this->getIntOrNull('diff_activity');
   }
+
+  private function getIntOrNull(string $optionsKey): ?int {
+    $options = $this->getOptions();
+
+    return is_numeric($options[$optionsKey] ?? NULL) ? (int) $options[$optionsKey] : NULL;
+  }
+
 }
