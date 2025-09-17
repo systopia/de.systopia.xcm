@@ -1082,6 +1082,7 @@ class CRM_Xcm_MatchingEngine {
     // compile udpate request
     $submitted_contact_data['id'] = $current_contact_data['id'];
     $submitted_contact_data['activity_subject'] = $options['diff_activity_subject'];
+    $submitted_contact_data['activity_type_id'] = $options['diff_activity'];
 
     try {
       $result = civicrm_api3('Contact', 'request_update', $submitted_contact_data);
