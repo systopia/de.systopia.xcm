@@ -1290,7 +1290,7 @@ class CRM_Xcm_MatchingEngine {
     $smarty = CRM_Core_Smarty::singleton();
 
     // first backup original variables, since smarty instance is a singleton
-    $oldVars = $smarty->get_template_vars();
+    $oldVars = $smarty->getTemplateVars();
     $backupFrame = array();
     foreach ($vars as $key => $value) {
       $key = str_replace(' ', '_', $key);
