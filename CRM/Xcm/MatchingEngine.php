@@ -25,8 +25,7 @@ class CRM_Xcm_MatchingEngine {
   /** Configuration for this engine */
   protected $config = NULL;
 
-  /** @var bool  */
-  protected $isStreetAddressParsingEnabled = FALSE;
+  protected bool $isStreetAddressParsingEnabled;
 
   /**
    * get the singleton instance of the engine
@@ -1126,7 +1125,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // if there is one address attribute, add all (so the user can later compile a full address)
-    $address_parameters = array('street_address');
+    $address_parameters = ['street_address'];
     if ($this->isStreetAddressParsingEnabled) {
       $address_parameters[] = 'street_name';
       $address_parameters[] = 'street_number';

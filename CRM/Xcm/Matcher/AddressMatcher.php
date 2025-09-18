@@ -21,10 +21,7 @@ abstract class CRM_Xcm_Matcher_AddressMatcher extends CRM_Xcm_MatchingRule {
   protected $required_fields = array('street_address', 'postal_code', 'city');
   protected $additional_fields = NULL;
 
-  /**
-   * @var bool
-   */
-  protected $isStreetAddressParsingEnabled = FALSE;
+  protected bool $isStreetAddressParsingEnabled;
 
   protected function __construct($additional_fields) {
     $this->additional_fields = $additional_fields;
@@ -75,7 +72,9 @@ abstract class CRM_Xcm_Matcher_AddressMatcher extends CRM_Xcm_MatchingRule {
       }
       if (array_key_exists('street_number', $contact_data)) {
         $address_query['street_number'] = $contact_data['street_number'];
-        $address_query['street_number_suffix'] = $contact_data['street_number_suffix'];
+        if (array_key_exists('street_number_suffix', $contact_data)) {
+          $address_query['street_number_suffix'] = $contact_data['street_number_suffix'];
+        }
       }
       if (array_key_exists('street_unit', $contact_data)) {
         $address_query['street_unit'] = $contact_data['street_unit'];
