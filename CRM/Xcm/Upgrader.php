@@ -128,4 +128,36 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Changing fill email and fill phone to If contact has no email of that type or no phone of that type
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0201() {
+    $this->ctx->log->info('Changing fill email and fill phone to If contact has no email of that type or no phone of that type.');
+    $allProfiles = CRM_Xcm_Configuration::getProfileList();
+    foreach ($allProfiles as $profileName => $profileLabel) {
+      $profile = CRM_Xcm_Configuration::getConfigProfile($profileName);
+      if ($profile instanceof CRM_Xcm_Configuration) {
+        $options = $profile->getOptions();
+        if ($options) {
+          // Backwards compatibility change fill details email to fill email.
+          if (empty($options['fill_email']) && ($key = array_search('email', $options['fill_details']))!==false) {
+            $options['fill_email'] = 3;
+            unset($options['fill_details'][$key]);
+          }
+          // Backwards compatibility change fill details phone to fill phone.
+          if (empty($options['fill_phone']) && ($key = array_search('phone', $options['fill_details']))!==false) {
+            $options['fill_phone'] = 3;
+            unset($options['fill_details'][$key]);
+          }
+          $profile->setOptions($options);
+          $profile->store();
+        }
+      }
+    }
+    return TRUE;
+  }
+
 }

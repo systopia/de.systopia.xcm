@@ -131,6 +131,18 @@
     <div class="clear"></div>
   </div>
 
+  <div class="crm-section">
+    <div class="label">{$form.fill_email.label}</div>
+    <div class="content">{$form.fill_email.html}</div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="crm-section">
+    <div class="label">{$form.fill_phone.label}</div>
+    <div class="content">{$form.fill_phone.html}</div>
+    <div class="clear"></div>
+  </div>
+
 </div>
 
 
