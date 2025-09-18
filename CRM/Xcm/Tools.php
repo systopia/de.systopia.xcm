@@ -29,10 +29,20 @@ class CRM_Xcm_Tools {
    * return all address fields
    */
   public static function getAddressFields() {
-    return array(
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
+
+    $addressFields = array(
       'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3',
       'street_address', 'city', 'country_id', 'state_province_id', 'county_id', 'postal_code',
       'is_billing', 'geo_code_1', 'geo_code_2');
+    if ($isStreetAddressParsingEnabled) {
+      $addressFields[] = 'street_name';
+      $addressFields[] = 'street_number';
+      $addressFields[] = 'street_number_suffix';
+      $addressFields[] = 'street_unit';
+    }
+    return $addressFields;
   }
 
   /**
@@ -77,6 +87,10 @@ class CRM_Xcm_Tools {
         'suffix_id' => ts('Suffix'),
         'email' => ts('Email'),
         'street_address' => ts('Street Address'),
+        'street_name' => ts('Street Name'),
+        'street_number' => ts('Street Number'),
+        'street_number_suffix' => ts('Street Number Suffix'),
+        'street_unit' => ts('Street Unit'),
         'city' => ts('City'),
         'country_id' => ts('Country'),
         'state_province_id' => ts('State/Province'),
