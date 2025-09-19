@@ -18,7 +18,7 @@
   <version>1.15.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.38</ver>
+    <ver>5.65</ver>
   </compatibility>
   <comments/>
   <classloader>

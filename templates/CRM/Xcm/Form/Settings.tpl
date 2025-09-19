@@ -37,43 +37,43 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.input_sanitation.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Input Sanitation{/ts}", {literal}{"id":"id-input-sanitation","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.input_sanitation.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Input Sanitation{/ts}", {literal}{"id":"id-input-sanitation","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.input_sanitation.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.case_insensitive.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Case Sensitivity{/ts}", {literal}{"id":"id-case-sensitive","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.case_insensitive.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Case Sensitivity{/ts}", {literal}{"id":"id-case-sensitive","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.case_insensitive.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.default_location_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Location Type{/ts}", {literal}{"id":"id-location-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.default_location_type.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Location Type{/ts}", {literal}{"id":"id-location-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.default_location_type.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.primary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Primary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.primary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Primary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.primary_phone_type.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.secondary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Secondary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.secondary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Secondary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.secondary_phone_type.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.tertiary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Tertiary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.tertiary_phone_type.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Tertiary Phone Type{/ts}", {literal}{"id":"id-phone-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.tertiary_phone_type.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.default_website_type.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Default Website Type{/ts}", {literal}{"id":"id-website-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.default_website_type.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Default Website Type{/ts}", {literal}{"id":"id-website-type","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.default_website_type.html}</div>
     <div class="clear"></div>
   </div>
@@ -81,7 +81,7 @@
 </div>
 
 <div>
-  <h3>{ts domain="de.systopia.xcm"}Update Options - Danger!{/ts} <a onclick='CRM.help("{ts domain="de.systopia.xcm"}Update Data{/ts}", {literal}{"id":"id-update","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></h3>
+  <h3>{ts domain="de.systopia.xcm"}Update Options - Danger!{/ts} <a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Update Data{/ts}", {literal}{"id":"id-update","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></h3>
 
   <div class="crm-section">
     <div class="label">{$form.override_fields.label}</div>
@@ -90,13 +90,13 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.override_details.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.override_details.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.override_details.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.override_details_primary.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.override_details_primary.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Override Details{/ts}", {literal}{"id":"id-override-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.override_details_primary.html}</div>
     <div class="clear"></div>
   </div>
@@ -108,19 +108,19 @@
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.fill_fields_multivalue.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill multi-value field values{/ts}", {literal}{"id":"id-fill-fields-multivalue","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.fill_fields_multivalue.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Fill multi-value field values{/ts}", {literal}{"id":"id-fill-fields-multivalue","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.fill_fields_multivalue.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.fill_details.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.fill_details.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.fill_details.html}</div>
     <div class="clear"></div>
   </div>
 
   <div class="crm-section">
-    <div class="label">{$form.fill_details_primary.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.fill_details_primary.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Fill Details{/ts}", {literal}{"id":"id-fill-details-primary","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.fill_details_primary.html}</div>
     <div class="clear"></div>
   </div>
@@ -137,7 +137,7 @@
 <div>
   <h3>{ts domain="de.systopia.xcm"}Matching Rules{/ts}</h3>
   <div class="crm-section">
-    <div class="label">{$form.match_contact_id.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Match contact ID{/ts}", {literal}{"id":"id-match-contact-id","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.match_contact_id.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Match contact ID{/ts}", {literal}{"id":"id-match-contact-id","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.match_contact_id.html}</div>
     <div class="clear"></div>
   </div>
@@ -233,7 +233,7 @@
 <div>
   <h3>{ts domain="de.systopia.xcm"}Difference Handling{/ts}</h3>
   <div class="crm-section">
-    <div class="label">{$form.diff_handler.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.xcm"}Data Changed Activity{/ts}", {literal}{"id":"id-diff-activity","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+    <div class="label">{$form.diff_handler.label}&nbsp;<a onclick='CRM.help("{ts escape='htmlattribute' domain="de.systopia.xcm"}Data Changed Activity{/ts}", {literal}{"id":"id-diff-activity","file":"CRM\/Xcm\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts escape='htmlattribute' domain="de.systopia.xcm"}Help{/ts}" class="helpicon">&nbsp;</a></div>
     <div class="content">{$form.diff_handler.html}</div>
     <div class="clear"></div>
   </div>
