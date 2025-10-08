@@ -25,17 +25,11 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
   public function buildQuickForm() {
     $config = CRM_Core_Config::singleton();
 
-    $uploadFileSize = CRM_Utils_Number::formatUnitSize(
-      $config->maxFileSize . 'm',
-      TRUE
-    );
+    $uploadFileSize = ini_parse_quantity($config->maxFileSize . 'm');
     // Fetch uploadFileSize from php_ini when $config->maxFileSize is set to
     // "no limit".
     if (empty($uploadFileSize)) {
-      $uploadFileSize = CRM_Utils_Number::formatUnitSize(
-        ini_get('upload_max_filesize'),
-        TRUE
-      );
+      $uploadFileSize = ini_parse_quantity(ini_get('upload_max_filesize'));
     }
     $uploadSize = round(($uploadFileSize / (1024 * 1024)), 2);
     $this->assign('uploadSize', $uploadSize);
