@@ -9,6 +9,7 @@ parameters:
 	excludePaths:
 		analyse:
 			- CRM/Xcm/DAO/*
+			- CRM/Xcm/CustomData.php
 			- tests/phpunit/bootstrap.php
 	scanFiles:
 		- xcm.civix.php

@@ -119,7 +119,7 @@ class CRM_Xcm_Tools {
           'value' => $config->primaryPhoneType(),
         ]);
       }
-      catch (CiviCRM_API3_Exception $e) {
+      catch (CRM_Core_Exception $e) {
         $data['phone'] = ts('Phone');
       }
       if ($config->secondaryPhoneType()) {
@@ -130,7 +130,7 @@ class CRM_Xcm_Tools {
             'value' => $config->secondaryPhoneType(),
           ]);
         }
-        catch (CiviCRM_API3_Exception $e) {
+        catch (CRM_Core_Exception $e) {
           $data['phone2'] = ts('Phone 2');
         }
       }
@@ -142,7 +142,7 @@ class CRM_Xcm_Tools {
             'value' => $config->tertiaryPhoneType(),
           ]);
         }
-        catch (CiviCRM_API3_Exception $e) {
+        catch (CRM_Core_Exception $e) {
           $data['phone3'] = ts('Phone 3');
         }
       }

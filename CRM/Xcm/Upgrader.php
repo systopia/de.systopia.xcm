@@ -59,14 +59,20 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
       ];
 
       // save and reset the others
-      CRM_Core_BAO_Setting::setItem($profiles, 'de.systopia.xcm', 'xcm_config_profiles');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'xcm_options');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'rules');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'postprocessing');
+      Civi::settings()->set('xcm_config_profiles', $profiles);
+      Civi::settings()->set('xcm_options', NULL);
+      Civi::settings()->set('rules', NULL);
+      Civi::settings()->set('postprocessing', NULL);
     }
 
     // also: rebuild menu
-    CRM_Core_Invoke::rebuildMenuAndCaches();
+    if (version_compare(CRM_Utils_System::version(), '6.1.0', '>=')) {
+      Civi::rebuild('*')->execute();
+    }
+    else {
+      // @phpstan-ignore staticMethod.deprecated
+      CRM_Core_Invoke::rebuildMenuAndCaches();
+    }
 
     return TRUE;
   }

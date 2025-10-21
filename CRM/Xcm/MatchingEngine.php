@@ -597,8 +597,8 @@ class CRM_Xcm_MatchingEngine {
     if (empty($status_id)) {
       $status_id = $this->config->defaultActivityStatus();
     }
-    if ($campaign == 'input') {
-      $campaign = CRM_Utils_Array::value('campaign_id', $contact_data);
+    if ('input' === $campaign) {
+      $campaign = $contact_data['campaign_id'] ?? NULL;
     }
 
     $activity_data = [
@@ -704,7 +704,7 @@ class CRM_Xcm_MatchingEngine {
    *  Mark the phone as primary
    * @param $data_update
    *  The current contact data
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   protected function addPhoneToContact($contact_id,
     &$data,
@@ -822,7 +822,7 @@ class CRM_Xcm_MatchingEngine {
         ]);
         $contact['phone2'] = $phone;
       }
-      catch (CiviCRM_API3_Exception $e) {
+      catch (CRM_Core_Exception $e) {
         // Do nothing
       }
     }
@@ -836,7 +836,7 @@ class CRM_Xcm_MatchingEngine {
         ]);
         $contact['phone3'] = $phone;
       }
-      catch (CiviCRM_API3_Exception $e) {
+      catch (CRM_Core_Exception $e) {
         // Do nothing
       }
     }
@@ -931,9 +931,9 @@ class CRM_Xcm_MatchingEngine {
     $update_query = [];
     foreach ($fields as $key) {
       if (isset($submitted_contact_data[$key])) {
-        $current_value = CRM_Utils_Array::value($key, $current_contact_data);
+        $current_value = $current_contact_data[$key] ?? NULL;
         if ($current_value != $submitted_contact_data[$key]) {
-          $update_query[$key]         = $submitted_contact_data[$key];
+          $update_query[$key] = $submitted_contact_data[$key];
           $current_contact_data[$key] = $submitted_contact_data[$key];
         }
       }
@@ -1023,8 +1023,8 @@ class CRM_Xcm_MatchingEngine {
     // find current entries and replace the first match
     try {
       $options = $this->config->getOptions();
-      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
-      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      $case_insensitive = $options['case_insensitive'] ?? NULL;
+      $override_details_primary = $options['override_details_primary'] ?? NULL;
       if (empty($submitted_contact_data['location_type_id'])) {
         $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
       }
@@ -1097,8 +1097,8 @@ class CRM_Xcm_MatchingEngine {
     // find current entries and replace the first match
     try {
       $options = $this->config->getOptions();
-      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
-      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      $case_insensitive = $options['case_insensitive'] ?? NULL;
+      $override_details_primary = $options['override_details_primary'] ?? NULL;
       if (empty($submitted_contact_data['location_type_id'])) {
         $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
       }
@@ -1172,7 +1172,7 @@ class CRM_Xcm_MatchingEngine {
    * @return bool
    *   Whether the given field accepts multiple values.
    *
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    *   When an error occurred retrieving a custom field.
    */
   public static function fieldIsMultivalue($key) {
@@ -1258,7 +1258,7 @@ class CRM_Xcm_MatchingEngine {
   protected function createDiffActivity($contact, $options, $subject, &$contact_data, $location_type_id) {
   // phpcs:enable
     $options = $this->config->getOptions();
-    $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
+    $case_insensitive = $options['case_insensitive'] ?? NULL;
 
     // look up some id fields
     CRM_Xcm_DataNormaliser::labelData($contact);
@@ -1363,8 +1363,8 @@ class CRM_Xcm_MatchingEngine {
           : $this->config->defaultActivityStatus(),
         'activity_date_time' => date('YmdHis'),
         'target_contact_id' => (int) $contact['id'],
-        'source_contact_id' => $this->config->getCurrentUserID($contact['id']),
-        'campaign_id' => CRM_Utils_Array::value('campaign_id', $contact_data),
+        'source_contact_id' => $this->config->getCurrentUserID((int) $contact['id']),
+        'campaign_id' => $contact_data['campaign_id'] ?? NULL,
         'details' => $this->renderTemplate('activity/diff.tpl', $data),
       ];
       // phpcs:enable
@@ -1404,8 +1404,8 @@ class CRM_Xcm_MatchingEngine {
   // phpcs:enable
     foreach ($data_attributes as $data_attribute) {
       // let's find out if data differs for this particular attribute
-      $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
-      $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+      $original_value = $original_values[$data_attribute] ?? '';
+      $submitted_value = $submitted_values[$data_attribute] ?? '';
 
       // mitigate api quirk: sometimes a single value is returned as a 1-array
       if (is_array($original_value) && count($original_value) == 1 && is_string($submitted_value)) {

@@ -24,7 +24,7 @@ declare(strict_types = 1);
  * @throws Exception
  */
 function civicrm_api3_contact_getorcreate($params) {
-  $profile = CRM_Utils_Array::value('xcm_profile', $params, NULL);
+  $profile = $params['xcm_profile'] ?? NULL;
   $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->getOrCreateContact($params);
 

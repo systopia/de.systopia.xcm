@@ -57,7 +57,7 @@ function _civicrm_api3_contact_Createifnotexists_spec(&$spec) {
  * @throws Exception
  */
 function civicrm_api3_contact_Createifnotexists($params) {
-  $profile = CRM_Utils_Array::value('xcm_profile', $params, NULL);
+  $profile = $params['xcm_profile'] ?? NULL;
   $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->createIfNotExists($params);
 

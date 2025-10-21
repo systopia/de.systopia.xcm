@@ -115,7 +115,7 @@ class CRM_Xcm_DataSanitiser {
    * @return array of options
    */
   public static function getSetting($config) {
-    $sanitiser_setting = CRM_Utils_Array::value('input_sanitation', $config, '');
+    $sanitiser_setting = $config['input_sanitation'] ?? '';
     if (!is_array($sanitiser_setting)) {
       $sanitiser_setting = [$sanitiser_setting];
     }

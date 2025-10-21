@@ -25,10 +25,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Implements hook_civicrm_container().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
-function xcm_civicrm_container(ContainerBuilder $container) {
+function xcm_civicrm_container(ContainerBuilder $container): void {
   if (class_exists('Civi\Xcm\ContainerSpecs')) {
     $container->addCompilerPass(new Civi\Xcm\ContainerSpecs());
   }
@@ -36,10 +34,8 @@ function xcm_civicrm_container(ContainerBuilder $container) {
 
 /**
  * Implements hook_civicrm_config().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
-function xcm_civicrm_config(&$config) {
+function xcm_civicrm_config(\CRM_Core_Config &$config): void {
   _xcm_civix_civicrm_config($config);
 }
 
@@ -48,7 +44,7 @@ function xcm_civicrm_config(&$config) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
-function xcm_civicrm_install() {
+function xcm_civicrm_install(): void {
   _xcm_civix_civicrm_install();
 }
 
@@ -57,7 +53,7 @@ function xcm_civicrm_install() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
-function xcm_civicrm_enable() {
+function xcm_civicrm_enable(): void {
   _xcm_civix_civicrm_enable();
 
   require_once 'CRM/Xcm/CustomData.php';
@@ -68,31 +64,25 @@ function xcm_civicrm_enable() {
 /**
  * Implements hook_civicrm_buildForm().
  */
-function xcm_civicrm_buildForm($formName, &$form) {
+function xcm_civicrm_buildForm(string $formName, \CRM_Core_Form &$form): void {
   // Inject modification tpl snippets, where required
-  if ($formName == 'CRM_Activity_Form_Activity'
-        && CRM_Core_Permission::check('edit all contacts')) {
-
+  if ('CRM_Activity_Form_Activity' === $formName && CRM_Core_Permission::check('edit all contacts')) {
+    /** @var \CRM_Activity_Form_Activity $form */
     // not required if we are deleting!
-    if ($form->_action != CRM_Core_Action::DELETE) {
-      try {
-        // check if status_id field exists. $form->getElement triggers an error
-        // otherwise (doesn't throw an exception!)
-        if (!$form->elementExists('status_id')) {
-          return;
-        }
-        // look up activity type id and status_id
-        $elem_status_id           = $form->getElement('status_id');
-        $current_status_value     = $elem_status_id->getValue();
-        $current_status_id        = $current_status_value[0];
-        $current_activity_type_id = $form->getVar('_activityTypeId');
-      }
-      catch (Exception $e) {
-        // something went wrong there, but that probably means it's not our form...
+    if (CRM_Core_Action::DELETE !== $form->_action) {
+      // check if status_id field exists. $form->getElement triggers an error
+      // otherwise (doesn't throw an exception!)
+      if (!$form->elementExists('status_id')) {
         return;
       }
+      // look up activity type id and status_id
+      $elem_status_id = $form->getElement('status_id');
+      /** @phpstan-var array<int, mixed> $current_status_value */
+      $current_status_value = $elem_status_id->getValue();
+      $current_status_id = $current_status_value[0];
+      $current_activity_type_id = $form->_activityTypeId;
 
-      CRM_Xcm_Configuration::injectDiffHelper($form, $current_activity_type_id, $current_status_id);
+      \CRM_Xcm_Configuration::injectDiffHelper($form, $current_activity_type_id, $current_status_id);
     }
   }
 }
@@ -100,13 +90,16 @@ function xcm_civicrm_buildForm($formName, &$form) {
 /**
  * Implements hook_civicrm_navigationMenu().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ * @phpstan-param array<string, array<string, mixed>> $menu
  */
-function xcm_civicrm_navigationMenu(&$menu) {
+function xcm_civicrm_navigationMenu(array &$menu): void {
   // ADD 'Import Contacts' item (if it doesn't exist elsewhere)
-  $menu_item_search = ['name' => 'Import Contacts'];
   $menu_items = [];
-  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+  $parentMenuItem = \Civi\Api4\Navigation::get(FALSE)
+    ->addSelect('weight')
+    ->addWhere('name', '=', 'Import Contacts')
+    ->execute()
+    ->single();
   _xcm_civix_insert_navigation_menu($menu, 'Contacts', [
     'label' => E::ts('Import contacts (XCM)'),
     'name' => 'Import contacts (XCM)',
@@ -115,7 +108,7 @@ function xcm_civicrm_navigationMenu(&$menu) {
     'operator' => 'OR',
     'separator' => 0,
     // See https://github.com/civicrm/civicrm-core/pull/11772 for weight.
-    'weight' => $menu_items['weight'] + 1,
+    'weight' => $parentMenuItem['weight'] + 1,
   ]);
 
   // Note: "Configure XCM" in "Automation" sub-menu is being taken care of by
@@ -127,19 +120,19 @@ function xcm_civicrm_navigationMenu(&$menu) {
  * Checks whether a navigation menu item exists.
  *  (copied from form processor, code by Jaap)
  *
- * @param array $menu - menu hierarchy
+ * @phpstan-param array<string, array<string, mixed>> $menu
  * @param string $path - path to parent of this item, e.g. 'my_extension/submenu'
  *    'Mailing', or 'Administer/System Settings'
  * @return bool
  */
-function _xcm_menu_exists(&$menu, $path) {
+function _xcm_menu_exists(array &$menu, string $path): bool {
   // Find an recurse into the next level down
   $found = FALSE;
   $path = explode('/', $path);
   $first = array_shift($path);
   foreach ($menu as $key => &$entry) {
-    if ($entry['attributes']['name'] == $first) {
-      if (empty($path)) {
+    if ($entry['attributes']['name'] === $first) {
+      if ([] === $path) {
         return TRUE;
       }
       $found = _xcm_menu_exists($entry['child'], implode('/', $path));

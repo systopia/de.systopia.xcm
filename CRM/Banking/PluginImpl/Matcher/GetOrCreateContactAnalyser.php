@@ -15,7 +15,7 @@
 
 declare(strict_types = 1);
 
-use CRM_XCM_ExtensionUtil as E;
+use CRM_Xcm_ExtensionUtil as E;
 
 /**
  * This analyser will use the XCM's facilities to get or create a contact based on the contact
@@ -134,9 +134,9 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     $this->logMessage('Contact identified by XCM: ' . $contact_id, 'debug');
 
     // step 4: apply contact ID
-    if ($contact_id) {
+    if (is_int($contact_id)) {
       $data_parsed = $btx->getDataParsed();
-      if (!isset($data_parsed[$config->output_field]) || $data_parsed[$config->output_field] != $contact_id) {
+      if (!isset($data_parsed[$config->output_field]) || (int) $data_parsed[$config->output_field] !== $contact_id) {
         $data_parsed[$config->output_field] = $contact_id;
         $btx->setDataParsed($data_parsed);
         $this->logMessage("Update field {$config->output_field} with: " . $contact_id, 'debug');
@@ -170,7 +170,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
       $xcm_result = civicrm_api3('Contact', 'getorcreate', $xcm_values);
       return $xcm_result['id'];
     }
-    catch (CiviCRM_API3_Exception $ex) {
+    catch (CRM_Core_Exception $ex) {
       $this->logMessage(
         'XCM call failed with ' . $ex->getMessage() . ' Parameters were: ' . json_encode($xcm_values),
         'error'
@@ -319,9 +319,9 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
         $last_names = [];
 
         // If the name contains a comma, we assume that the name is in the format "Lastname, Firstname"
-        if (in_array(',', $name_bits)) {
-          $last_names += array_slice($name_bits, 0, array_search(',', $name_bits));
-          $first_names += array_slice($name_bits, array_search(',', $name_bits) + 1);
+        if (in_array(',', $name_bits, TRUE)) {
+          $last_names += array_slice($name_bits, 0, array_search(',', $name_bits, TRUE));
+          $first_names += array_slice($name_bits, array_search(',', $name_bits, TRUE) + 1);
         }
         // Otherwise, we assume that the name is in the format "Firstname Lastname"
         else {

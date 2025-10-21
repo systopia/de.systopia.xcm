@@ -39,12 +39,15 @@ class ContactGetOrCreate extends AbstractAction {
    * @return \Civi\ActionProvider\Parameter\SpecificationBag specs
    */
   public function getConfigurationSpecification() {
+    /** @phpstan-var array{values: list<array{name: string, label: string}>} $contactSubTypesApi */
     $contactSubTypesApi = civicrm_api3('ContactType', 'get', ['options' => ['limit' => 0]]);
+    $contact_types = [];
     foreach ($contactSubTypesApi['values'] as $contactSubType) {
       $contact_types[$contactSubType['name']] = E::ts($contactSubType['label']);
     }
 
     $profiles = \CRM_Xcm_Configuration::getProfileList();
+    $configuration = [];
     $configuration[] = new Specification(
       'xcm_profile',
       'String',
@@ -230,28 +233,10 @@ class ContactGetOrCreate extends AbstractAction {
   }
 
   /**
-   * Method to check if the version of the Action Provider is 1.18 or later
-   *
-   * @return bool
-   */
-  private function isActionProvider181() {
-    $fileName = \Civi::paths()->getPath('[civicrm.files]/ext') . '/action-provider/info.xml';
-    if (file_exists($fileName)) {
-      $infoXml = simplexml_load_file($fileName);
-      if ($infoXml) {
-        if ($infoXml->version >= 1.81) {
-          return TRUE;
-        }
-      }
-    }
-    return FALSE;
-  }
-
-  /**
    * Returns the custom fields as a Specification array.
    *
    * @return array
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   private static function getCustomFields() {
     $specs = [];
@@ -316,7 +301,7 @@ class ContactGetOrCreate extends AbstractAction {
   // phpcs:enable
     $apiParams = [];
     foreach ($this->getParameterSpecification() as $spec) {
-      if ($parameters->doesParameterExists($spec->getName())) {
+      if ($parameters->parameterExists($spec->getName())) {
         if ($spec->getApiFieldName()) {
           $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
         }
@@ -324,7 +309,7 @@ class ContactGetOrCreate extends AbstractAction {
           $apiParams[$spec->getName()] = $parameters->getParameter($spec->getName());
         }
       }
-      elseif ($spec->getApiFieldName() && $parameters->doesParameterExists($spec->getApiFieldName())) {
+      elseif ($spec->getApiFieldName() && $parameters->parameterExists($spec->getApiFieldName())) {
         // Use above statement so that custom_1 still works.
         $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getApiFieldName());
       }

@@ -131,7 +131,7 @@ abstract class CRM_Xcm_MatchingRule {
       );
     }
 
-    $picker = CRM_Utils_Array::value('picker', $options, 'min');
+    $picker = $options['picker'] ?? 'min';
     switch ($picker) {
       case 'none':
         return NULL;

@@ -85,7 +85,7 @@ class CRM_Xcm_Configuration {
       if (empty($profile_name)) {
         $all_profile_name = array_keys($all_profiles);
         $profile_name = reset($all_profile_name);
-        $this->setDefaultProfile($profile_name);
+        self::setDefaultProfile($profile_name);
       }
     }
     $this->profile_name = $profile_name;
@@ -100,7 +100,7 @@ class CRM_Xcm_Configuration {
       return $all_profiles[$this->profile_name];
     }
     else {
-      throw new Exception("Profile '{$this->profile_name}' unknown!");
+      throw new \RuntimeException("Profile '{$this->profile_name}' unknown!");
     }
   }
 
@@ -155,7 +155,7 @@ class CRM_Xcm_Configuration {
       }
     }
     else {
-      throw new Exception("Profile '{$default_profile_name}' unknown!");
+      throw new \RuntimeException("Profile '{$default_profile_name}' unknown!");
     }
     self::storeAllProfiles();
   }
@@ -169,7 +169,7 @@ class CRM_Xcm_Configuration {
   public function cloneProfile($new_profile_name) {
     $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$new_profile_name])) {
-      throw new Exception("Profile '{$new_profile_name}' already exists!");
+      throw new \RuntimeException("Profile '{$new_profile_name}' already exists!");
     }
 
     // simply store a copy of the data
@@ -215,7 +215,7 @@ class CRM_Xcm_Configuration {
       $config[$setting_name] = $settings;
     }
     else {
-      throw new Exception('ConfigGroup has to be an array.');
+      throw new \RuntimeException('ConfigGroup has to be an array.');
     }
   }
 
@@ -457,7 +457,7 @@ class CRM_Xcm_Configuration {
     // check via API key, i.e. when coming through REST-API
     $null = NULL;
     $api_key = CRM_Utils_Request::retrieve('api_key', 'String', $null, FALSE, NULL, 'REQUEST');
-    if (!$api_key || strtolower($api_key) == 'null') {
+    if (!isset($api_key) || '' === $api_key || strtolower($api_key) == 'null') {
       // nothing we can do
       return $fallback_id;
     }
@@ -525,9 +525,10 @@ class CRM_Xcm_Configuration {
       if (!empty($warnOnTags)) {
         $contact_id = $form->getVar('_currentlyViewedContactId');
         if ($contact_id) {
+          /** @phpstan-var array<int, string> $tags */
           $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
           foreach ($warnOnTags as $tagName) {
-            if (in_array($tagName, $tags)) {
+            if (in_array($tagName, $tags, TRUE)) {
               CRM_Core_Session::setStatus(
                   E::ts("Warning! This contact is tagged '%1'.", [1 => $tagName]),
                   E::ts('Warning'), 'warning');
@@ -549,11 +550,11 @@ class CRM_Xcm_Configuration {
       $constants['phone_type_mobile_value']       = $profile->mobileType();
 
       // add prefix_ids
-      $constants['prefix_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'prefix_id');
+      $constants['prefix_ids'] = Civi::entity('Contact')->getOptions('prefix_id');
       $constants['prefix_names'] = array_flip($constants['prefix_ids']);
 
       // add gender_ids
-      $constants['gender_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
+      $constants['gender_ids'] = Civi::entity('Contact')->getOptions('gender_id');
       $constants['gender_names'] = array_flip($constants['gender_ids']);
 
       // add countries
@@ -568,6 +569,7 @@ class CRM_Xcm_Configuration {
     }
     catch (Exception $ex) {
       Civi::log()->debug('DiffHelper injection failed: ' . $ex->getMessage());
+      // @ignoreException
     }
   }
 
