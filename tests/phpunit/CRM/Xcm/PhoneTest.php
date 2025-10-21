@@ -16,7 +16,6 @@
 declare(strict_types = 1);
 
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
@@ -26,7 +25,7 @@ use Civi\Test\TransactionalInterface;
  * @coversNothing
  *  TODO: Document actual coverage.
  */
-class CRM_Xcm_PhoneTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_Xcm_PhoneTest extends CRM_Xcm_TestBase implements HeadlessInterface, TransactionalInterface {
 
   public function testPhoneNumeric() {
     // set up our test scenario

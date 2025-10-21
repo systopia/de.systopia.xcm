@@ -17,7 +17,6 @@ declare(strict_types = 1);
 
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
@@ -30,7 +29,7 @@ use Civi\Test\TransactionalInterface;
  *  TODO: Document actual coverage.
  */
 // phpcs:disable Generic.Files.LineLength.TooLong
-class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterface, TransactionalInterface {
 // phpcs:enable
 
   /**

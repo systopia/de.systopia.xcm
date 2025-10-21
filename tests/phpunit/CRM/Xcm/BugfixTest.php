@@ -17,7 +17,6 @@ declare(strict_types = 1);
 
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
@@ -29,7 +28,7 @@ use Civi\Test\TransactionalInterface;
  * @coversNothing
  * TODO: Document actual coverage.
  */
-class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, TransactionalInterface {
 
   /**
    * Test bug#36: the location type is ignored for new

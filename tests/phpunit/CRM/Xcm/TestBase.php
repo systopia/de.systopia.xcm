@@ -17,14 +17,13 @@ declare(strict_types = 1);
 
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
  * This class adds some base functions for PHP unit tests for the XCM
  */
 // phpcs:disable Generic.Files.LineLength.TooLong, Generic.NamingConventions.AbstractClassNamePrefix.Missing
-abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, TransactionalInterface {
 // phpcs:enable
 
   protected static $counter = 0;
