@@ -1,0 +1,3287 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property object\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$output_field\.$#'
+			identifier: property.notFound
+			count: 4
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Call to an undefined method object\:\:fetch\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Cannot call method setTimer\(\) on CRM_Banking_Helpers_Logger\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 2
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:__construct\(\) has parameter \$config_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:analyse\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyMapping\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyMapping\(\) has parameter \$mapping with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyMapping\(\) has parameter \$xcm_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyNameExtraction\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyNameExtraction\(\) has parameter \$name_mode with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyNameExtraction\(\) has parameter \$xcm_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyNormalisation\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:applyNormalisation\(\) has parameter \$xcm_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:contactAlreadyIdentified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:isDBFirstName\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:isDBFirstName\(\) has parameter \$name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:isNameBlacklisted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:isNameBlacklisted\(\) has parameter \$blacklist1 with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:isNameBlacklisted\(\) has parameter \$blacklist2 with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:registerModule\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:runXCM\(\) has parameter \$xcm_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Method CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser\:\:runXCM\(\) should return int but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, array\|int given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, string\|null given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Only numeric types are allowed in \+, int\<0, max\>\|false given on the left side\.$#'
+			identifier: plus.leftNonNumeric
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_reverse expects array, list\<string\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, ''trim'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, list\<string\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Parameter \#3 \$length of function array_slice expects int\|null, int\<0, max\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 10
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Implicit array creation is not allowed \- variable \$constants does not exist\.$#'
+			identifier: variable.implicitArray
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 7
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:cloneProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:cloneProfile\(\) has parameter \$new_profile_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:deleteProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:diffProcess_warnOnTags\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:flushProfileCache\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getAllProfiles\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getConfigGroup\(\) has parameter \$setting_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getConfigGroup\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getConfiguration\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getOptions\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getPostprocessing\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getProfileForDiffActivityHelper\(\) has parameter \$activity_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getProfileForDiffActivityHelper\(\) has parameter \$status_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getProfileList\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:getRules\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:injectDiffHelper\(\) has parameter \$activity_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:injectDiffHelper\(\) has parameter \$form with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:injectDiffHelper\(\) has parameter \$status_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setConfigGroup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setConfigGroup\(\) has parameter \$setting_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setConfigGroup\(\) has parameter \$settings with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setDefaultProfile\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setDefaultProfile\(\) has parameter \$default_profile_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setLabel\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setLabel\(\) has parameter \$label with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setOptions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setOptions\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setPostprocessing\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setPostprocessing\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setRules\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:setRules\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Method CRM_Xcm_Configuration\:\:storeAllProfiles\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, CRM_Xcm_Configuration\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_flip expects array\<int\|string\>, array\|null given\.$#'
+			identifier: argument.type
+			count: 3
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strtolower expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Parameter \#2 \$searchValue of static method CRM_Core_DAO\:\:getFieldValue\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Property CRM_Xcm_Configuration\:\:\$_all_profiles has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Property CRM_Xcm_Configuration\:\:\$profile_name has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Configuration.php
+
+		-
+			message: '#^Call to function method_exists\(\) with ''CRM_Utils_Normalize'' and ''normalize_phone'' will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Call to method normalize_phone\(\) on an unknown class CRM_Utils_Normalize\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Cannot access offset ''count'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 6
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Instantiated class CRM_Utils_Normalize not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 3
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:getFieldTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:getFieldnameMap\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:labelData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:labelData\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupID\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupID\(\) has parameter \$fieldname with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupID\(\) has parameter \$fieldtype with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupID\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupLabel\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupLabel\(\) has parameter \$fieldname with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupLabel\(\) has parameter \$fieldtype with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:lookupLabel\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:normaliseData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:normaliseData\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:normaliseFieldnames\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:normaliseFieldnames\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:normaliseFieldnames\(\) has parameter \$strip_wrong_fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:resolveData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataNormaliser\:\:resolveData\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Property CRM_Xcm_DataNormaliser\:\:\$_id2value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Property CRM_Xcm_DataNormaliser\:\:\$_value2id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/DataNormaliser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:getDataSanitationOptions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:getSetting\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:getSetting\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:sanitise\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:sanitise\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:sanitiseString\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Method CRM_Xcm_DataSanitiser\:\:sanitiseString\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function preg_replace expects array\<float\|int\|string\>\|string, string\|null given\.$#'
+			identifier: argument.type
+			count: 3
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Parameter &\$string by\-ref type of method CRM_Xcm_DataSanitiser\:\:sanitiseString\(\) expects string, string\|null given\.$#'
+			identifier: parameterByRef.type
+			count: 3
+			path: CRM/Xcm/DataSanitiser.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Cannot access offset ''is_error'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Cannot access offset int\<0, max\> on non\-empty\-list\<string\|null\>\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Class HTML_QuickForm_element referenced with incorrect case\: HTML_QuickForm_Element\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Do not throw the \\Exception base class\.$#'
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Condition between '','' and ''\\\\t'' are falsy, please do not mix types\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Condition between '','' and ''tab'' are falsy, please do not mix types\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Condition between ''\\\\t'' and '','' are falsy, please do not mix types\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Condition between ''tab'' and '','' are falsy, please do not mix types\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Insane comparison between '','' and ''\\\\t''\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Insane comparison between '','' and ''tab''\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Insane comparison between ''\\\\t'' and '',''\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Equal\: Insane comparison between ''tab'' and '',''\.$#'
+			identifier: voku.Equal
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^In method "CRM_Xcm_Form_Import\:\:postProcess", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 4
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Import\:\:buildQuickForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Import\:\:getRenderableElementNames\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Import\:\:postProcess\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, resource\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(string\|null\)\: mixed\)\|null, ''mb_strtolower''\|''strtolower'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#1 \$keys of function array_combine expects array\<int\|string\>, list\<string\|null\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#1 \$shorthand of function ini_parse_quantity expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#2 \$array of function array_map expects array, list\<string\|null\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array, list\<string\|null\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#4 \$attributes of method CRM_Core_Form\:\:add\(\) expects array\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#4 \$format of method HTML_QuickForm\:\:addRule\(\) expects string\|null, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 12
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 4
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:buildQuickForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getActivities\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getActivities\(\) has parameter \$none_option with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getActivityStatuses\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getCampaigns\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getContactFields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getCustomFields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getDiffHandlers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getGroups\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getLocationTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getPhoneTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getPickers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getRuleOptions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getRuleOptions\(\) has parameter \$i with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getTags\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getTemplates\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:getWebsiteTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:postProcess\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Method CRM_Xcm_Form_Settings\:\:setDefaultValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, int\|false given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 3
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Parameter \#1 \$profile_name of static method CRM_Xcm_Configuration\:\:getConfigProfile\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Property CRM_Xcm_Form_Settings\:\:\$config has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Form/Settings.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 5
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:__construct\(\) has parameter \$additional_fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_AddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_AddressMatcher\:\:\$additional_fields has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_AddressMatcher\:\:\$required_fields has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/AddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_DedupeRule\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/DedupeRule.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_DedupeRule\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/DedupeRule.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_DedupeRule\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/DedupeRule.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 2
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_EmailMatcher\:\:__construct\(\) has parameter \$other_contact_fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_EmailMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_EmailMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_EmailMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_EmailMatcher\:\:\$other_contact_fields has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_EmailMatcher\:\:\$restrictions has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/EmailMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_FirstNameAddressMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/FirstNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_FirstNameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/FirstNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_FirstNameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/FirstNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanBirthdayMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/IbanBirthdayMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanBirthdayMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanBirthdayMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanBirthdayMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanBirthdayMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanFirstNameMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/IbanFirstNameMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanFirstNameMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanFirstNameMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanFirstNameMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanFirstNameMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanLastNameMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/IbanLastNameMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanLastNameMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanLastNameMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanLastNameMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanLastNameMatcher.php
+
+		-
+			message: '#^Cannot access offset ''count'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Empty catch block\.$#'
+			count: 2
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^In method "CRM_Xcm_Matcher_IbanMatcher\:\:matchContact", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 2
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:__construct\(\) has parameter \$attributes with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_IbanMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_IbanMatcher\:\:\$attributes type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/IbanMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_LastNameAddressMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/LastNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_LastNameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/LastNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_LastNameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/LastNameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_NameAddressMatcher\:\:refineContactQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/NameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_NameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/NameAddressMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_NameAddressMatcher\:\:refineContactQuery\(\) has parameter \$contact_query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/NameAddressMatcher.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 2
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_PhoneMatcher\:\:__construct\(\) has parameter \$other_contact_fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_PhoneMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_PhoneMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_PhoneMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_PhoneMatcher\:\:\$other_contact_fields has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_PhoneMatcher\:\:\$restrictions has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/PhoneMatcher.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:__construct\(\) has parameter \$attribute with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:__construct\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:__construct\(\) has parameter \$fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:createResultUnmatchedFixed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:createResultUnmatchedFixed\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_SingleAttributeMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_SingleAttributeMatcher\:\:\$attribute has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_SingleAttributeMatcher\:\:\$entity has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_SingleAttributeMatcher\:\:\$fields has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_SingleAttributeMatcher\:\:\$restrictions has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Matcher/SingleAttributeMatcher.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 2
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_WebsiteMatcher\:\:__construct\(\) has parameter \$other_contact_fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_WebsiteMatcher\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_WebsiteMatcher\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Method CRM_Xcm_Matcher_WebsiteMatcher\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_WebsiteMatcher\:\:\$other_contact_fields type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Property CRM_Xcm_Matcher_WebsiteMatcher\:\:\$restrictions type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Matcher/WebsiteMatcher.php
+
+		-
+			message: '#^Call to an undefined method object\:\:setConfig\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Call to function array_search\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 7
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 6
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''is_primary'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''msg_text'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''phone2'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''phone3'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset \(array\<string\>\|string\) on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Cannot access offset non\-falsy\-string on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 62
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Empty catch block\.$#'
+			count: 4
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Implicit array creation is not allowed \- variable \$create_detail_call does not exist\.$#'
+			identifier: variable.implicitArray
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:addActivityToContact", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:addContactToGroup", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:addContactToTag", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:createDiffActivity", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:createI3ValActivity", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:matchContact", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:overrideContactDetail", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingEngine\:\:overrideContactPhone", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 5
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 8
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:__construct\(\) has parameter \$profile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$activity_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$campaign with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$status_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$subject with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addActivityToContact\(\) has parameter \$template_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToGroup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToGroup\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToGroup\(\) has parameter \$group_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToTag\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToTag\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addContactToTag\(\) has parameter \$tag_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has parameter \$as_primary with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has parameter \$data_update with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addDetailToContact\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has parameter \$as_primary with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has parameter \$attribute with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has parameter \$data_update with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:addPhoneToContact\(\) has parameter \$phone_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:attributesDiffer\(\) has parameter \$data_attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:attributesDiffer\(\) has parameter \$original_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:attributesDiffer\(\) has parameter \$submitted_values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has parameter \$contact with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has parameter \$location_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has parameter \$options with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createDiffActivity\(\) has parameter \$subject with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createI3ValActivity\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createI3ValActivity\(\) has parameter \$current_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createI3ValActivity\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createIfNotExists\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createIfNotExists\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createResultMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createResultMatched\(\) has parameter \$confidence with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createResultMatched\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createResultUnmatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:createResultUnmatched\(\) has parameter \$message with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fieldIsMultivalue\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fillContactData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fillContactData\(\) has parameter \$current_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fillContactData\(\) has parameter \$fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fillContactData\(\) has parameter \$fill_multivalue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:fillContactData\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:getEngine\(\) has parameter \$profile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:getMatchingRules\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:getOrCreateContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:getOrCreateContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:loadCurrentContactData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:loadCurrentContactData\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:loadCurrentContactData\(\) has parameter \$submitted_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:makeExistingDetailPrimary\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:makeExistingDetailPrimary\(\) has parameter \$attribute with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:makeExistingDetailPrimary\(\) has parameter \$attribute_value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:makeExistingDetailPrimary\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:makeExistingDetailPrimary\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:matchContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactData\(\) has parameter \$current_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactData\(\) has parameter \$fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactData\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactDetail\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactDetail\(\) has parameter \$current_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactDetail\(\) has parameter \$entity_type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactDetail\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactPhone\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactPhone\(\) has parameter \$attribute with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactPhone\(\) has parameter \$current_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactPhone\(\) has parameter \$phone_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:overrideContactPhone\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessContactMatch\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessContactMatch\(\) has parameter \$result with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessContactMatch\(\) has parameter \$submitted_contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessNewContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessNewContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:postProcessNewContact\(\) has parameter \$new_contact with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:renderTemplate\(\) has parameter \$template_path with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:renderTemplate\(\) has parameter \$vars with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:sanitiseData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingEngine\:\:sanitiseData\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 2
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 2
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int\<min, \-1\>\|int\<1, max\> given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int\|false given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, array\|int given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, array\<int, string\> given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Parameter \#1 \$dedupe_group_id of class CRM_Xcm_Matcher_DedupeRule constructor expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Property CRM_Xcm_MatchingEngine\:\:\$_singletons has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Property CRM_Xcm_MatchingEngine\:\:\$config has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: CRM/Xcm/MatchingEngine.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 5
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^In method "CRM_Xcm_MatchingRule\:\:pickContact", caught "Exception" must be rethrown\. Either catch a more specific exception, add a "throw" clause in the "catch" block to propagate the exception or add a "// @ignoreException" comment\.$#'
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:createResultMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:createResultMatched\(\) has parameter \$confidence with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:createResultMatched\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:createResultUnmatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:createResultUnmatched\(\) has parameter \$message with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:getContactType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:getContactType\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:isContactType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:isContactType\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:isContactType\(\) has parameter \$contact_type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:matchContact\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:matchContact\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:matchContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:pickContact\(\) has invalid return type contact_id\.$#'
+			identifier: class.notFound
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:pickContact\(\) has parameter \$contact_ids with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:pickContact\(\) should return contact_id but returns null\.$#'
+			identifier: return.type
+			count: 2
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:setConfig\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_MatchingRule\:\:setConfig\(\) has parameter \$config with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Property CRM_Xcm_MatchingRule\:\:\$config has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/MatchingRule.php
+
+		-
+			message: '#^Method CRM_Xcm_Page_Profiles\:\:run\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Page/Profiles.php
+
+		-
+			message: '#^Only booleans are allowed in &&, mixed given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: CRM/Xcm/Page/Profiles.php
+
+		-
+			message: '#^Only booleans are allowed in &&, mixed given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: CRM/Xcm/Page/Profiles.php
+
+		-
+			message: '#^Parameter \#1 \$profile_name of static method CRM_Xcm_Configuration\:\:getConfigProfile\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Page/Profiles.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 7
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 3
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:cacheCustomGroups\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:cacheCustomGroups\(\) has parameter \$custom_group_names with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:extractAddressData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:extractAddressData\(\) has parameter \$copy_location_type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:extractAddressData\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getAddressFields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getCustomField\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getCustomField\(\) has parameter \$custom_field_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getCustomField\(\) has parameter \$custom_group_name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getDetailFields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getFieldLabels\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getFieldLabels\(\) has parameter \$differing_attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:getKnownFieldLabels\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:resolveCustomFields\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:resolveCustomFields\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:stripAddressAndDetailData\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Tools\:\:stripAddressAndDetailData\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 2
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 2
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Parameter \#2 \$subject of function preg_match expects string, int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Property CRM_Xcm_Tools\:\:\$custom_group_cache has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: CRM/Xcm/Tools.php
+
+		-
+			message: '#^Method CRM_Xcm_Upgrader\:\:upgrade_0171\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: CRM/Xcm/Upgrader.php
+
+		-
+			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
+			identifier: function.strict
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Cannot call method getApiFieldName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 4
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Method Civi\\Xcm\\ActionProvider\\Action\\ContactGetOrCreate\:\:getCustomFields\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Offset 2 on array\{non\-empty\-string, numeric\-string, string\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, Civi\\ActionProvider\\Parameter\\Specification\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+
+		-
+			message: '#^Function _civicrm_api3_contact_Createifnotexists_spec\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: api/v3/Contact/Createifnotexists.php
+
+		-
+			message: '#^Function _civicrm_api3_contact_Createifnotexists_spec\(\) has parameter \$spec with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: api/v3/Contact/Createifnotexists.php
+
+		-
+			message: '#^Function civicrm_api3_contact_Createifnotexists\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: api/v3/Contact/Createifnotexists.php
+
+		-
+			message: '#^Function civicrm_api3_contact_Createifnotexists\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: api/v3/Contact/Createifnotexists.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: api/v3/Contact/Getorcreate.php
+
+		-
+			message: '#^Function _civicrm_api3_contact_getorcreate_spec\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: api/v3/Contact/Getorcreate.php
+
+		-
+			message: '#^Function _civicrm_api3_contact_getorcreate_spec\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: api/v3/Contact/Getorcreate.php
+
+		-
+			message: '#^Function civicrm_api3_contact_getorcreate\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: api/v3/Contact/Getorcreate.php
+
+		-
+			message: '#^Function civicrm_api3_contact_getorcreate\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: api/v3/Contact/Getorcreate.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Cannot access offset ''values'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 7
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:addContact\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:addContact\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:assertContactCountIs\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:configureXcm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:configureXcm\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:getOrCreate\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:getOrCreate\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:setUpHeadless\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testAddressAddedToExistingContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testAddressFillDoesNotMangleExisting\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testExistingAddressNotOverwritten\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testNameFill\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testNewContactCreatedNotRecreated\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Method CRM_XCMTest\:\:testNewContactCreatedWithAddress\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Property CRM_XCMTest\:\:\$contacts has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/phpunit/CRM/XCMTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertNotEmpty\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Loose comparison via "\!\=" is not allowed\.$#'
+			identifier: notEqual.notAllowed
+			count: 1
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Method CRM_Xcm_BugfixTest\:\:getNonDefaultLocationType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Method CRM_Xcm_BugfixTest\:\:testBug36Email\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Method CRM_Xcm_BugfixTest\:\:testBug36Phone\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Method CRM_Xcm_BugfixTest\:\:testBug36PhoneNewContact\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/BugfixTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 3
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertGreaterThan\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
+			identifier: equal.notAllowed
+			count: 1
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Method CRM_Xcm_FillDetailTest\:\:testBugEnhancement39_1\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Method CRM_Xcm_FillDetailTest\:\:testBugEnhancement39_2\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Method CRM_Xcm_FillDetailTest\:\:testEnhancement37\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/FillDetailTest.php
+
+		-
+			message: '#^Cannot access offset ''first_name'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 6
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertGreaterThan\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertLessThanOrEqual\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertTrue\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\TestCase\:\:throwException\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$attribute with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$detail with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$expects_success with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$identifying_attributes with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$suffix with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:assertDetailOverride\(\) has parameter \$test_contact with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:testDetailOverwrite\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:testSimpleOverwrite\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Method CRM_Xcm_OverwriteTest\:\:testSimpleOverwriteNoChangeActivity\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Switch condition type \(''address''\|''im''\|''phone''\|''website''\) does not match case condition ''email'' \(string\)\.$#'
+			identifier: switch.type
+			count: 1
+			path: tests/phpunit/CRM/Xcm/OverwriteTest.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 9
+			path: tests/phpunit/CRM/Xcm/PhoneTest.php
+
+		-
+			message: '#^Method CRM_Xcm_PhoneTest\:\:testPhoneNumeric\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/PhoneTest.php
+
+		-
+			message: '#^Method CRM_Xcm_PhoneTest\:\:testSecondaryPhoneNumeric\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/PhoneTest.php
+
+		-
+			message: '#^Method CRM_Xcm_PhoneTest\:\:testTertiaryPhoneNumeric\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/PhoneTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertFalse\(\) with true and non\-falsy\-string will always evaluate to false\.$#'
+			identifier: method.impossibleType
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Cannot access offset ''id'' on array\|int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 5
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertEquals\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 2
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assertFalse\(\)\.$#'
+			identifier: staticMethod.dynamicCall
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) has parameter \$action with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) has parameter \$entity with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) has parameter \$params with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) should return array but returns array\|int\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertAPI3\(\) should return array but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertEntityEqual\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertEntityEqual\(\) has parameter \$entity_1 with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertEntityEqual\(\) has parameter \$entity_2 with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertEntityEqual\(\) has parameter \$fields with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertXCMLookup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertXCMLookup\(\) has parameter \$contact_data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:assertXCMLookup\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:createContactWithRandomEmail\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:createContactWithRandomEmail\(\) has parameter \$contact_data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:enableDiffActivity\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:enableDiffActivity\(\) has parameter \$activity_subject with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:getDefaultDiffActivityTypeID\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:getDiffActivityCount\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:getDiffActivityCount\(\) has parameter \$activity_type_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:getDiffActivityCount\(\) has parameter \$contact_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:getLocationTypeIDs\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setUpHeadless\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMOption\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMOption\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMOption\(\) has parameter \$profile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMOption\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMRules\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMRules\(\) has parameter \$matchers with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Method CRM_Xcm_TestBase\:\:setXCMRules\(\) has parameter \$profile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Property CRM_Xcm_TestBase\:\:\$counter has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Property CRM_Xcm_TestBase\:\:\$diff_activity_type_id has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: tests/phpunit/CRM/Xcm/TestBase.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: xcm.php
+
+		-
+			message: '#^Parameter \#1 \$menu of function _xcm_menu_exists expects array\<string, array\<string, mixed\>\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: xcm.php
+
+		-
+			message: '#^Parameter &\$menu by\-ref type of function xcm_civicrm_navigationMenu\(\) expects array\<string, array\<string, mixed\>\>, array given\.$#'
+			identifier: parameterByRef.type
+			count: 1
+			path: xcm.php
