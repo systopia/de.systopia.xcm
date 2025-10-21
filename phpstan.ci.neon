@@ -3,7 +3,8 @@ includes:
 
 parameters:
 	scanDirectories:
-		- vendor/civicrm/civicrm-core/CRM
+		- vendor/civicrm/civicrm-core/CRM/
+		- vendor/civicrm/civicrm-core/Civi/
 		- vendor/civicrm/civicrm-core/api/
 		- vendor/civicrm/civicrm-packages/
 	bootstrapFiles:

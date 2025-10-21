@@ -6,7 +6,8 @@ includes:
 
 parameters:
 	scanDirectories:
-		- {VENDOR_DIR}/civicrm/civicrm-core/CRM
+		- {VENDOR_DIR}/civicrm/civicrm-core/CRM/
+		- {VENDOR_DIR}/civicrm/civicrm-core/Civi/
 		- {VENDOR_DIR}/civicrm/civicrm-core/api/
 		- {VENDOR_DIR}/civicrm/civicrm-packages/
 	bootstrapFiles:
