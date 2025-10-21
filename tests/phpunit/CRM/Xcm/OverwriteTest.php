@@ -26,6 +26,8 @@ use Civi\Test\TransactionalInterface;
  * @see https://github.com/systopia/de.systopia.xcm/issues/32
  *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
 // phpcs:disable Generic.Files.LineLength.TooLong
 class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {

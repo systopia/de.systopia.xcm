@@ -35,6 +35,8 @@ use Civi\Test\TransactionalInterface;
  *       b. Disable TransactionalInterface, and handle all setup/teardown yourself.
  *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
 // phpcs:disable Generic.Files.LineLength.TooLong
 class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
@@ -49,7 +51,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       ->apply();
   }
 
-  public function setUp() {
+  public function setUp(): void {
 
     // Start with the test-default config.
     $this->configureXcm();
@@ -86,7 +88,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     return $contact['values'][0];
   }
 
-  public function tearDown() {
+  public function tearDown(): void {
 
     // Delete our contacts.
     foreach ($this->contacts as $contact_id => $contact) {

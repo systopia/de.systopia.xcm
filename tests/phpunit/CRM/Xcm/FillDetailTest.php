@@ -26,6 +26,8 @@ use Civi\Test\TransactionalInterface;
  * @see https://github.com/systopia/de.systopia.xcm/issues/32
  *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
 // phpcs:disable Generic.Files.LineLength.TooLong
 class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
@@ -40,7 +42,7 @@ class CRM_Xcm_FillDetailTest extends CRM_Xcm_TestBase implements HeadlessInterfa
       'first_name' => 'Aaron',
       'last_name'  => 'Aaronson',
     ]);
-    $phone_1 = str_replace('.', '', microtime(TRUE));
+    $phone_1 = str_replace('.', '', (string) microtime(TRUE));
     $phone_2 = $phone_1 . '-1';
     $this->assertAPI3('Phone', 'create', [
       'contact_id' => $test_contact['id'],

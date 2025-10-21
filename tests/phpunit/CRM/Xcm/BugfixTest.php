@@ -26,6 +26,8 @@ use Civi\Test\TransactionalInterface;
  * @see https://github.com/systopia/de.systopia.xcm/issues/32
  *
  * @group headless
+ * @coversNothing
+ * TODO: Document actual coverage.
  */
 class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
@@ -94,7 +96,7 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
 
     // set up our test scenario
     $this->setXCMOption('fill_details', ['phone']);
-    $phone = str_replace('.', '', microtime(1));
+    $phone = str_replace('.', '', (string) microtime(TRUE));
     $test_contact = $this->createContactWithRandomEmail([
       'first_name' => 'Aaron',
       'last_name'  => 'Aaronson',

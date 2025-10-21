@@ -39,14 +39,6 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
       ->apply();
   }
 
-  public function setUp() {
-    parent::setUp();
-  }
-
-  public function tearDown() {
-    parent::tearDown();
-  }
-
   /**
    * Execute the API call and assert that it is successfull
    *
@@ -59,7 +51,7 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
     try {
       return civicrm_api3($entity, $action, $params);
     }
-    catch (CiviCRM_API3_Exception $ex) {
+    catch (CRM_Core_Exception $ex) {
       $this->assertFalse(TRUE, 'API Exception: ' . $ex->getMessage());
       return NULL;
     }
@@ -240,8 +232,8 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
     }
 
     foreach ($fields as $field) {
-      $value_1 = CRM_Utils_Array::value($field, $entity_1);
-      $value_2 = CRM_Utils_Array::value($field, $entity_2);
+      $value_1 = $entity_1[$field] ?? NULL;
+      $value_2 = $entity_2[$field] ?? NULL;
       $this->assertEquals($value_1, $value_2, 'Entities differ!');
     }
   }

@@ -23,6 +23,8 @@ use Civi\Test\TransactionalInterface;
  * Test phone-related matching and handling
  *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
 class CRM_Xcm_PhoneTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
