@@ -52,6 +52,8 @@ jobs:
         composer config --no-plugins allow-plugins.cweagans/composer-patches true
         # Run with --no-scripts so ComposerHelper doesn't prevent installation
         # of civicrm packages.
+        git clone --depth=1 https://github.com/project60/org.project60.banking.git ../org.project60.banking
+        git clone --depth=1 https://lab.civicrm.org/extensions/action-provider.git ../action-provider
         composer update --no-scripts --no-progress --prefer-dist --${{ matrix.prefer }} --optimize-autoloader --ignore-platform-reqs
         composer composer-phpunit -- update --no-progress --prefer-dist --optimize-autoloader
         composer composer-phpstan -- update --no-progress --prefer-dist --optimize-autoloader
