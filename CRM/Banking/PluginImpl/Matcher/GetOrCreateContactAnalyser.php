@@ -27,6 +27,8 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
   // one week
   private const FIRST_NAME_CACHE_TTL = 60 * 60 * 24 * 7;
 
+  protected ?\CRM_Banking_Helpers_Logger $logger;
+
   /**
    * Contact Get-Or-Create Analyser. Configuration options:
    *   'xcm_profile':
@@ -63,6 +65,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    */
   public function __construct($config_name) {
     parent::__construct($config_name);
+    $this->logger = CRM_Banking_Helpers_Logger::getLogger();
 
     // read config, set defaults
     $config = $this->_plugin_config;
