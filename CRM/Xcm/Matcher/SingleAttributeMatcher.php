@@ -13,33 +13,41 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This matcher will only match if only one attribute
  * of a set is given, otherwise it will not do anything
+ *
  */
 class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
 
-  /** additional restrictions  */
-  protected $restrictions = array();
+  /**
+   * additional restrictions  */
+  protected $restrictions = [];
 
-  /** the attribute that this matcher is using */
+  /**
+   * the attribute that this matcher is using */
   protected $attribute = NULL;
 
-  /** the entity this attribute belongs to */
+  /**
+   * the entity this attribute belongs to */
   protected $entity = NULL;
 
-  /** the set of fields to be monitored */
+  /**
+   * the set of fields to be monitored */
   protected $fields = NULL;
-
 
   public function __construct($attribute, $entity, $fields = NULL) {
     $this->attribute = $attribute;
     $this->entity = $entity;
     if (is_array($fields)) {
       $this->fields = $fields;
-    } else {
+    }
+    else {
       // default fields to monitor
-      $this->fields = array(
+      $this->fields = [
         'first_name',
         'last_name',
         'phone_numeric',
@@ -47,7 +55,8 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
         'street_address',
         'postal_code',
         'city',
-        'birth_date');
+        'birth_date',
+      ];
     }
   }
 
@@ -57,7 +66,9 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
    * 2) check if none of the other attributes are set
    * 3) find all contacts based on our attribute
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   public function matchContact(&$contact_data, $params = NULL) {
+  // phpcs:enable
     // 1) check if attribute is set
     if (empty($contact_data[$this->attribute])) {
       return $this->createResultUnmatched();
@@ -67,7 +78,8 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
     foreach ($this->fields as $field) {
       if ($field == $this->attribute) {
         continue;
-      } elseif (!empty($contact_data[$field])) {
+      }
+      elseif (!empty($contact_data[$field])) {
         return $this->createResultUnmatched();
       }
     }
@@ -78,7 +90,7 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
     $entity_query['return'] = 'contact_id';
     $entity_query['option.limit'] = 0;
     $entities_found = civicrm_api3($this->entity, 'get', $entity_query);
-    $entity_contact_ids = array();
+    $entity_contact_ids = [];
     foreach ($entities_found['values'] as $entity) {
       $entity_contact_ids[] = $entity['contact_id'];
     }
@@ -89,13 +101,14 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // now: find contacts
-    $contact_search = array(
-      'id'           => array('IN' => $entity_contact_ids),
+    $contact_search = [
+      'id'           => ['IN' => $entity_contact_ids],
       'is_deleted'   => 0,
       'option.limit' => 0,
-      'return'       => 'id');
+      'return'       => 'id',
+    ];
     $contacts = civicrm_api3('Contact', 'get', $contact_search);
-    $contact_matches = array();
+    $contact_matches = [];
     foreach ($contacts['values'] as $contact) {
       $contact_matches[] = $contact['id'];
     }
@@ -112,7 +125,8 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
         $contact_id = $this->pickContact($contact_matches);
         if ($contact_id) {
           return $this->createResultMatched($contact_id);
-        } else {
+        }
+        else {
           return $this->createResultUnmatchedFixed($contact_data);
         }
     }
@@ -132,4 +146,5 @@ class CRM_Xcm_Matcher_SingleAttributeMatcher extends CRM_Xcm_MatchingRule {
 
     return $this->createResultUnmatched();
   }
+
 }

@@ -13,9 +13,13 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This matcher will match on email,
  * BUT only match only the email was submitted
+ *
  */
 class CRM_Xcm_Matcher_EmailOnlyMatcher extends CRM_Xcm_Matcher_SingleAttributeMatcher {
 

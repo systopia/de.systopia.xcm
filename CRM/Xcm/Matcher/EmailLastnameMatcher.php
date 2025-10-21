@@ -13,11 +13,17 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on (any) email and last_name
+ *
  */
 class CRM_Xcm_Matcher_EmailLastnameMatcher extends CRM_Xcm_Matcher_EmailMatcher {
+
   public function __construct() {
     parent::__construct(['last_name' => 'last_name', 'contact_type' => 'contact_type']);
   }
+
 }

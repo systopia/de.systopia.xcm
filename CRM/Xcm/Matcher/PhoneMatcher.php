@@ -13,23 +13,31 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This will execute a matching process based on the configuration,
  * employing various matching rules
+ *
  */
 class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
 
-  /** fields to match in addition to the phone number */
+  /**
+   * fields to match in addition to the phone number */
   protected $other_contact_fields = NULL;
 
-  // restrictions for search, e.g. array('is_billing' => '0')
-  protected $restrictions = array();
+  /**
+   * Restrictions for search, e.g. array('is_billing' => '0').
+   */
+  protected $restrictions = [];
 
   public function __construct($other_contact_fields = NULL) {
     if (is_array($other_contact_fields)) {
       $this->other_contact_fields = $other_contact_fields;
-    } else {
-      $this->other_contact_fields = array('contact_type');
+    }
+    else {
+      $this->other_contact_fields = ['contact_type'];
     }
   }
 
@@ -39,7 +47,9 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
    * 2) load the attached contacts
    * 3) check the other_contact_fields
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   public function matchContact(&$contact_data, $params = NULL) {
+  // phpcs:enable
     if (empty($contact_data['phone'])) {
       return $this->createResultUnmatched();
     }
@@ -57,7 +67,7 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
     $phone_query['return'] = 'contact_id';
     $phone_query['option.limit'] = 0;
     $phones_found = civicrm_api3('Phone', 'get', $phone_query);
-    $phone_contact_ids = array();
+    $phone_contact_ids = [];
     foreach ($phones_found['values'] as $phone) {
       $phone_contact_ids[] = $phone['contact_id'];
     }
@@ -68,16 +78,17 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // now: find contacts
-    $contact_search = array(
-      'id'           => array('IN' => $phone_contact_ids),
+    $contact_search = [
+      'id'           => ['IN' => $phone_contact_ids],
       'is_deleted'   => 0,
       'option.limit' => 0,
-      'return'       => 'id');
+      'return'       => 'id',
+    ];
     foreach ($this->other_contact_fields as $field_name) {
       $contact_search[$field_name] = $contact_data[$field_name];
     }
     $contacts = civicrm_api3('Contact', 'get', $contact_search);
-    $contact_matches = array();
+    $contact_matches = [];
     foreach ($contacts['values'] as $contact) {
       $contact_matches[] = $contact['id'];
     }
@@ -91,12 +102,14 @@ class CRM_Xcm_Matcher_PhoneMatcher extends CRM_Xcm_MatchingRule {
         return $this->createResultMatched(reset($contact_matches));
 
       default:
-          $contact_id = $this->pickContact($contact_matches);
-          if ($contact_id) {
-            return $this->createResultMatched($contact_id);
-          } else {
-            return $this->createResultUnmatched();
-          }
+        $contact_id = $this->pickContact($contact_matches);
+        if ($contact_id) {
+          return $this->createResultMatched($contact_id);
+        }
+        else {
+          return $this->createResultUnmatched();
+        }
     }
   }
+
 }

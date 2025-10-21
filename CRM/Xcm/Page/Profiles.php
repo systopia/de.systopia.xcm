@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
 class CRM_Xcm_Page_Profiles extends CRM_Core_Page {
@@ -30,11 +32,13 @@ class CRM_Xcm_Page_Profiles extends CRM_Core_Page {
           $profile->deleteProfile();
           $profile->store();
           break;
+
         case 'setdefault':
           CRM_Xcm_Configuration::setDefaultProfile($pid);
           break;
+
         default:
-          CRM_Core_Session::setStatus(E::ts("Unkown action submitted."), E::ts("Warning"), 'warning');
+          CRM_Core_Session::setStatus(E::ts('Unkown action submitted.'), E::ts('Warning'), 'warning');
       }
     }
 
@@ -44,9 +48,9 @@ class CRM_Xcm_Page_Profiles extends CRM_Core_Page {
     foreach ($all_profiles as $profile_name => $profile_label) {
       $profile = CRM_Xcm_Configuration::getConfigProfile($profile_name);
       $profile_data[] = [
-          'pid'        => $profile_name,
-          'label'      => $profile->getLabel(),
-          'is_default' => $profile->isDefault(),
+        'pid'        => $profile_name,
+        'label'      => $profile->getLabel(),
+        'is_default' => $profile->isDefault(),
       ];
     }
 
@@ -58,4 +62,5 @@ class CRM_Xcm_Page_Profiles extends CRM_Core_Page {
     $this->assign('profiles', $profile_data);
     parent::run();
   }
+
 }

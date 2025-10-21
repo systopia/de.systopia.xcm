@@ -10,6 +10,7 @@
     <file>xcm.php</file>
 
     <exclude-pattern>/CRM/Xcm/DAO/.*\.php$</exclude-pattern>
+    <exclude-pattern>/CRM/Xcm/CustomData\.php$</exclude-pattern>
 
     <arg name="extensions" value="php"/>
     <arg name="cache" value=".phpcs.cache"/>

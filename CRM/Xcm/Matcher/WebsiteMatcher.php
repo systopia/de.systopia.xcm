@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 /**
  * This will execute a matching process based on the configuration,
  * employing various matching rules
@@ -46,7 +48,9 @@ class CRM_Xcm_Matcher_WebsiteMatcher extends CRM_Xcm_MatchingRule {
    * 2) load the attached contacts
    * 3) check the other_contact_fields
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   public function matchContact(&$contact_data, $params = NULL) {
+  // phpcs:enable
     if (empty($contact_data['website'])) {
       return $this->createResultUnmatched();
     }
@@ -75,12 +79,12 @@ class CRM_Xcm_Matcher_WebsiteMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // now: find contacts
-    $contact_search = array(
-      'id'           => array('IN' => $website_contact_ids),
+    $contact_search = [
+      'id'           => ['IN' => $website_contact_ids],
       'is_deleted'   => 0,
       'option.limit' => 0,
       'return'       => 'id',
-    );
+    ];
     foreach ($this->other_contact_fields as $contact_field_name => $submitted_field_name) {
       $contact_search[$contact_field_name] = $contact_data[$submitted_field_name];
     }

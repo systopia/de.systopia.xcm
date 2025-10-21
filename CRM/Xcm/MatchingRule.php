@@ -13,10 +13,16 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This as the base class of all XCM matching rules
+ *
  */
+// phpcs:disable Generic.NamingConventions.AbstractClassNamePrefix.Missing
 abstract class CRM_Xcm_MatchingRule {
+// phpcs:enable
 
   /**
    * This is the core matching function
@@ -24,7 +30,7 @@ abstract class CRM_Xcm_MatchingRule {
    * @param $contact_data  an array of all information we have on the contact, e.g. first_name, street_address, etc...
    * @param $params        additional parameters
    * @return array result: mandatory entries:
-   *                         contact_id   -  matched contact ID or NULL if not matched
+   *   contact_id   -  matched contact ID or NULL if not matched
    *                       recommended entries:
    *                         confidence   - float [0..1] defining the likelihood of the match
    *                       other entries:
@@ -32,7 +38,8 @@ abstract class CRM_Xcm_MatchingRule {
    */
   abstract public function matchContact(&$contact_data, $params = NULL);
 
-  /** stores the configuration instance */
+  /**
+   * stores the configuration instance */
   protected $config = NULL;
 
   /**
@@ -72,9 +79,11 @@ abstract class CRM_Xcm_MatchingRule {
     // if not, start guessing
     if (!empty($contact_data['organization_name'])) {
       return 'Organization';
-    } elseif (!empty($contact_data['household_name'])) {
+    }
+    elseif (!empty($contact_data['household_name'])) {
       return 'Household';
-    } else {
+    }
+    else {
       return 'Individual';
     }
   }
@@ -97,7 +106,9 @@ abstract class CRM_Xcm_MatchingRule {
    * @throws Exception
    */
   protected function pickContact($contact_ids) {
-    if (empty($contact_ids)) return NULL;
+    if (empty($contact_ids)) {
+      return NULL;
+    }
 
     $config  = $this->getConfig();
     $options = $config->getOptions();
@@ -105,19 +116,22 @@ abstract class CRM_Xcm_MatchingRule {
     // create activity for duplicates if requested
     try {
       if (count($contact_ids) > 1 && !empty($options['duplicates_activity'])) {
-        civicrm_api3('Activity', 'create', array(
-            'activity_type_id'   => $options['duplicates_activity'],
-            'subject'            => $options['duplicates_subject'],
-            'status_id'          => $config->defaultActivityStatus(),
-            'activity_date_time' => date("YmdHis"),
-            'target_id'          => $contact_ids,
-        ));
+        civicrm_api3('Activity', 'create', [
+          'activity_type_id'   => $options['duplicates_activity'],
+          'subject'            => $options['duplicates_subject'],
+          'status_id'          => $config->defaultActivityStatus(),
+          'activity_date_time' => date('YmdHis'),
+          'target_id'          => $contact_ids,
+        ]);
       }
-    } catch (Exception $e) {
-      Civi::log()->debug("de.systopia.xcm: Failed to create duplicates activity, check your settings! Error was " . $e->getMessage());
+    }
+    catch (Exception $e) {
+      Civi::log()->debug(
+        'de.systopia.xcm: Failed to create duplicates activity, check your settings! Error was ' . $e->getMessage()
+      );
     }
 
-    $picker  = CRM_Utils_Array::value('picker', $options, 'min');
+    $picker = CRM_Utils_Array::value('picker', $options, 'min');
     switch ($picker) {
       case 'none':
         return NULL;
@@ -144,4 +158,5 @@ abstract class CRM_Xcm_MatchingRule {
   protected function createResultUnmatched($message = 'not matched') {
     return CRM_Xcm_MatchingEngine::createResultUnmatched($message);
   }
+
 }

@@ -13,29 +13,38 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Some basic tools for addresses and custom fields
+ *
  */
 class CRM_Xcm_Tools {
 
-  /** caches custom field data, indexed by group name */
-  protected static $custom_group_cache = array();
+  /**
+   * caches custom field data, indexed by group name */
+  protected static $custom_group_cache = [];
 
   /*********************************************************
-   **                 Address  Logic                      **
-   *********************************************************
-
-  /**
+   * *                 Address  Logic                      **
+   * ********************************************************
+   *
+   * /**
    * return all address fields
    */
   public static function getAddressFields() {
-    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(
+      \CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME,
+      'address_options'
+    );
     $isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
 
-    $addressFields = array(
+    $addressFields = [
       'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3',
       'street_address', 'city', 'country_id', 'state_province_id', 'county_id', 'postal_code',
-      'is_billing', 'geo_code_1', 'geo_code_2');
+      'is_billing', 'geo_code_1', 'geo_code_2',
+    ];
     if ($isStreetAddressParsingEnabled) {
       $addressFields[] = 'street_name';
       $addressFields[] = 'street_number';
@@ -55,16 +64,17 @@ class CRM_Xcm_Tools {
   /**
    * Generate a list of field labels for the given diff
    *
-   * @param array
+   * @param array $differing_attributes
    * @param \CRM_Xcm_Configuration $config
    */
   public static function getFieldLabels($differing_attributes, CRM_Xcm_Configuration $config) {
-    $field_labels = array();
+    $field_labels = [];
     $all_labels = self::getKnownFieldLabels($config);
     foreach ($differing_attributes as $field_name) {
       if (isset($all_labels[$field_name])) {
         $field_labels[$field_name] = $all_labels[$field_name];
-      } else {
+      }
+      else {
         $field_labels[$field_name] = $field_name;
       }
     }
@@ -77,7 +87,7 @@ class CRM_Xcm_Tools {
    * @param \CRM_Xcm_Configuration $config
    */
   public static function getKnownFieldLabels(CRM_Xcm_Configuration $config) {
-    static $data = null;
+    static $data = NULL;
     if (!$data) {
       $data = [
         'first_name' => ts('First Name'),
@@ -106,9 +116,10 @@ class CRM_Xcm_Tools {
         $data['phone'] = civicrm_api3('OptionValue', 'getvalue', [
           'return' => 'label',
           'option_group_id' => 'phone_type',
-          'value' => $config->primaryPhoneType()
+          'value' => $config->primaryPhoneType(),
         ]);
-      } catch (CiviCRM_API3_Exception $e) {
+      }
+      catch (CiviCRM_API3_Exception $e) {
         $data['phone'] = ts('Phone');
       }
       if ($config->secondaryPhoneType()) {
@@ -116,9 +127,10 @@ class CRM_Xcm_Tools {
           $data['phone2'] = civicrm_api3('OptionValue', 'getvalue', [
             'return' => 'label',
             'option_group_id' => 'phone_type',
-            'value' => $config->secondaryPhoneType()
+            'value' => $config->secondaryPhoneType(),
           ]);
-        } catch (CiviCRM_API3_Exception $e) {
+        }
+        catch (CiviCRM_API3_Exception $e) {
           $data['phone2'] = ts('Phone 2');
         }
       }
@@ -127,9 +139,10 @@ class CRM_Xcm_Tools {
           $data['phone3'] = civicrm_api3('OptionValue', 'getvalue', [
             'return' => 'label',
             'option_group_id' => 'phone_type',
-            'value' => $config->tertiaryPhoneType()
+            'value' => $config->tertiaryPhoneType(),
           ]);
-        } catch (CiviCRM_API3_Exception $e) {
+        }
+        catch (CiviCRM_API3_Exception $e) {
           $data['phone3'] = ts('Phone 3');
         }
       }
@@ -142,7 +155,7 @@ class CRM_Xcm_Tools {
    */
   public static function extractAddressData($data, $copy_location_type = TRUE) {
     $fields = self::getAddressFields();
-    $address_data = array();
+    $address_data = [];
     foreach ($fields as $field_name) {
       if (isset($data[$field_name])) {
         $address_data[$field_name] = $data[$field_name];
@@ -166,7 +179,7 @@ class CRM_Xcm_Tools {
    */
   public static function stripAddressAndDetailData($data) {
     $fields = array_merge(self::getAddressFields(), self::getDetailFields());
-    $remaining_data = array();
+    $remaining_data = [];
     foreach ($data as $field_name => $value) {
       if (!in_array($field_name, $fields)) {
         $remaining_data[$field_name] = $value;
@@ -193,18 +206,17 @@ class CRM_Xcm_Tools {
     return $remaining_data;
   }
 
-
   /*********************************************************
-   **               Custom Field Logic                    **
-   *********************************************************
-
-  /**
+   * *               Custom Field Logic                    **
+   * ********************************************************
+   *
+   * /**
    * internal function to replace "<custom_group_name>.<custom_field_name>"
    * in the data array with the custom_XX notation.
    */
   public static function resolveCustomFields(&$data) {
     // first: find out which ones to cache
-    $customgroups_used = array();
+    $customgroups_used = [];
     foreach ($data as $key => $value) {
       if (preg_match('/^(?P<group_name>\w+)[.](?P<field_name>\w+)$/', $key, $match)) {
         $customgroups_used[$match['group_name']] = 1;
@@ -222,37 +234,37 @@ class CRM_Xcm_Tools {
           $custom_key = 'custom_' . $custom_field['id'];
           $data[$custom_key] = $data[$key];
           unset($data[$key]);
-        } else {
-          // TODO: unknown data field $match['group_name'] . $match['field_name']
         }
       }
     }
   }
 
   /**
-  * Get CustomField entity (cached)
-  */
+   * Get CustomField entity (cached)
+   */
   public static function getCustomField($custom_group_name, $custom_field_name) {
-    self::cacheCustomGroups(array($custom_group_name));
+    self::cacheCustomGroups([$custom_group_name]);
 
     if (isset(self::$custom_group_cache[$custom_group_name][$custom_field_name])) {
       return self::$custom_group_cache[$custom_group_name][$custom_field_name];
-    } else {
+    }
+    else {
       return NULL;
     }
   }
 
   /**
-  * Get CustomField entity (cached)
-  */
+   * Get CustomField entity (cached)
+   */
   public static function cacheCustomGroups($custom_group_names) {
     foreach ($custom_group_names as $custom_group_name) {
       if (!isset(self::$custom_group_cache[$custom_group_name])) {
         // set to empty array to indicate our intentions
-        self::$custom_group_cache[$custom_group_name] = array();
-        $fields = civicrm_api3('CustomField', 'get', array(
+        self::$custom_group_cache[$custom_group_name] = [];
+        $fields = civicrm_api3('CustomField', 'get', [
           'custom_group_id' => $custom_group_name,
-          'option.limit'    => 0));
+          'option.limit'    => 0,
+        ]);
         foreach ($fields['values'] as $field) {
           self::$custom_group_cache[$custom_group_name][$field['name']] = $field;
         }

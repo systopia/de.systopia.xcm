@@ -13,14 +13,18 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
+// phpcs:disable PSR1.Files.SideEffects
 require_once 'xcm.civix.php';
+// phpcs:enable
 
 use CRM_Xcm_ExtensionUtil as E;
 
-use \Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Implements hook_civicrm_container()
+ * Implements hook_civicrm_container().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
@@ -62,14 +66,14 @@ function xcm_civicrm_enable() {
 }
 
 /**
- * Implementation of hook_civicrm_buildForm:
- *   Inject modification tpl snippets, where required
+ * Implements hook_civicrm_buildForm().
  */
 function xcm_civicrm_buildForm($formName, &$form) {
+  // Inject modification tpl snippets, where required
   if ($formName == 'CRM_Activity_Form_Activity'
         && CRM_Core_Permission::check('edit all contacts')) {
 
-        // not required if we are deleting!
+    // not required if we are deleting!
     if ($form->_action != CRM_Core_Action::DELETE) {
       try {
         // check if status_id field exists. $form->getElement triggers an error
@@ -82,7 +86,8 @@ function xcm_civicrm_buildForm($formName, &$form) {
         $current_status_value     = $elem_status_id->getValue();
         $current_status_id        = $current_status_value[0];
         $current_activity_type_id = $form->getVar('_activityTypeId');
-      } catch (Exception $e) {
+      }
+      catch (Exception $e) {
         // something went wrong there, but that probably means it's not our form...
         return;
       }
@@ -135,11 +140,11 @@ function _xcm_menu_exists(&$menu, $path) {
   foreach ($menu as $key => &$entry) {
     if ($entry['attributes']['name'] == $first) {
       if (empty($path)) {
-        return true;
+        return TRUE;
       }
       $found = _xcm_menu_exists($entry['child'], implode('/', $path));
       if ($found) {
-        return true;
+        return TRUE;
       }
     }
   }

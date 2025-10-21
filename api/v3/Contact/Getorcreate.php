@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 /**
  * Get or create a contact for the given data
  *
@@ -28,10 +30,11 @@ function civicrm_api3_contact_getorcreate($params) {
 
   if (empty($result['contact_id'])) {
     // this shouldn't happen
-    return civicrm_api3_create_error("Unknown matching error.");
-  } else {
-    $reply = array('contact_id' => $result['contact_id']);
-    return civicrm_api3_create_success(array($result['contact_id'] => $reply));
+    return civicrm_api3_create_error('Unknown matching error.');
+  }
+  else {
+    $reply = ['contact_id' => $result['contact_id']];
+    return civicrm_api3_create_success([$result['contact_id'] => $reply]);
   }
 }
 
@@ -39,17 +42,16 @@ function civicrm_api3_contact_getorcreate($params) {
  * API3 action specs
  */
 function _civicrm_api3_contact_getorcreate_spec(&$params) {
-  $params['contact_type'] = array(
-      'name'         => 'contact_type',
-      'api.default'  => 'Individual',
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Contact Type',
-  );
-  $params['xcm_profile'] = array(
-      'name'         => 'xcm_profile',
-      'api.required' => 0,
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Which profile should be used for matching?',
-  );
+  $params['contact_type'] = [
+    'name'         => 'contact_type',
+    'api.default'  => 'Individual',
+    'type'         => CRM_Utils_Type::T_STRING,
+    'title'        => 'Contact Type',
+  ];
+  $params['xcm_profile'] = [
+    'name'         => 'xcm_profile',
+    'api.required' => 0,
+    'type'         => CRM_Utils_Type::T_STRING,
+    'title'        => 'Which profile should be used for matching?',
+  ];
 }
-

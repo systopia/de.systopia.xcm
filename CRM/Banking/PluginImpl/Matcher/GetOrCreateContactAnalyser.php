@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_XCM_ExtensionUtil as E;
 
 /**
@@ -21,8 +23,9 @@ use CRM_XCM_ExtensionUtil as E;
  */
 class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Banking_PluginModel_Analyser {
 
-  const FIRST_NAME_CACHE_KEY = 'banking_xcm_analyser_db_first_name_list';
-  const FIRST_NAME_CACHE_TTL = 60 * 60 * 24 * 7; // one week
+  private const FIRST_NAME_CACHE_KEY = 'banking_xcm_analyser_db_first_name_list';
+  // one week
+  private const FIRST_NAME_CACHE_TTL = 60 * 60 * 24 * 7;
 
   /**
    * Contact Get-Or-Create Analyser. Configuration options:
@@ -34,7 +37,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    *       'first': first part of the name (separated by blanks) is the first name, the rest is last name (default)
    *       'last':  last part of the name (separated by blanks) is the last name, the rest is first name
    *       'off':   no name extraction is done, you would then have to use a mapping to get the fields used for your
-     *                xc_ profile
+   *                xc_ profile
    *       'db':    if the first part is already in the database as a first_name, use that as first name,
    *                  otherwise use same as 'last'
    *
@@ -58,20 +61,40 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    *       array of values that should be excluded from being considered to be part of the name at all,
    *       e.g. 'Mr' or 'Mrs'
    */
-  function __construct($config_name) {
+  public function __construct($config_name) {
     parent::__construct($config_name);
 
     // read config, set defaults
     $config = $this->_plugin_config;
-    if (!isset($config->xcm_profile))           $config->xcm_profile          = null; // i.e. default
-    if (!isset($config->threshold))             $config->threshold            = 1.0; // 100% matches
-    if (!isset($config->name_mode))             $config->name_mode            = 'first';
-    if (!isset($config->contact_type))          $config->contact_type         = 'Individual';
-    if (!isset($config->mapping))               $config->mapping              = [];
-    if (!isset($config->output_field))          $config->output_field         = 'contact_id';
-    if (!isset($config->ucwords_fields))        $config->ucwords_fields       = [];
-    if (!isset($config->name_blacklist))        $config->name_blacklist       = [];
-    if (!isset($config->first_name_blacklist))  $config->first_name_blacklist = [];
+    // i.e. default
+    if (!isset($config->xcm_profile)) {
+      $config->xcm_profile = NULL;
+    }
+    // 100% matches
+    if (!isset($config->threshold)) {
+      $config->threshold = 1.0;
+    }
+    if (!isset($config->name_mode)) {
+      $config->name_mode = 'first';
+    }
+    if (!isset($config->contact_type)) {
+      $config->contact_type = 'Individual';
+    }
+    if (!isset($config->mapping)) {
+      $config->mapping = [];
+    }
+    if (!isset($config->output_field)) {
+      $config->output_field = 'contact_id';
+    }
+    if (!isset($config->ucwords_fields)) {
+      $config->ucwords_fields = [];
+    }
+    if (!isset($config->name_blacklist)) {
+      $config->name_blacklist = [];
+    }
+    if (!isset($config->first_name_blacklist)) {
+      $config->first_name_blacklist = [];
+    }
   }
 
   /**
@@ -81,18 +104,20 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     $config = $this->_plugin_config;
 
     // You can control/restrict the execution with the required values - just like a matcher
-    if (!$this->requiredValuesPresent($btx)) return null;
+    if (!$this->requiredValuesPresent($btx)) {
+      return NULL;
+    }
 
     // make sure we don't re-create a contact that's already been identified
     if ($this->contactAlreadyIdentified($btx, $context)) {
-      $this->logMessage("Contact already identified, not running XCM.", 'debug');
-      return null;
+      $this->logMessage('Contact already identified, not running XCM.', 'debug');
+      return NULL;
     }
 
     // start compiling the values
     $xcm_values = [
-        'xcm_profile'  => $config->xcm_profile,
-        'contact_type' => $config->contact_type,
+      'xcm_profile'  => $config->xcm_profile,
+      'contact_type' => $config->contact_type,
     ];
 
     // step 1: get the first/last name
@@ -106,7 +131,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
 
     // step 3: run XCM
     $contact_id = $this->runXCM($btx, $xcm_values);
-    $this->logMessage("Contact identified by XCM: " . $contact_id, 'debug');
+    $this->logMessage('Contact identified by XCM: ' . $contact_id, 'debug');
 
     // step 4: apply contact ID
     if ($contact_id) {
@@ -124,16 +149,13 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    *
    * @param CRM_Banking_BAO_BankTransaction $btx
    *     the current transaction
-   * @param string $xcm_profile
-   *     the xcm profile to use
    * @param array $xcm_values
    *     values to be passed to the xcm
    *
    * @return integer
-   *     contact ID
+   *   contact ID
    */
-  protected function runXCM($btx, $xcm_values)
-  {
+  protected function runXCM($btx, $xcm_values) {
     // first add some config values
     $config = $this->_plugin_config;
     if (!isset($xcm_values['xcm_profile'])) {
@@ -147,9 +169,13 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
       $this->logMessage('Calling XCM with parameters: ' . json_encode($xcm_values), 'debug');
       $xcm_result = civicrm_api3('Contact', 'getorcreate', $xcm_values);
       return $xcm_result['id'];
-    } catch (CiviCRM_API3_Exception $ex) {
-      $this->logMessage('XCM call failed with ' . $ex->getMessage() . ' Parameters were: ' . json_encode($xcm_values), 'error');
-      return null;
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+      $this->logMessage(
+        'XCM call failed with ' . $ex->getMessage() . ' Parameters were: ' . json_encode($xcm_values),
+        'error'
+      );
+      return NULL;
     }
   }
 
@@ -163,8 +189,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param array $mapping
    *     one of the name modes, see above
    */
-  protected function applyMapping($btx, &$xcm_values, $mapping)
-  {
+  protected function applyMapping($btx, &$xcm_values, $mapping) {
     foreach ($mapping as $from_field => $to_field) {
       $value = $this->getPropagationValue($btx, NULL, $from_field);
       if (isset($value)) {
@@ -172,7 +197,6 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
       }
     }
   }
-
 
   /**
    * Apply the configured normalisation to the xcm paramters
@@ -182,8 +206,7 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param array $xcm_values
    *     the current list of values to be passed to XCM to be extended
    */
-  protected function applyNormalisation($btx, &$xcm_values)
-  {
+  protected function applyNormalisation($btx, &$xcm_values) {
     $config = $this->_plugin_config;
 
     // extract ucwords normalisation
@@ -210,18 +233,21 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param $name_mode
    *     one of the name modes, see above
    */
-  protected function applyNameExtraction($btx, &$xcm_values, $name_mode)
-  {
+  // phpcs:disable Generic.Metrics.NestingLevel.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
+  protected function applyNameExtraction($btx, &$xcm_values, $name_mode) {
+  // phpcs:enable
     $config = $this->_plugin_config;
     $btx_name = $btx->getDataParsed()['name'] ?? '';
-    if (!$btx_name) return;
+    if (!$btx_name) {
+      return;
+    }
 
     $name_bits = preg_split('/ +/', $btx_name);
     $this->logMessage("Extracting names from '{$btx_name}', mode is '{$name_mode}'", 'debug');
 
     switch ($name_mode) {
       case 'first':
-        $first_name = null;
+        $first_name = NULL;
         $last_names = [];
         foreach ($name_bits as $name_bit) {
           if (!isset($first_name)) {
@@ -229,7 +255,8 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
             if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist, $config->first_name_blacklist)) {
               $first_name = $name_bit;
             }
-          } else {
+          }
+          else {
             // adding last names
             if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
               $last_names[] = $name_bit;
@@ -241,16 +268,18 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
         break;
 
       case 'last':
-        $last_name = null;
+        $last_name = NULL;
         $first_names = [];
-        $name_bits = array_reverse($name_bits); // will go from the back to the front
+        // will go from the back to the front
+        $name_bits = array_reverse($name_bits);
         foreach ($name_bits as $name_bit) {
           if (!isset($last_name)) {
             // still looking for the last name
             if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist)) {
               $last_name = $name_bit;
             }
-          } else {
+          }
+          else {
             // adding first names
             if (!$this->isNameBlacklisted($name_bit, $config->name_blacklist, $config->first_name_blacklist)) {
               $first_names[] = $name_bit;
@@ -269,12 +298,16 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
             if ((!$this->isNameBlacklisted($name_bit, $config->first_name_blacklist))
                 && $this->isDBFirstName($name_bit)) {
               $first_names[] = $name_bit;
-            } else {
+            }
+            else {
               $last_names[] = $name_bit;
             }
           }
         }
-        $this->logMessage("Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names), 'debug');
+        $this->logMessage(
+          "Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names),
+          'debug'
+        );
         $xcm_values['first_name'] = implode(' ', $first_names);
         $xcm_values['last_name'] = implode(' ', $last_names);
         break;
@@ -287,8 +320,8 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
 
         // If the name contains a comma, we assume that the name is in the format "Lastname, Firstname"
         if (in_array(',', $name_bits)) {
-            $last_names += array_slice($name_bits, 0, array_search(',', $name_bits));
-            $first_names += array_slice($name_bits, array_search(',', $name_bits) + 1);
+          $last_names += array_slice($name_bits, 0, array_search(',', $name_bits));
+          $first_names += array_slice($name_bits, array_search(',', $name_bits) + 1);
         }
         // Otherwise, we assume that the name is in the format "Firstname Lastname"
         else {
@@ -312,7 +345,10 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
           }
         }
 
-        $this->logMessage("Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names), 'debug');
+        $this->logMessage(
+          "Identified (by DB) first names of '{$btx_name}' are: " . implode(',', $first_names),
+          'debug'
+        );
         $xcm_values['first_name'] = implode(' ', $first_names);
         $xcm_values['last_name'] = implode(' ', $last_names);
         break;
@@ -323,27 +359,27 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     }
   }
 
-
   /**
    * Check if the given string appears in the first_name column in the database
    *
    * @param $name string
    *  the name sample
    */
-  public function isDBFirstName($name)
-  {
-    static $all_first_names = null;
-    if ($all_first_names === null) {
+  public function isDBFirstName($name) {
+    static $all_first_names = NULL;
+    if ($all_first_names === NULL) {
       $all_first_names = Civi::cache('long')->get(self::FIRST_NAME_CACHE_KEY);
-      if ($all_first_names === null) {
+      if ($all_first_names === NULL) {
         // load all first names from the database
         $all_first_names = [];
         $this->logger->setTimer('load_first_names');
-        $data = CRM_Core_DAO::executeQuery("SELECT DISTINCT(LOWER(first_name)) AS name FROM civicrm_contact WHERE is_deleted = 0;");
+        $data = CRM_Core_DAO::executeQuery(
+          'SELECT DISTINCT(LOWER(first_name)) AS name FROM civicrm_contact WHERE is_deleted = 0;'
+        );
         while ($data->fetch()) {
           $all_first_names[$data->name] = 1;
         }
-        $this->logTime("Loading all first names", 'load_first_names');
+        $this->logTime('Loading all first names', 'load_first_names');
         Civi::cache('long')->set(self::FIRST_NAME_CACHE_KEY, $all_first_names, self::FIRST_NAME_CACHE_TTL);
       }
     }
@@ -351,7 +387,6 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
     // now simply
     return isset($all_first_names[strtolower($name)]);
   }
-
 
   /**
    * @param string $name
@@ -361,22 +396,21 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param array $blacklist2
    *    list strings not to be considered names
    */
-  public function isNameBlacklisted($name, $blacklist1 = [], $blacklist2 = [])
-  {
+  public function isNameBlacklisted($name, $blacklist1 = [], $blacklist2 = []) {
     $name = strtolower($name);
     foreach ($blacklist1 as $blacklisted_name) {
       if ($name == strtolower($blacklisted_name)) {
-        return true;
+        return TRUE;
       }
     }
 
     foreach ($blacklist2 as $blacklisted_name) {
       if ($name == strtolower($blacklisted_name)) {
-        return true;
+        return TRUE;
       }
     }
 
-    return false;
+    return FALSE;
   }
 
   /**
@@ -385,52 +419,56 @@ class CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser extends CRM_Bank
    * @param CRM_Banking_BAO_BankTransaction $btx
    * @param CRM_Banking_Matcher_Context $context
    */
-  public function contactAlreadyIdentified(CRM_Banking_BAO_BankTransaction $btx, CRM_Banking_Matcher_Context $context)
-  {
+  public function contactAlreadyIdentified(CRM_Banking_BAO_BankTransaction $btx, CRM_Banking_Matcher_Context $context) {
     $config = $this->_plugin_config;
     if (isset($config->threshold)) {
       // check if the contact is already identified with sufficient confidence
       $data_parsed    = $btx->getDataParsed();
-      $contacts_found = $context->findContacts($config->threshold, $data_parsed['name'] ?? null);
+      $contacts_found = $context->findContacts($config->threshold, $data_parsed['name'] ?? NULL);
       if (!empty($contacts_found)) {
         // for consistency: set this contact ID to the output field, too
         $contact_field_value = implode(',', array_keys($contacts_found));
-        if (!isset($data_parsed[$config->output_field]) || $data_parsed[$config->output_field] != $contact_field_value) {
+        if (
+          !isset($data_parsed[$config->output_field]) || $data_parsed[$config->output_field] != $contact_field_value
+        ) {
           $data_parsed[$config->output_field] = $contact_field_value;
           $btx->setDataParsed($data_parsed);
-          $this->logMessage("Copy already identified contact {$contact_field_value} to output field {$config->output_field}.", 'debug');
+          $this->logMessage(
+            "Copy already identified contact {$contact_field_value} to output field {$config->output_field}.",
+            'debug'
+          );
         }
-        return true;
+        return TRUE;
       }
     }
-    return false;
+    return FALSE;
   }
 
   /**
    * Register this module IF CiviBanking is installed and detected
    */
-  public static function registerModule()
-  {
+  public static function registerModule() {
     if (function_exists('banking_civicrm_install_options')) {
       // extension is enabled, let's see if our module is there
       $exists = civicrm_api3('OptionValue', 'getcount', [
-          'option_group_id' => 'civicrm_banking.plugin_types',
-          'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser'
+        'option_group_id' => 'civicrm_banking.plugin_types',
+        'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser',
       ]);
       if (!$exists) {
         // register new item
         civicrm_api3('OptionValue', 'create', [
-            'option_group_id' => 'civicrm_banking.plugin_types',
-            'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser',
-            'label' => E::ts('Create Contact Analyser (XCM)'),
-            'name' => 'analyser_xcm',
-            'description' => E::ts("Uses XCM to create a potentially missing contact before reconciliation."),
+          'option_group_id' => 'civicrm_banking.plugin_types',
+          'value' => 'CRM_Banking_PluginImpl_Matcher_GetOrCreateContactAnalyser',
+          'label' => E::ts('Create Contact Analyser (XCM)'),
+          'name' => 'analyser_xcm',
+          'description' => E::ts('Uses XCM to create a potentially missing contact before reconciliation.'),
         ]);
         CRM_Core_Session::setStatus(
             E::ts("Registered new XCM CiviBanking module 'Create Contact Analyser'"),
-            E::ts("Registered CiviBanking Module!"),
+            E::ts('Registered CiviBanking Module!'),
             'info');
       }
     }
   }
+
 }

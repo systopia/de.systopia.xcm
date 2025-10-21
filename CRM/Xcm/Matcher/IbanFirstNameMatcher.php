@@ -13,8 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on IBAN (CiviBanking or CiviSEPA) + first name
+ *
  */
 class CRM_Xcm_Matcher_IbanFirstNameMatcher extends CRM_Xcm_Matcher_IbanMatcher {
 

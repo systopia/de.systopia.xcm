@@ -13,9 +13,13 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This will execute a matching process based on the configuration,
  * employing various matching rules
+ *
  */
 class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
 
@@ -41,7 +45,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
           $dedupeParams,
           $contact_type,
           NULL,
-          array(),
+          [],
           $this->dedupe_group_bao->id);
 
       $contact_id = $this->pickContact($dupes);
@@ -53,19 +57,18 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
     return $this->createResultUnmatched();
   }
 
-
   /**
    * get a key => title list of existing unsupervised dedupe rules
    */
   public static function getRuleList() {
     $dao = new CRM_Dedupe_DAO_RuleGroup();
-    // $dao->used = 'Unsupervised';
 
     $dao->find();
-    $list = array();
+    $list = [];
     while ($dao->fetch()) {
       $list["DEDUPE_{$dao->id}"] = "[{$dao->contact_type}|{$dao->used}] {$dao->title}";
     }
     return $list;
   }
+
 }

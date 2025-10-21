@@ -12,6 +12,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
 /**
@@ -19,22 +21,22 @@ use CRM_Xcm_ExtensionUtil as E;
  */
 function _civicrm_api3_contact_Createifnotexists_spec(&$spec) {
   $spec['contact_type'] = [
-      'name'         => 'contact_type',
-      'api.default'  => 'Individual',
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Contact Type',
+    'name'         => 'contact_type',
+    'api.default'  => 'Individual',
+    'type'         => CRM_Utils_Type::T_STRING,
+    'title'        => 'Contact Type',
   ];
   $spec['xcm_profile'] = [
-      'name'         => 'xcm_profile',
-      'api.required' => 0,
-      'type'         => CRM_Utils_Type::T_STRING,
-      'title'        => 'Which profile should be used for matching?',
+    'name'         => 'xcm_profile',
+    'api.required' => 0,
+    'type'         => CRM_Utils_Type::T_STRING,
+    'title'        => 'Which profile should be used for matching?',
   ];
   $spec['match_only'] = [
     'type'        => CRM_Utils_Type::T_BOOLEAN,
     'title'       => 'Match only',
     'api.default' => 0,
-    'description' => 'Either return the matched contact, or nothing; do not create a contact.'
+    'description' => 'Either return the matched contact, or nothing; do not create a contact.',
   ];
 }
 
@@ -59,13 +61,13 @@ function civicrm_api3_contact_Createifnotexists($params) {
   $engine = CRM_Xcm_MatchingEngine::getEngine($profile);
   $result = $engine->createIfNotExists($params);
 
-  $reply = array(
+  $reply = [
     'contact_id' => $result['contact_id'],
     'was_created' => $result['was_created'],
-  );
-  $null = null;
+  ];
+  $null = NULL;
   return civicrm_api3_create_success(
-    array($result['contact_id'] => $reply),
+    [$result['contact_id'] => $reply],
     $params,
     'Contact',
     'createifnotexists',
@@ -73,5 +75,3 @@ function civicrm_api3_contact_Createifnotexists($params) {
     $reply
   );
 }
-
-

@@ -13,11 +13,17 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on (any) email, birthdate, and first name
+ *
  */
 class CRM_Xcm_Matcher_EmailFirstNameBirthdateMatcher extends CRM_Xcm_Matcher_EmailMatcher {
+
   public function __construct() {
     parent::__construct(['first_name' => 'first_name', 'birth_date' => 'birth_date', 'contact_type' => 'contact_type']);
   }
+
 }
