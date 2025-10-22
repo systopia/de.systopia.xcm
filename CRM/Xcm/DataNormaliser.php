@@ -13,15 +13,19 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This class will deal with resolving id <-> label,
- *  e.g. prefix_id vs. prefix
+ * e.g. prefix_id vs. prefix
+ *
  */
 class CRM_Xcm_DataNormaliser {
 
   // cached lookups
-  protected static $_value2id = array();
-  protected static $_id2value = array();
+  protected static $_value2id = [];
+  protected static $_id2value = [];
 
   /**
    * Will 'normalise' field names, e.g.
@@ -111,14 +115,12 @@ class CRM_Xcm_DataNormaliser {
     }
   }
 
-
-
   /**
    * a list of 'wrong' field names
    *  used by the normaliseFieldnames function above
    */
   private static function getFieldnameMap() {
-    return array(
+    return [
       'prefix'               => 'prefix_id',
       'individual_prefix'    => 'prefix_id',
       'individual_prefix_id' => 'prefix_id',
@@ -129,9 +131,8 @@ class CRM_Xcm_DataNormaliser {
       'gender'               => 'gender_id',
       'location_type'        => 'location_type_id',
       'phone_type'           => 'phone_type_id',
-    );
+    ];
   }
-
 
   /**
    * Look up the ID for the given value in the given field
@@ -143,7 +144,8 @@ class CRM_Xcm_DataNormaliser {
       $lookup_result = self::$_value2id[$fieldname][$value];
       if ($lookup_result == 'NOT_FOUND') {
         return NULL;
-      } else {
+      }
+      else {
         return $lookup_result;
       }
     }
@@ -156,35 +158,40 @@ class CRM_Xcm_DataNormaliser {
 
     switch ($fieldtype['type']) {
       case 'option_value':
-        $query = civicrm_api3('OptionValue', 'get', array(
+        $query = civicrm_api3('OptionValue', 'get', [
           'option_group_id' => $fieldtype['option_group'],
           'label'           => $value,
           'option.limit'    => 1,
           'return'          => 'value,label',
-          'sequential'      => 1));
+          'sequential'      => 1,
+        ]);
         $id_field    = 'value';
         $label_field = 'label';
         break;
 
       case 'country':
         if (strlen($value) == 2) {
-          $query = civicrm_api3('Country', 'get', array(
+          $query = civicrm_api3('Country', 'get', [
             'option.limit'    => 1,
             'iso_code'        => strtoupper($value),
-            'return'          => 'id,name'));
-        } else {
-          $query = civicrm_api3('Country', 'get', array(
+            'return'          => 'id,name',
+          ]);
+        }
+        else {
+          $query = civicrm_api3('Country', 'get', [
             'option.limit'    => 1,
             'name'            => $value,
-            'return'          => 'id,name'));
+            'return'          => 'id,name',
+          ]);
         }
         break;
 
       case 'location_type':
-        $query = civicrm_api3('LocationType', 'get', array(
+        $query = civicrm_api3('LocationType', 'get', [
           'name'            => $value,
           'option.limit'    => 1,
-          'return'          => 'name,id'));
+          'return'          => 'name,id',
+        ]);
         break;
 
       default:
@@ -199,13 +206,13 @@ class CRM_Xcm_DataNormaliser {
       // cache result
       self::$_value2id[$fieldname][$value] = $lookup_result;
       self::$_id2value[$fieldname][$lookup_result] = $result[$label_field];
-    } else {
+    }
+    else {
       self::$_value2id[$fieldname][$value] = 'NOT_FOUND';
     }
 
     return $lookup_result;
   }
-
 
   /**
    * Look up the label for the given ID value in the given field
@@ -217,7 +224,8 @@ class CRM_Xcm_DataNormaliser {
       $lookup_result = self::$_id2value[$fieldname][$id];
       if ($lookup_result == 'NOT_FOUND') {
         return NULL;
-      } else {
+      }
+      else {
         return $lookup_result;
       }
     }
@@ -229,27 +237,30 @@ class CRM_Xcm_DataNormaliser {
 
     switch ($fieldtype['type']) {
       case 'option_value':
-        $query = civicrm_api3('OptionValue', 'get', array(
+        $query = civicrm_api3('OptionValue', 'get', [
           'option_group_id' => $fieldtype['option_group'],
           'value'           => $id,
           'option.limit'    => 1,
           'return'          => 'value,label',
-          'sequential'      => 1));
+          'sequential'      => 1,
+        ]);
         $result_field = 'label';
         break;
 
       case 'country':
-        $query = civicrm_api3('Country', 'get', array(
+        $query = civicrm_api3('Country', 'get', [
           'option.limit'    => 1,
           'id'              => $id,
-          'return'          => 'name,id'));
+          'return'          => 'name,id',
+        ]);
         break;
 
       case 'location_type':
-        $query = civicrm_api3('LocationType', 'get', array(
+        $query = civicrm_api3('LocationType', 'get', [
           'id'              => $id,
           'option.limit'    => 1,
-          'return'          => 'name,id'));
+          'return'          => 'name,id',
+        ]);
         break;
 
       default:
@@ -264,24 +275,25 @@ class CRM_Xcm_DataNormaliser {
       // cache result
       self::$_id2value[$fieldname][$id] = $lookup_result;
       self::$_value2id[$fieldname][$lookup_result] = $id;
-    } else {
+    }
+    else {
       self::$_id2value[$fieldname][$id] = 'NOT_FOUND';
     }
 
     return $lookup_result;
   }
 
-
   /**
    * Get resolvable field types
    */
   protected static function getFieldTypes() {
-    return array(
-      'prefix_id'        => array('type' => 'option_value', 'option_group' => 'individual_prefix'),
-      'suffix_id'        => array('type' => 'option_value', 'option_group' => 'individual_suffix'),
-      'gender_id'        => array('type' => 'option_value', 'option_group' => 'gender'),
-      'location_type_id' => array('type' => 'location_type'),
-      'country_id'       => array('type' => 'country'),
-    );
+    return [
+      'prefix_id'        => ['type' => 'option_value', 'option_group' => 'individual_prefix'],
+      'suffix_id'        => ['type' => 'option_value', 'option_group' => 'individual_suffix'],
+      'gender_id'        => ['type' => 'option_value', 'option_group' => 'gender'],
+      'location_type_id' => ['type' => 'location_type'],
+      'country_id'       => ['type' => 'country'],
+    ];
   }
+
 }

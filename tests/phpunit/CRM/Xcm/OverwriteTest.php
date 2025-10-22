@@ -13,9 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
@@ -24,8 +25,12 @@ use Civi\Test\TransactionalInterface;
  * @see https://github.com/systopia/de.systopia.xcm/issues/32
  *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
-class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
+// phpcs:disable Generic.Files.LineLength.TooLong
+class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterface, TransactionalInterface {
+// phpcs:enable
 
   /**
    * Example: Test that a version is returned.
@@ -33,16 +38,16 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
   public function testSimpleOverwrite() {
     // set up our test scenario
     $test_contact = $this->createContactWithRandomEmail([
-        'first_name' => 'Aaron',
-        'last_name'  => 'Aaronson'
+      'first_name' => 'Aaron',
+      'last_name'  => 'Aaronson',
     ]);
     $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
 
     // run XCM and make sure we're matched
     $this->assertXCMLookup([
-        'email'      => $test_contact['email'],
-        'first_name' => 'Bert',
-        'last_name'  => 'Bertson'
+      'email'      => $test_contact['email'],
+      'first_name' => 'Bert',
+      'last_name'  => 'Bertson',
     ], $test_contact['id']);
 
     // after this, there should NOT be any changes (because we haven't enabled the overwrite
@@ -52,9 +57,9 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
     // NOW: activate overwrite.
     $this->setXCMOption('override_fields', ['first_name']);
     $this->assertXCMLookup([
-        'email'      => $test_contact['email'],
-        'first_name' => 'Bert',
-        'last_name'  => 'Bertson'
+      'email'      => $test_contact['email'],
+      'first_name' => 'Bert',
+      'last_name'  => 'Bertson',
     ], $test_contact['id']);
 
     // this time, the first_name should have changed
@@ -69,7 +74,8 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
    * Test if the entity overwrite works
    */
   public function testDetailOverwrite() {
-    $details_to_test = ['phone', 'im', 'website', 'address']; // TODO: test email, but needs different identification
+    // TODO: test email, but needs different identification
+    $details_to_test = ['phone', 'im', 'website', 'address'];
     $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
     $this->setXCMOption('fill_details', []);
     $this->setXCMOption('override_details', $details_to_test);
@@ -79,11 +85,11 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
     foreach ($details_to_test as $entity) {
       // create test contact
       $test_contact = $this->createContactWithRandomEmail([
-          'first_name' => 'Carl',
-          'last_name'  => 'Carlson'
+        'first_name' => 'Carl',
+        'last_name'  => 'Carlson',
       ]);
 
-      $non_primary = rand(10000000,99999999);
+      $non_primary = rand(10000000, 99999999);
       $primary     = $non_primary . '9';
       $attribute   = '';
 
@@ -133,23 +139,25 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
           $this->throwException(new Exception("Unknown type {$entity}!"));
       }
 
-
       // create details with contact
       $primary_detail = $this->assertAPI3($entity, 'create', [
-          $attribute         => $primary,
-          'contact_id'       => $test_contact['id'],
-          'location_type_id' => $location_type_ids[1],
-          'is_primary'       => 1] + $additional_create_attributes);
+        $attribute         => $primary,
+        'contact_id'       => $test_contact['id'],
+        'location_type_id' => $location_type_ids[1],
+        'is_primary'       => 1,
+      ] + $additional_create_attributes);
       $primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $primary_detail['id']]);
 
       if ($has_primary) {
         $non_primary_detail = $this->assertAPI3($entity, 'create', [
-            $attribute         => $non_primary,
-            'contact_id'       => $test_contact['id'],
-            'location_type_id' => $location_type_ids[0],
-            'is_primary'       => 0] + $additional_create_attributes);
+          $attribute         => $non_primary,
+          'contact_id'       => $test_contact['id'],
+          'location_type_id' => $location_type_ids[0],
+          'is_primary'       => 0,
+        ] + $additional_create_attributes);
         $non_primary_detail = $this->assertAPI3($entity, 'getsingle', ['id' => $non_primary_detail['id']]);
-      } else {
+      }
+      else {
         $non_primary_detail = $primary_detail;
       }
 
@@ -161,12 +169,44 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
 
       // test with override primary off and on
       $this->setXCMOption('override_details_primary', 0);
-      $this->assertDetailOverride($entity, $test_contact, $attribute, !$has_primary, $primary_detail, $identifying_attributes, '1');
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, '2');
+      $this->assertDetailOverride(
+        $entity,
+        $test_contact,
+        $attribute,
+        !$has_primary,
+        $primary_detail,
+        $identifying_attributes,
+        '1'
+      );
+      $this->assertDetailOverride(
+        $entity,
+        $test_contact,
+        $attribute,
+        TRUE,
+        $non_primary_detail,
+        $identifying_attributes,
+        '2'
+      );
 
       $this->setXCMOption('override_details_primary', 1);
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $primary_detail, $identifying_attributes, '3');
-      $this->assertDetailOverride($entity, $test_contact, $attribute, TRUE, $non_primary_detail, $identifying_attributes, '4');
+      $this->assertDetailOverride(
+        $entity,
+        $test_contact,
+        $attribute,
+        TRUE,
+        $primary_detail,
+        $identifying_attributes,
+        '3'
+      );
+      $this->assertDetailOverride(
+        $entity,
+        $test_contact,
+        $attribute,
+        TRUE,
+        $non_primary_detail,
+        $identifying_attributes,
+        '4'
+      );
     }
   }
 
@@ -174,13 +214,21 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
    * Helper function for testDetailOverwrite
    * Simply try to override the detail
    */
-  protected function assertDetailOverride($entity, $test_contact, $attribute, $expects_success, $detail, $identifying_attributes, $suffix = 's') {
+  protected function assertDetailOverride(
+    $entity,
+    $test_contact,
+    $attribute,
+    $expects_success,
+    $detail,
+    $identifying_attributes,
+    $suffix = 's'
+  ) {
     // compile lookup query
     $lookup_query = [
-        'email'            => $test_contact['email'],
-        'first_name'       => 'Carl',
-        'last_name'        => 'Carlson',
-        $attribute         => $detail[$attribute] . $suffix,
+      'email'            => $test_contact['email'],
+      'first_name'       => 'Carl',
+      'last_name'        => 'Carlson',
+      $attribute         => $detail[$attribute] . $suffix,
     ];
     foreach ($identifying_attributes as $identifying_attribute) {
       if (!empty($detail[$identifying_attribute])) {
@@ -189,23 +237,34 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
     }
 
     $old_detail_count = $this->assertAPI3($entity, 'getcount', [
-        'contact_id' => $test_contact['id'],
-        $attribute   => $detail[$attribute] . $suffix]);
+      'contact_id' => $test_contact['id'],
+      $attribute   => $detail[$attribute] . $suffix,
+    ]);
 
     $this->assertXCMLookup($lookup_query, $test_contact['id']);
 
     $new_detail_count = $this->assertAPI3($entity, 'getcount', [
-        'contact_id' => $test_contact['id'],
-        $attribute   => $detail[$attribute] . $suffix]);
+      'contact_id' => $test_contact['id'],
+      $attribute   => $detail[$attribute] . $suffix,
+    ]);
 
     $old_detail_still_exists = (bool) $this->assertAPI3($entity, 'getcount', ['id' => $detail['id']]);
 
     // evaluate
     if ($expects_success) {
-      $this->assertGreaterThan($old_detail_count, $new_detail_count, "Detail '{$detail[$attribute]}{$suffix}' not created");
+      $this->assertGreaterThan(
+        $old_detail_count,
+        $new_detail_count,
+        "Detail '{$detail[$attribute]}{$suffix}' not created"
+      );
       $this->assertFalse($old_detail_still_exists, "Detail '{$detail[$attribute]}' still exists.");
-    } else {
-      $this->assertLessThanOrEqual($old_detail_count, $new_detail_count, "Detail '{$detail[$attribute]}{$suffix}' created despite primary protection.");
+    }
+    else {
+      $this->assertLessThanOrEqual(
+        $old_detail_count,
+        $new_detail_count,
+        "Detail '{$detail[$attribute]}{$suffix}' created despite primary protection."
+      );
       $this->assertTrue($old_detail_still_exists, "Detail '{$detail[$attribute]}' deleted despite primary protection.");
     }
   }
@@ -216,47 +275,44 @@ class CRM_Xcm_OverwriteTest extends CRM_Xcm_TestBase implements HeadlessInterfac
   public function testSimpleOverwriteNoChangeActivity() {
     // set up our test scenario
     $test_contact = $this->createContactWithRandomEmail([
-        'first_name' => 'Ceron',
-        'last_name'  => 'Ceronson'
+      'first_name' => 'Ceron',
+      'last_name'  => 'Ceronson',
     ]);
     $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
 
     // run XCM and make sure we're matched
-    $this->enableDiffActivity("testSimpleOverwriteNoChangeActivity");
+    $this->enableDiffActivity('testSimpleOverwriteNoChangeActivity');
     $this->assertXCMLookup([
-        'email'      => $test_contact['email'],
-        'first_name' => 'Ceron',
-        'last_name'  => 'Ceronson'
+      'email'      => $test_contact['email'],
+      'first_name' => 'Ceron',
+      'last_name'  => 'Ceronson',
     ], $test_contact['id']);
 
     // the names are the same, so there shouldn't be any diff activity
-    $activity_count = $this->getDiffActivityCount($test_contact['id'], "testSimpleOverwriteNoChangeActivity");
-    $this->assertEquals(0, $activity_count, "Unexpected diff activity");
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testSimpleOverwriteNoChangeActivity');
+    $this->assertEquals(0, $activity_count, 'Unexpected diff activity');
 
-
-    $this->setXCMOption('override_fields', ['first_name','last_name']);
+    $this->setXCMOption('override_fields', ['first_name', 'last_name']);
     $this->assertXCMLookup([
-        'email'      => $test_contact['email'],
-        'first_name' => 'Derron',
-        'last_name'  => 'Derpson'
+      'email'      => $test_contact['email'],
+      'first_name' => 'Derron',
+      'last_name'  => 'Derpson',
     ], $test_contact['id']);
 
     // both overwritten, so there shouldn't be any diff activity either
-    $activity_count = $this->getDiffActivityCount($test_contact['id'], "testSimpleOverwriteNoChangeActivity");
-    $this->assertEquals(0, $activity_count, "Unexpected diff activity");
-
-
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testSimpleOverwriteNoChangeActivity');
+    $this->assertEquals(0, $activity_count, 'Unexpected diff activity');
 
     $this->setXCMOption('override_fields', ['first_name']);
     $this->assertXCMLookup([
-        'email'      => $test_contact['email'],
-        'first_name' => 'Ethan',
-        'last_name'  => 'Earmark'
+      'email'      => $test_contact['email'],
+      'first_name' => 'Ethan',
+      'last_name'  => 'Earmark',
     ], $test_contact['id']);
 
     // one overwritten, so there SHOULD be any diff activity
-    $activity_count = $this->getDiffActivityCount($test_contact['id'], "testSimpleOverwriteNoChangeActivity");
-    $this->assertEquals(1, $activity_count, "Missing diff activity");
+    $activity_count = $this->getDiffActivityCount($test_contact['id'], 'testSimpleOverwriteNoChangeActivity');
+    $this->assertEquals(1, $activity_count, 'Missing diff activity');
   }
 
 }

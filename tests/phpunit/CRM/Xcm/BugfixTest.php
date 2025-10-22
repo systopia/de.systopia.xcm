@@ -13,9 +13,10 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
@@ -24,9 +25,10 @@ use Civi\Test\TransactionalInterface;
  * @see https://github.com/systopia/de.systopia.xcm/issues/32
  *
  * @group headless
+ * @coversNothing
+ * TODO: Document actual coverage.
  */
-class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, HookInterface, TransactionalInterface {
-
+class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, TransactionalInterface {
 
   /**
    * Test bug#36: the location type is ignored for new
@@ -38,17 +40,17 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
     $this->setXCMRules([]);
     $this->setXCMOption('fill_details', []);
     $test_contact = $this->assertAPI3('Contact', 'getorcreate', [
-        'contact_type'  => 'Individual',
-        'first_name'    => 'Some',
-        'last_name'     => 'Guy',
-        'location_type' => $test_location_type,
-        'email'         => sha1(microtime() . 'b36') . '@nowhere.nil',
+      'contact_type'  => 'Individual',
+      'first_name'    => 'Some',
+      'last_name'     => 'Guy',
+      'location_type' => $test_location_type,
+      'email'         => sha1(microtime() . 'b36') . '@nowhere.nil',
     ]);
     $test_contact = $this->assertAPI3('Contact', 'getsingle', ['id' => $test_contact['id']]);
 
     // check email
     $email = $this->assertAPI3('Email', 'getsingle', ['contact_id' => $test_contact['id']]);
-    $this->assertEquals($test_location_type, $email['location_type_id'], "Bug#36 still active for new contacts!");
+    $this->assertEquals($test_location_type, $email['location_type_id'], 'Bug#36 still active for new contacts!');
   }
 
   /**
@@ -60,28 +62,28 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
 
     // set up our test scenario
     $test_contact = $this->createContactWithRandomEmail([
-        'first_name' => 'Aaron',
-        'last_name'  => 'Aaronson'
+      'first_name' => 'Aaron',
+      'last_name'  => 'Aaronson',
     ]);
     $this->setXCMRules(['CRM_Xcm_Matcher_EmailMatcher']);
-
 
     // run XCM, adding a phone number
     $this->setXCMOption('fill_details', ['phone']);
     $this->assertXCMLookup([
-        'email'            => $test_contact['email'],
-        'first_name'       => 'Bert',
-        'last_name'        => 'Bertson',
-        'phone'            => '123456789',
-        'location_type_id' => $test_location_type,
+      'email'            => $test_contact['email'],
+      'first_name'       => 'Bert',
+      'last_name'        => 'Bertson',
+      'phone'            => '123456789',
+      'location_type_id' => $test_location_type,
     ], $test_contact['id']);
 
     // now, let's see if the phone has the right location type
     $phone = $this->assertAPI3('Phone', 'getsingle', [
-        'contact_id' => $test_contact['id'],
-        'phone'      => '123456789']);
+      'contact_id' => $test_contact['id'],
+      'phone'      => '123456789',
+    ]);
 
-    $this->assertEquals($test_location_type, $phone['location_type_id'], "Bug#36 still active!");
+    $this->assertEquals($test_location_type, $phone['location_type_id'], 'Bug#36 still active!');
   }
 
   /**
@@ -93,32 +95,34 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
 
     // set up our test scenario
     $this->setXCMOption('fill_details', ['phone']);
-    $phone = str_replace('.', '', microtime(1));
+    $phone = str_replace('.', '', (string) microtime(TRUE));
     $test_contact = $this->createContactWithRandomEmail([
-        'first_name' => 'Aaron',
-        'last_name'  => 'Aaronson',
+      'first_name' => 'Aaron',
+      'last_name'  => 'Aaronson',
     ]);
     $this->assertAPI3('Phone', 'create', [
-        'contact_id' => $test_contact['id'],
-        'phone'      => $phone]);
+      'contact_id' => $test_contact['id'],
+      'phone'      => $phone,
+    ]);
 
     // run XCM, adding an email
     $this->setXCMOption('fill_details', ['email']);
     $this->setXCMRules(['CRM_Xcm_Matcher_PhoneLastnameMatcher']);
     $this->assertXCMLookup([
-        'email'            => 'test36@email.test',
-        'first_name'       => 'Aaron',
-        'last_name'        => 'Aaronson',
-        'phone'            => $phone,
-        'location_type_id' => $test_location_type,
+      'email'            => 'test36@email.test',
+      'first_name'       => 'Aaron',
+      'last_name'        => 'Aaronson',
+      'phone'            => $phone,
+      'location_type_id' => $test_location_type,
     ], $test_contact['id']);
 
     // now, let's see if the phone has the right location type
     $phone = $this->assertAPI3('Email', 'getsingle', [
-        'contact_id' => $test_contact['id'],
-        'email'      => 'test36@email.test']);
+      'contact_id' => $test_contact['id'],
+      'email'      => 'test36@email.test',
+    ]);
 
-    $this->assertEquals($test_location_type, $phone['location_type_id'], "Bug#36 still active!");
+    $this->assertEquals($test_location_type, $phone['location_type_id'], 'Bug#36 still active!');
   }
 
   protected function getNonDefaultLocationType() {
@@ -136,4 +140,5 @@ class CRM_Xcm_BugfixTest extends CRM_Xcm_TestBase implements HeadlessInterface, 
     $this->assertNotEmpty($test_location_type, "Couldn't find non-default location type");
     return $test_location_type;
   }
+
 }

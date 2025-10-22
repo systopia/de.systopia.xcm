@@ -13,11 +13,17 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on (any) email and first_name and last name... BUT only when they're reversed!
+ *
  */
 class CRM_Xcm_Matcher_EmailFullNameReversedMatcher extends CRM_Xcm_Matcher_EmailMatcher {
+
   public function __construct() {
     parent::__construct(['first_name' => 'last_name', 'last_name' => 'first_name', 'contact_type' => 'contact_type']);
   }
+
 }

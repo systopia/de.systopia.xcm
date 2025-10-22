@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
 /**
@@ -44,10 +46,10 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     $this->addRule(
       'uploadFile',
       ts('File size should be less than %1 MBytes (%2 bytes)',
-        array(
+        [
           1 => $uploadSize,
           2 => $uploadFileSize,
-        )
+        ]
       ),
       'maxfilesize',
       $uploadFileSize
@@ -65,24 +67,26 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
 
     $this->addElement('select',
         'profile_name',
-        ts('Use Configuration Profile', array('domain' => 'de.systopia.xcm')),
+        ts('Use Configuration Profile', ['domain' => 'de.systopia.xcm']),
         CRM_Xcm_Configuration::getProfileList(),
-        array('class' => 'crm-select2 huge'));
+        ['class' => 'crm-select2 huge']);
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Submit'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // Export form elements.
     $this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();
   }
 
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   public function postProcess() {
+  // phpcs:enable
     $values = $this->exportValues();
 
     if (isset($this->_submitFiles['uploadFile'])) {
@@ -106,7 +110,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     $fd = fopen($file, 'r');
     if (!$fd) {
       CRM_Core_Session::setStatus(
-        E::ts('Could not read import file %1.', array(1 => $filename)),
+        E::ts('Could not read import file %1.', [1 => $filename]),
         E::ts('Import failure'),
         'no-popup'
       );
@@ -114,7 +118,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     }
     if (filesize($file) == 0) {
       CRM_Core_Session::setStatus(
-        E::ts('Import file %1 is empty. Please upload a valid file.', array(1 => $filename)),
+        E::ts('Import file %1 is empty. Please upload a valid file.', [1 => $filename]),
         E::ts('Import failure'),
         'no-popup'
       );
@@ -147,7 +151,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
       return;
     }
 
-    $errors = array();
+    $errors = [];
     $error_csv = implode($fieldSeparator, $firstrow);
     $success_count = 0;
     while ($record = fgetcsv($fd, 0, $fieldSeparator)) {
@@ -179,7 +183,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     }
 
     CRM_Core_Session::setStatus(
-      E::ts('%1 contact(s) imported.', array(1 => $success_count)),
+      E::ts('%1 contact(s) imported.', [1 => $success_count]),
       '<p>' . E::ts('Import completed') . '</p>',
       'no-popup'
     );
@@ -206,7 +210,7 @@ class CRM_Xcm_Form_Import extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();

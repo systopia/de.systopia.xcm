@@ -13,8 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on first name and address
+ *
  */
 class CRM_Xcm_Matcher_LastNameAddressMatcher extends CRM_Xcm_Matcher_AddressMatcher {
 
@@ -32,4 +36,5 @@ class CRM_Xcm_Matcher_LastNameAddressMatcher extends CRM_Xcm_Matcher_AddressMatc
   public function refineContactQuery(&$contact_query, $contact_data) {
     $contact_query['last_name'] = $contact_data['last_name'];
   }
+
 }

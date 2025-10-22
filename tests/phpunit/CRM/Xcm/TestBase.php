@@ -13,15 +13,18 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
  * This class adds some base functions for PHP unit tests for the XCM
  */
-abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+// phpcs:disable Generic.Files.LineLength.TooLong, Generic.NamingConventions.AbstractClassNamePrefix.Missing
+abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements HeadlessInterface, TransactionalInterface {
+// phpcs:enable
 
   protected static $counter = 0;
 
@@ -35,14 +38,6 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
       ->apply();
   }
 
-  public function setUp() {
-    parent::setUp();
-  }
-
-  public function tearDown() {
-    parent::tearDown();
-  }
-
   /**
    * Execute the API call and assert that it is successfull
    *
@@ -54,8 +49,9 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
   public function assertAPI3($entity, $action, $params) {
     try {
       return civicrm_api3($entity, $action, $params);
-    } catch (CiviCRM_API3_Exception $ex) {
-      $this->assertFalse(TRUE, "API Exception: " . $ex->getMessage());
+    }
+    catch (CRM_Core_Exception $ex) {
+      $this->assertFalse(TRUE, 'API Exception: ' . $ex->getMessage());
       return NULL;
     }
   }
@@ -67,17 +63,30 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
    */
   public function getDefaultDiffActivityTypeID() {
     if ($this->diff_activity_type_id === NULL) {
-      $existing_activity = $this->assertAPI3('OptionValue', 'get', ['option_group_id' => 'activity_type', 'name' => 'xcm_test_diff_activity']);
+      $existing_activity = $this->assertAPI3(
+        'OptionValue',
+        'get',
+        ['option_group_id' => 'activity_type', 'name' => 'xcm_test_diff_activity']
+      );
       if (!empty($existing_activity['id'])) {
-        $this->diff_activity_type_id = $this->assertAPI3('OptionValue', 'getvalue', ['id' => $existing_activity['id'], 'return' => 'value']);
-
-      } else {
+        $this->diff_activity_type_id = $this->assertAPI3(
+          'OptionValue',
+          'getvalue',
+          ['id' => $existing_activity['id'], 'return' => 'value']
+        );
+      }
+      else {
         // create it
         $new_activity = $this->assertAPI3('OptionValue', 'create', [
-            'option_group_id' => 'activity_type',
-            'name'            => 'xcm_test_diff_activity',
-            'label'           => 'XCM Test Suite Diff Activity']);
-        $this->diff_activity_type_id = $this->assertAPI3('OptionValue', 'getvalue', ['id' => $new_activity['id'], 'return' => 'value']);
+          'option_group_id' => 'activity_type',
+          'name'            => 'xcm_test_diff_activity',
+          'label'           => 'XCM Test Suite Diff Activity',
+        ]);
+        $this->diff_activity_type_id = $this->assertAPI3(
+          'OptionValue',
+          'getvalue',
+          ['id' => $new_activity['id'], 'return' => 'value']
+        );
       }
     }
     return $this->diff_activity_type_id;
@@ -90,7 +99,7 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
    * @param null $profile
    * @param null $activity_type_id
    */
-  public function enableDiffActivity($activity_subject = "test diff", $profile = NULL, $activity_type_id = NULL) {
+  public function enableDiffActivity($activity_subject = 'test diff', $profile = NULL, $activity_type_id = NULL) {
     $config = CRM_Xcm_Configuration::getConfigProfile($profile);
 
     // get activity type
@@ -114,19 +123,18 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
    * @param $contact_id
    * @param string $subject
    */
-  public function getDiffActivityCount($contact_id, $subject = "test diff", $activity_type_id = NULL) {
+  public function getDiffActivityCount($contact_id, $subject = 'test diff', $activity_type_id = NULL) {
     // get activity type
     if (!$activity_type_id) {
       $activity_type_id = $this->getDefaultDiffActivityTypeID();
     }
 
     return $this->assertAPI3('Activity', 'getcount', [
-        'activity_type_id'  => $activity_type_id,
-        'target_contact_id' => $contact_id,
-        'subject'           => $subject
+      'activity_type_id'  => $activity_type_id,
+      'target_contact_id' => $contact_id,
+      'subject'           => $subject,
     ]);
   }
-
 
   /**
    * Set the matcher list
@@ -167,7 +175,7 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
     }
 
     $result = civicrm_api3('Contact', 'getorcreate', $contact_data);
-    $this->assertEquals($contact_id, $result['id'], "Unexpected contact identified");
+    $this->assertEquals($contact_id, $result['id'], 'Unexpected contact identified');
   }
 
   /**
@@ -206,7 +214,6 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
 
     $contact = civicrm_api3('Contact', 'create', $contact_data);
     $new_contact = civicrm_api3('Contact', 'getsingle', ['id' => $contact['id']]);
-    //error_log("Contact [{$contact['id']}] with email {$contact_data['email']} created.");
     self::assertEntityEqual($contact_data, $new_contact, ['email']);
     return $new_contact;
   }
@@ -224,9 +231,10 @@ abstract class CRM_Xcm_TestBase extends \PHPUnit\Framework\TestCase implements H
     }
 
     foreach ($fields as $field) {
-      $value_1 = CRM_Utils_Array::value($field, $entity_1);
-      $value_2 = CRM_Utils_Array::value($field, $entity_2);
+      $value_1 = $entity_1[$field] ?? NULL;
+      $value_2 = $entity_2[$field] ?? NULL;
       $this->assertEquals($value_1, $value_2, 'Entities differ!');
     }
   }
+
 }

@@ -13,22 +13,30 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
-/*
+/**
+ *
  * This class will provide data sanitation
  *
- *  based on https://github.com/greenpeace-cee/at.greenpeace.multibite by @pfigel
+ * based on https://github.com/greenpeace-cee/at.greenpeace.multibite by @pfigel
+ *
  */
 class CRM_Xcm_DataSanitiser {
 
-  const SANITISER_NONE                 = '';
-  const SANITISER_UTF8MB4_STRIP        = 'utf8mb4';
-  const SANITISER_UTF8MB4_QUESTIONMARK = 'utf8mb4_?';
-  const SANITISER_UTF8MB4_QUESTIONCHAR = 'utf8mb4_c';
+  private const SANITISER_NONE = '';
 
-  const MULTIBYTE_REGEX = '/[\x{10000}-\x{10FFFF}]/u';
-  const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
+  private const SANITISER_UTF8MB4_STRIP = 'utf8mb4';
+
+  private const SANITISER_UTF8MB4_QUESTIONMARK = 'utf8mb4_?';
+
+  private const SANITISER_UTF8MB4_QUESTIONCHAR = 'utf8mb4_c';
+
+  private const MULTIBYTE_REGEX = '/[\x{10000}-\x{10FFFF}]/u';
+
+  private const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 
   /**
    * Sanitise the given data
@@ -39,13 +47,13 @@ class CRM_Xcm_DataSanitiser {
    * @param int $recursion
    *   recursion depth. default is 0
    */
-  public static function sanitise(&$data, $options, $recursion = 1)
-  {
+  public static function sanitise(&$data, $options, $recursion = 1) {
     if (is_string($data)) {
       // sanitise strings
       self::sanitiseString($data, $options);
 
-    } elseif (is_array($data)) {
+    }
+    elseif (is_array($data)) {
       if ($recursion > 0) {
         // sanitise values of an array
         $recursion = $recursion - 1;
@@ -54,7 +62,7 @@ class CRM_Xcm_DataSanitiser {
         }
       }
 
-    // other data types don't need to be sanitised
+      // other data types don't need to be sanitised
     }
   }
 
@@ -64,12 +72,8 @@ class CRM_Xcm_DataSanitiser {
    *   the data to be sanitised
    * @param array $options
    *   list of sanitation options
-   *
-   * @return string
-   *   sanitised version of the string
    */
-  public static function sanitiseString(&$string, $options)
-  {
+  public static function sanitiseString(&$string, $options) {
     foreach ($options as $sanitation) {
       switch ($sanitation) {
         case self::SANITISER_UTF8MB4_STRIP:
@@ -93,13 +97,12 @@ class CRM_Xcm_DataSanitiser {
   /**
    * Get the list of sanitation options
    */
-  public static function getDataSanitationOptions()
-  {
+  public static function getDataSanitationOptions() {
     return [
-        self::SANITISER_NONE    => E::ts("None"),
-        self::SANITISER_UTF8MB4_STRIP        => E::ts("Strip UTF8 4 Byte Characters"),
-        self::SANITISER_UTF8MB4_QUESTIONMARK => E::ts("Replace UTF8 4 Byte Characters with '?'"),
-        self::SANITISER_UTF8MB4_QUESTIONCHAR => E::ts("Replace UTF8 4 Byte Characters with '�'"),
+      self::SANITISER_NONE    => E::ts('None'),
+      self::SANITISER_UTF8MB4_STRIP        => E::ts('Strip UTF8 4 Byte Characters'),
+      self::SANITISER_UTF8MB4_QUESTIONMARK => E::ts("Replace UTF8 4 Byte Characters with '?'"),
+      self::SANITISER_UTF8MB4_QUESTIONCHAR => E::ts("Replace UTF8 4 Byte Characters with '�'"),
     ];
   }
 
@@ -112,10 +115,11 @@ class CRM_Xcm_DataSanitiser {
    * @return array of options
    */
   public static function getSetting($config) {
-    $sanitiser_setting = CRM_Utils_Array::value('input_sanitation', $config, '');
+    $sanitiser_setting = $config['input_sanitation'] ?? '';
     if (!is_array($sanitiser_setting)) {
       $sanitiser_setting = [$sanitiser_setting];
     }
     return $sanitiser_setting;
   }
+
 }

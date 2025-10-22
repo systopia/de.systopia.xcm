@@ -13,22 +13,30 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This will execute a matching process based on the configuration,
  * employing various matching rules
+ *
  */
 class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
 
-  /** fields to match in addition to the email address */
+  /**
+   * fields to match in addition to the email address */
   protected $other_contact_fields = NULL;
 
-  // restrictions for search, e.g. array('is_billing' => '0')
+  /**
+   * Restrictions for search, e.g. array('is_billing' => '0').
+   */
   protected $restrictions = [];
 
   public function __construct($other_contact_fields = NULL) {
     if (is_array($other_contact_fields)) {
       $this->other_contact_fields = $other_contact_fields;
-    } else {
+    }
+    else {
       $this->other_contact_fields = ['contact_type' => 'contact_type'];
     }
   }
@@ -39,7 +47,9 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
    * 2) load the attached contacts
    * 3) check the other_contact_fields
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   public function matchContact(&$contact_data, $params = NULL) {
+  // phpcs:enable
     if (empty($contact_data['email'])) {
       return $this->createResultUnmatched();
     }
@@ -68,11 +78,12 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
     }
 
     // now: find contacts
-    $contact_search = array(
-      'id'           => array('IN' => $email_contact_ids),
+    $contact_search = [
+      'id'           => ['IN' => $email_contact_ids],
       'is_deleted'   => 0,
       'option.limit' => 0,
-      'return'       => 'id');
+      'return'       => 'id',
+    ];
     foreach ($this->other_contact_fields as $contact_field_name => $submitted_field_name) {
       $contact_search[$contact_field_name] = $contact_data[$submitted_field_name];
     }
@@ -94,9 +105,11 @@ class CRM_Xcm_Matcher_EmailMatcher extends CRM_Xcm_MatchingRule {
         $contact_id = $this->pickContact($contact_matches);
         if ($contact_id) {
           return $this->createResultMatched($contact_id);
-        } else {
+        }
+        else {
           return $this->createResultUnmatched();
         }
     }
   }
+
 }

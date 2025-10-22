@@ -13,36 +13,47 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This will execute a matching process based on the configuration,
  * employing various matching rules
+ *
  */
 class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
 
-  protected $dedupe_group_bao = NULL;
+  protected int $dedupeGroupId;
 
-  public function __construct($dedupe_group_id) {
-    $this->dedupe_group_bao = new CRM_Dedupe_BAO_RuleGroup();
-    $this->dedupe_group_bao->get('id', $dedupe_group_id);
+  protected string $dedupeGroupContactType;
 
-    // todo: handle NOT FOUND
+  public function __construct(int $dedupe_group_id) {
+    $this->dedupeGroupId = $dedupe_group_id;
+    $dedupeGroup = \Civi\Api4\DedupeRuleGroup::get(FALSE)
+      ->addSelect('contact_type')
+      ->addWhere('id', '=', $dedupe_group_id)
+      ->execute()
+      ->single();
+    $this->dedupeGroupContactType = $dedupeGroup['contact_type'];
   }
 
   public function matchContact(&$contact_data, $params = NULL) {
     // first check, if the contact_type is right
-    $contact_type = $this->dedupe_group_bao->contact_type;
+    $contact_type = $this->dedupeGroupContactType;
 
     if ($this->isContactType($contact_type, $contact_data)) {
-
       // it's the right type, let's go:
       $dedupeParams = CRM_Dedupe_Finder::formatParams($contact_data, $contact_type);
       $dedupeParams['check_permission'] = '';
-      $dupes = CRM_Dedupe_Finder::dupesByParams(
-          $dedupeParams,
-          $contact_type,
-          NULL,
-          array(),
-          $this->dedupe_group_bao->id);
+      $finderParams = [
+        'rule_group_id' => $this->dedupeGroupId,
+        'contact_type' => $contact_type,
+        'check_permission' => TRUE,
+        'excluded_contact_ids' => [],
+        'match_params' => $dedupeParams,
+        'rule' => 'Unsupervised',
+      ];
+      $dupes = CRM_Contact_BAO_Contact::findDuplicates($finderParams, ['is_legacy_usage' => TRUE]);
 
       $contact_id = $this->pickContact($dupes);
       if ($contact_id) {
@@ -53,19 +64,21 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
     return $this->createResultUnmatched();
   }
 
-
   /**
-   * get a key => title list of existing unsupervised dedupe rules
+   * @return array<int, string>
+   *   A key => title list of existing unsupervised dedupe rules.
    */
-  public static function getRuleList() {
-    $dao = new CRM_Dedupe_DAO_RuleGroup();
-    // $dao->used = 'Unsupervised';
-
-    $dao->find();
-    $list = array();
-    while ($dao->fetch()) {
-      $list["DEDUPE_{$dao->id}"] = "[{$dao->contact_type}|{$dao->used}] {$dao->title}";
+  public static function getRuleList(): array {
+    /** @phpstan-var iterable<array{id: int, contact_type: string, used: string, title: string}> $dedupeRuleGroups */
+    $dedupeRuleGroups = \Civi\Api4\DedupeRuleGroup::get(FALSE)
+      ->addSelect('id', 'contact_type', 'used', 'title')
+      ->execute();
+    $list = [];
+    foreach ($dedupeRuleGroups as $dedupeRuleGroup) {
+      $list[$dedupeRuleGroup['id']]
+        = "[{$dedupeRuleGroup['contact_type']}|{$dedupeRuleGroup['used']}] {$dedupeRuleGroup['title']}";
     }
     return $list;
   }
+
 }

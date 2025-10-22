@@ -13,17 +13,23 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
-/*
+/**
+ *
  * Configuration wrapper
+ *
  */
 class CRM_Xcm_Configuration {
 
-  /** stores the whole settings blob */
+  /**
+   * stores the whole settings blob */
   protected static $_all_profiles = NULL;
 
-  /** stores the whole settings blob */
+  /**
+   * stores the whole settings blob */
   protected $profile_name = NULL;
 
   /**
@@ -79,7 +85,7 @@ class CRM_Xcm_Configuration {
       if (empty($profile_name)) {
         $all_profile_name = array_keys($all_profiles);
         $profile_name = reset($all_profile_name);
-        $this->setDefaultProfile($profile_name);
+        self::setDefaultProfile($profile_name);
       }
     }
     $this->profile_name = $profile_name;
@@ -92,8 +98,9 @@ class CRM_Xcm_Configuration {
     $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$this->profile_name])) {
       return $all_profiles[$this->profile_name];
-    } else {
-      throw new Exception("Profile '{$this->profile_name}' unknown!");
+    }
+    else {
+      throw new \RuntimeException("Profile '{$this->profile_name}' unknown!");
     }
   }
 
@@ -106,7 +113,7 @@ class CRM_Xcm_Configuration {
     if (self::$_all_profiles === NULL) {
       self::$_all_profiles = Civi::settings()->get('xcm_config_profiles');
       if (!is_array(self::$_all_profiles) || empty(self::$_all_profiles)) {
-        self::$_all_profiles = array('default' => []);
+        self::$_all_profiles = ['default' => []];
       }
     }
     return self::$_all_profiles;
@@ -126,7 +133,7 @@ class CRM_Xcm_Configuration {
    * Caution! This might lose current changes
    */
   public static function flushProfileCache() {
-    self::$_all_profiles = null;
+    self::$_all_profiles = NULL;
   }
 
   /**
@@ -141,12 +148,14 @@ class CRM_Xcm_Configuration {
       foreach ($all_profiles as $profile_name => &$profile) {
         if ($profile_name == $default_profile_name) {
           $profile['is_default'] = 1;
-        } else {
+        }
+        else {
           $profile['is_default'] = 0;
         }
       }
-    } else {
-      throw new Exception("Profile '{$default_profile_name}' unknown!");
+    }
+    else {
+      throw new \RuntimeException("Profile '{$default_profile_name}' unknown!");
     }
     self::storeAllProfiles();
   }
@@ -160,7 +169,7 @@ class CRM_Xcm_Configuration {
   public function cloneProfile($new_profile_name) {
     $all_profiles = &self::getAllProfiles();
     if (isset($all_profiles[$new_profile_name])) {
-      throw new Exception("Profile '{$new_profile_name}' already exists!");
+      throw new \RuntimeException("Profile '{$new_profile_name}' already exists!");
     }
 
     // simply store a copy of the data
@@ -204,8 +213,9 @@ class CRM_Xcm_Configuration {
     $config = &$this->getConfiguration();
     if (is_array($settings)) {
       $config[$setting_name] = $settings;
-    } else {
-      throw new Exception("ConfigGroup has to be an array.");
+    }
+    else {
+      throw new \RuntimeException('ConfigGroup has to be an array.');
     }
   }
 
@@ -220,7 +230,6 @@ class CRM_Xcm_Configuration {
     return (int) $profile_data['is_default'] ?? 0;
   }
 
-
   /**
    * Get the label/name of this profile
    *
@@ -231,7 +240,8 @@ class CRM_Xcm_Configuration {
     $profile_data = $this->getConfiguration();
     if (!empty($profile_data['label'])) {
       return $profile_data['label'];
-    } else {
+    }
+    else {
       return E::ts("Profile '%1'", [1 => $this->profile_name]);
     }
   }
@@ -307,14 +317,12 @@ class CRM_Xcm_Configuration {
     $this->setConfigGroup('postprocessing', $data);
   }
 
-
   /**
    * Save all changes in the configuration to the DB
    */
   public function store() {
     self::storeAllProfiles();
   }
-
 
   /**
    * Get created activity status
@@ -338,11 +346,14 @@ class CRM_Xcm_Configuration {
     $handler = $options['diff_handler'] ?? NULL;
     if ($handler == 'i3val' && function_exists('i3val_civicrm_install')) {
       return 'i3val';
-    } elseif ($handler == 'diff') {
+    }
+    elseif ($handler == 'diff') {
       return 'diff';
-    } elseif ($handler == 'updated_diff') {
+    }
+    elseif ($handler == 'updated_diff') {
       return 'updated_diff';
-    } else {
+    }
+    else {
       return 'none';
     }
   }
@@ -382,7 +393,6 @@ class CRM_Xcm_Configuration {
     return $this->getIntOrNull('default_website_type');
   }
 
-
   /**
    * Get location type to be used for new addresses
    */
@@ -405,12 +415,13 @@ class CRM_Xcm_Configuration {
     $options = $this->getOptions();
     if (!empty($options['diff_phone_type'])) {
       return (int) $options['diff_phone_type'];
-    } else {
+    }
+    else {
       return (int) CRM_Core_PseudoConstant::getKey(
         'CRM_Core_BAO_Phone',
         'phone_type_id',
         'Phone'
-      );
+          );
     }
   }
 
@@ -421,12 +432,13 @@ class CRM_Xcm_Configuration {
     $options = $this->getOptions();
     if (!empty($options['diff_mobile_type'])) {
       return (int) $options['diff_mobile_type'];
-    } else {
+    }
+    else {
       return (int) CRM_Core_PseudoConstant::getKey(
         'CRM_Core_BAO_Phone',
         'phone_type_id',
         'Mobile'
-      );
+          );
     }
   }
 
@@ -443,10 +455,11 @@ class CRM_Xcm_Configuration {
     }
 
     // check via API key, i.e. when coming through REST-API
-    $null = null;
+    $null = NULL;
     $api_key = CRM_Utils_Request::retrieve('api_key', 'String', $null, FALSE, NULL, 'REQUEST');
-    if (!$api_key || strtolower($api_key) == 'null') {
-      return $fallback_id; // nothing we can do
+    if (!isset($api_key) || '' === $api_key || strtolower($api_key) == 'null') {
+      // nothing we can do
+      return $fallback_id;
     }
 
     // load user via API KEU
@@ -460,11 +473,6 @@ class CRM_Xcm_Configuration {
 
     return $fallback_id;
   }
-
-
-  /*******************************************************
-   **               DIFF HELPER                         **
-   ******************************************************/
 
   /**
    * Identify and return the profile that feels responsible
@@ -486,9 +494,9 @@ class CRM_Xcm_Configuration {
       $diff_activity_id = $config->diffActivity();
       $diff_status_id   = $config->defaultActivityStatus();
 
-      if (   $diff_enabled
+      if ($diff_enabled
           && $diff_activity_id == $activity_type_id
-          && $diff_status_id   == $status_id) {
+          && $diff_status_id == $status_id) {
         // yes, this configuration matches!
         return $config;
       }
@@ -508,25 +516,29 @@ class CRM_Xcm_Configuration {
   public static function injectDiffHelper(&$form, $activity_type_id, $status_id): void {
     try {
       $profile = self::getProfileForDiffActivityHelper($activity_type_id, $status_id);
-      if (!$profile) return;
+      if (!$profile) {
+        return;
+      }
 
       // WARN if contact is tagged with certain tags
       $warnOnTags = CRM_Xcm_Configuration::diffProcess_warnOnTags();
       if (!empty($warnOnTags)) {
         $contact_id = $form->getVar('_currentlyViewedContactId');
         if ($contact_id) {
+          /** @phpstan-var array<int, string> $tags */
           $tags = CRM_Core_BAO_EntityTag::getContactTags($contact_id);
           foreach ($warnOnTags as $tagName) {
-            if (in_array($tagName, $tags)) {
+            if (in_array($tagName, $tags, TRUE)) {
               CRM_Core_Session::setStatus(
-                  E::ts("Warning! This contact is tagged '%1'.", array(1=>$tagName)),
-                  E::ts("Warning"), 'warning');
+                  E::ts("Warning! This contact is tagged '%1'.", [1 => $tagName]),
+                  E::ts('Warning'), 'warning');
             }
           }
-        } else {
+        }
+        else {
           CRM_Core_Session::setStatus(
               E::ts("Warning! The tags couldn't be read."),
-              E::ts("Warning"), 'error');
+              E::ts('Warning'), 'error');
         }
       }
 
@@ -538,11 +550,11 @@ class CRM_Xcm_Configuration {
       $constants['phone_type_mobile_value']       = $profile->mobileType();
 
       // add prefix_ids
-      $constants['prefix_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'prefix_id');
+      $constants['prefix_ids'] = Civi::entity('Contact')->getOptions('prefix_id');
       $constants['prefix_names'] = array_flip($constants['prefix_ids']);
 
       // add gender_ids
-      $constants['gender_ids']   = CRM_Core_PseudoConstant::get('CRM_Contact_DAO_Contact', 'gender_id');
+      $constants['gender_ids'] = Civi::entity('Contact')->getOptions('gender_id');
       $constants['gender_names'] = array_flip($constants['gender_ids']);
 
       // add countries
@@ -551,11 +563,13 @@ class CRM_Xcm_Configuration {
 
       CRM_Core_Resources::singleton()->addVars('de.systopia.xcm', $constants);
 
-      CRM_Core_Region::instance('form-body')->add(array(
-          'script' => file_get_contents(__DIR__ . '/../../js/process_diff.js')
-      ));
-    } catch (Exception $ex) {
-      Civi::log()->debug("DiffHelper injection failed: " . $ex->getMessage());
+      CRM_Core_Region::instance('form-body')->add([
+        'script' => file_get_contents(__DIR__ . '/../../js/process_diff.js'),
+      ]);
+    }
+    catch (Exception $ex) {
+      Civi::log()->debug('DiffHelper injection failed: ' . $ex->getMessage());
+      // @ignoreException
     }
   }
 

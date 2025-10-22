@@ -13,16 +13,22 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * This will execute a matching process based on the configuration,
  * employing various matching rules
+ *
  */
 class CRM_Xcm_MatchingEngine {
 
-  /** singleton instance of the engine */
-  protected static $_singletons = array();
+  /**
+   * singleton instance of the engine */
+  protected static $_singletons = [];
 
-  /** Configuration for this engine */
+  /**
+   * Configuration for this engine */
   protected $config = NULL;
 
   protected bool $isStreetAddressParsingEnabled;
@@ -47,7 +53,10 @@ class CRM_Xcm_MatchingEngine {
    */
   protected function __construct($profile) {
     $this->config = CRM_Xcm_Configuration::getConfigProfile($profile);
-    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(\CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'address_options');
+    $addressOptions = \CRM_Core_BAO_Setting::valueOptions(
+      \CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME,
+      'address_options'
+    );
     $this->isStreetAddressParsingEnabled = !empty($addressOptions['street_address_parsing']);
   }
 
@@ -59,7 +68,8 @@ class CRM_Xcm_MatchingEngine {
    */
   public function getOrCreateContact(&$contact_data) {
     // first things first: sanitise data
-    unset($contact_data['contact_id']); // see XCM-72
+    // see XCM-72
+    unset($contact_data['contact_id']);
     $sanitiser_setting = CRM_Xcm_DataSanitiser::getSetting($this->config->getOptions());
     CRM_Xcm_DataSanitiser::sanitise($contact_data, $sanitiser_setting);
 
@@ -88,7 +98,8 @@ class CRM_Xcm_MatchingEngine {
       // do the post-processing
       $this->postProcessNewContact($new_contact, $contact_data);
 
-    } else {
+    }
+    else {
       // the matching was successful
       $this->postProcessContactMatch($result, $contact_data);
     }
@@ -151,7 +162,8 @@ class CRM_Xcm_MatchingEngine {
         ];
       }
 
-    } else {
+    }
+    else {
       // The matching was successful.
       $this->postProcessContactMatch($result, $params);
       $result['was_created'] = FALSE;
@@ -159,7 +171,6 @@ class CRM_Xcm_MatchingEngine {
 
     return $result;
   }
-
 
   /**
    * @todo document
@@ -172,15 +183,16 @@ class CRM_Xcm_MatchingEngine {
         if (!empty($options['match_contact_id'])) {
           // The setting is "on", try to match by contact ID.
           try {
-            $contact = civicrm_api3('Contact', 'getsingle', array(
-                'id'         => $contact_data['id'],
-                'return'     => 'id,is_deleted'
-            ));
+            $contact = civicrm_api3('Contact', 'getsingle', [
+              'id'         => $contact_data['id'],
+              'return'     => 'id,is_deleted',
+            ]);
             if (empty($contact['is_deleted'])) {
               // ID refers to a real contact, that has not been deleted
               return self::createResultMatched($contact_data['id']);
             }
-          } catch (Exception $ex) {
+          }
+          catch (Exception $ex) {
             // not found? no problem... let's move on...
           }
         }
@@ -200,7 +212,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // if we get here, there was no match
-    return array();
+    return [];
   }
 
   /**
@@ -224,7 +236,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // create phone number (that used to work...)
-    $this->addDetailToContact($new_contact['id'], 'email',   $contact_data);
+    $this->addDetailToContact($new_contact['id'], 'email', $contact_data);
     $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone', $this->config->primaryPhoneType());
     if ($this->config->secondaryPhoneType()) {
       $this->addPhoneToContact($new_contact['id'], $contact_data, 'phone2', $this->config->secondaryPhoneType());
@@ -237,25 +249,26 @@ class CRM_Xcm_MatchingEngine {
     return $new_contact;
   }
 
-
   /**
    * @todo document
    */
   protected function getMatchingRules() {
     $rules = $this->config->getRules();
-    $rule_instances = array();
+    $rule_instances = [];
 
     foreach ($rules as $rule_name) {
       if (empty($rule_name)) {
         continue;
 
-      } elseif ('DEDUPE_' == substr($rule_name, 0, 7)) {
+      }
+      elseif ('DEDUPE_' == substr($rule_name, 0, 7)) {
         // this is a dedupe rule
         $new_rule = new CRM_Xcm_Matcher_DedupeRule(substr($rule_name, 7));
         $new_rule->setConfig($this->config);
         $rule_instances[] = $new_rule;
 
-      } else {
+      }
+      else {
         // this should be a class name
         // TODO: error handling
         $new_rule = new $rule_name();
@@ -294,7 +307,9 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Perform all the post processing the configuration imposes
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.MaxExceeded
   protected function postProcessContactMatch(&$result, &$submitted_contact_data) {
+  // phpcs:enable
     $postprocessing = $this->config->getPostprocessing();
     $options        = $this->config->getOptions();
 
@@ -318,7 +333,7 @@ class CRM_Xcm_MatchingEngine {
 
     // FILL/DIFF ACTIONS (require the current contact data):
     $diff_handler = $this->config->diffHandler();
-    if (   ($diff_handler != 'none')
+    if (($diff_handler != 'none')
         || !empty($options['override_fields'])
         || !empty($options['override_details'])
         || !empty($options['fill_fields'])
@@ -328,7 +343,8 @@ class CRM_Xcm_MatchingEngine {
       // sort out location type
       if (empty($submitted_contact_data['location_type_id'])) {
         $location_type_id = $this->config->defaultLocationType();
-      } else {
+      }
+      else {
         $location_type_id = $submitted_contact_data['location_type_id'];
       }
 
@@ -348,14 +364,30 @@ class CRM_Xcm_MatchingEngine {
         //  caution: will override detail data
         foreach ($options['override_details'] as $entity_type) {
           if ($entity_type == 'phone') {
-            $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone', $this->config->primaryPhoneType());
+            $this->overrideContactPhone(
+              $current_contact_data,
+              $submitted_contact_data,
+              'phone',
+              $this->config->primaryPhoneType()
+            );
             if ($this->config->secondaryPhoneType()) {
-              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType());
+              $this->overrideContactPhone(
+                $current_contact_data,
+                $submitted_contact_data,
+                'phone2',
+                $this->config->secondaryPhoneType()
+              );
             }
             if ($this->config->tertiaryPhoneType()) {
-              $this->overrideContactPhone($current_contact_data, $submitted_contact_data, 'phone3', $this->config->tertiaryPhoneType());
+              $this->overrideContactPhone(
+                $current_contact_data,
+                $submitted_contact_data,
+                'phone3',
+                $this->config->tertiaryPhoneType()
+              );
             }
-          } else {
+          }
+          else {
             $this->overrideContactDetail($entity_type, $current_contact_data, $submitted_contact_data);
           }
         }
@@ -364,22 +396,55 @@ class CRM_Xcm_MatchingEngine {
       // FILL CURRENT CONTACT DATA
       if (!empty($options['fill_fields'])) {
         //  caution: will set the overwritten fields in $current_contact_data
-        $this->fillContactData($current_contact_data, $submitted_contact_data, $options['fill_fields'], $options['fill_fields_multivalue']);
+        $this->fillContactData(
+          $current_contact_data,
+          $submitted_contact_data,
+          $options['fill_fields'],
+          $options['fill_fields_multivalue']
+        );
       }
 
       // FILL CURRENT CONTACT DETAILS
       if (!empty($options['fill_details']) && is_array($options['fill_details'])) {
         foreach ($options['fill_details'] as $entity) {
           if ($entity == 'phone') {
-            $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone', $this->config->primaryPhoneType(), !empty($options['fill_details_primary']), $current_contact_data);
+            $this->addPhoneToContact(
+              $result['contact_id'],
+              $submitted_contact_data,
+              'phone',
+              $this->config->primaryPhoneType(),
+              !empty($options['fill_details_primary']),
+              $current_contact_data
+            );
             if ($this->config->secondaryPhoneType()) {
-              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone2', $this->config->secondaryPhoneType(), FALSE, $current_contact_data);
+              $this->addPhoneToContact(
+                $result['contact_id'],
+                $submitted_contact_data,
+                'phone2',
+                $this->config->secondaryPhoneType(),
+                FALSE,
+                $current_contact_data
+              );
             }
             if ($this->config->tertiaryPhoneType()) {
-              $this->addPhoneToContact($result['contact_id'], $submitted_contact_data, 'phone3', $this->config->tertiaryPhoneType(), FALSE, $current_contact_data);
+              $this->addPhoneToContact(
+                $result['contact_id'],
+                $submitted_contact_data,
+                'phone3',
+                $this->config->tertiaryPhoneType(),
+                FALSE,
+                $current_contact_data
+              );
             }
-          } else {
-            $this->addDetailToContact($result['contact_id'], $entity, $submitted_contact_data, !empty($options['fill_details_primary']), $current_contact_data);
+          }
+          else {
+            $this->addDetailToContact(
+              $result['contact_id'],
+              $entity,
+              $submitted_contact_data,
+              !empty($options['fill_details_primary']),
+              $current_contact_data
+            );
           }
         }
       }
@@ -391,10 +456,11 @@ class CRM_Xcm_MatchingEngine {
           $address_data['location_type_id'] = $location_type_id;
 
           // see if contact alread has an address
-          $address_query = array(
+          $address_query = [
             'contact_id'   => $result['contact_id'],
             'option.sort'  => 'is_primary desc',
-            'option.limit' => 1);
+            'option.limit' => 1,
+          ];
           if ($options['fill_address'] == 2) {
             // 2 = only if no address of the same _type_ exists
             $address_query['location_type_id'] = $address_data['location_type_id'];
@@ -410,7 +476,8 @@ class CRM_Xcm_MatchingEngine {
               $current_contact_data[$key] = $value;
             }
 
-          } else {
+          }
+          else {
             // address found -> add to current_contact_data for diff activity
             $existing_address = reset($addresses['values']);
             $existing_address_data = CRM_Xcm_Tools::extractAddressData($existing_address, FALSE);
@@ -424,10 +491,23 @@ class CRM_Xcm_MatchingEngine {
       // HANDLE DIFFERENCES
       switch ($diff_handler) {
         case 'diff':
-          $this->createDiffActivity($current_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          $this->createDiffActivity(
+            $current_contact_data,
+            $options,
+            $options['diff_activity_subject'],
+            $submitted_contact_data,
+            $location_type_id
+          );
           break;
+
         case 'updated_diff':
-          $this->createDiffActivity($original_contact_data, $options, $options['diff_activity_subject'], $submitted_contact_data, $location_type_id);
+          $this->createDiffActivity(
+            $original_contact_data,
+            $options,
+            $options['diff_activity_subject'],
+            $submitted_contact_data,
+            $location_type_id
+          );
           break;
 
         case 'i3val':
@@ -444,13 +524,22 @@ class CRM_Xcm_MatchingEngine {
     $group_id = (int) $group_id;
     if ($contact_id && $group_id) {
       try {
-        $is_group_member = civicrm_api3('GroupContact', 'getcount', ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']);
+        $is_group_member = civicrm_api3(
+          'GroupContact',
+          'getcount',
+          ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']
+        );
         if (!$is_group_member) {
-          civicrm_api3('GroupContact', 'create', ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']);
+          civicrm_api3(
+            'GroupContact',
+            'create',
+            ['contact_id' => $contact_id, 'group_id' => $group_id, 'status' => 'Added']
+          );
         }
-      } catch (Exception $ex) {
+      }
+      catch (Exception $ex) {
         // this shouldn't happen
-        error_log("Error when adding contact to group: " . $ex->getMessage());
+        error_log('Error when adding contact to group: ' . $ex->getMessage());
       }
     }
   }
@@ -466,11 +555,20 @@ class CRM_Xcm_MatchingEngine {
     $tag_id = (int) $tag_id;
     if ($contact_id && $tag_id) {
       try {
-        $is_tagged = civicrm_api3('EntityTag', 'getcount', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+        $is_tagged = civicrm_api3(
+          'EntityTag',
+          'getcount',
+          ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']
+        );
         if (!$is_tagged) {
-          civicrm_api3('EntityTag', 'create', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
+          civicrm_api3(
+            'EntityTag',
+            'create',
+            ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']
+          );
         }
-      } catch (Exception $ex) {
+      }
+      catch (Exception $ex) {
         // tag probably already exists with the contact, or contact doesn't exist
         //  no need to worry.
       }
@@ -480,48 +578,58 @@ class CRM_Xcm_MatchingEngine {
   /**
    * Create a marker activity with the given contact
    *
-   * @param $contact_id         int contact ID
-   * @param $activity_type_id   int activity type id
-   * @param $subject            string subject
-   * @param $status_id          int activity status id
-   * @param $campaign           string campaign: empty string (no campaign), 'input' (take from input), campaign_id otherwise
-   * @param $template_id        int template ID
-   * @param $contact_data       array contact data
+   * @param $contact_id int contact ID
+   * @param $activity_type_id int activity type id
+   * @param $subject string subject
+   * @param $status_id int activity status id
+   * @param $campaign string campaign: empty string (no campaign), 'input' (take from input), campaign_id otherwise
+   * @param $template_id int template ID
+   * @param $contact_data array contact data
    */
-  protected function addActivityToContact($contact_id, $activity_type_id, $subject, $status_id, $campaign, $template_id, &$contact_data) {
+  protected function addActivityToContact($contact_id,
+    $activity_type_id,
+    $subject,
+    $status_id,
+    $campaign,
+    $template_id,
+    &$contact_data
+  ) {
     if (empty($status_id)) {
       $status_id = $this->config->defaultActivityStatus();
     }
-    if ($campaign == 'input') {
-      $campaign = CRM_Utils_Array::value('campaign_id', $contact_data);
+    if ('input' === $campaign) {
+      $campaign = $contact_data['campaign_id'] ?? NULL;
     }
 
-    $activity_data = array(
-        'activity_type_id'   => $activity_type_id,
-        'subject'            => $subject,
-        'status_id'          => $status_id,
-        'activity_date_time' => date("YmdHis"),
-        'target_contact_id'  => (int) $contact_id,
-        'source_contact_id'  => (int) $contact_id,
-        'campaign_id'        => $campaign,
-    );
+    $activity_data = [
+      'activity_type_id'   => $activity_type_id,
+      'subject'            => $subject,
+      'status_id'          => $status_id,
+      'activity_date_time' => date('YmdHis'),
+      'target_contact_id'  => (int) $contact_id,
+      'source_contact_id'  => (int) $contact_id,
+      'campaign_id'        => $campaign,
+    ];
 
     try {
       if ($template_id) {
-        $template = civicrm_api3('MessageTemplate', 'getsingle', array('id' => $template_id));
+        $template = civicrm_api3('MessageTemplate', 'getsingle', ['id' => $template_id]);
         $activity_data['details'] = $this->renderTemplate('string:' . $template['msg_text'], $contact_data);
       }
 
       $activity = CRM_Activity_BAO_Activity::create($activity_data);
-    } catch (Exception $ex) {
-      Civi::log()->debug("XCM: failed to create activity: " . $ex->getMessage());
+    }
+    catch (Exception $ex) {
+      Civi::log()->debug('XCM: failed to create activity: ' . $ex->getMessage());
     }
   }
 
   /**
    * Add a certain entity detail (phone,email,website)
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function addDetailToContact($contact_id, $entity, &$data, $as_primary = FALSE, &$data_update = NULL) {
+  // phpcs:enable
     if (!empty($data[$entity])) {
       // Params for a possible "create" API call.
       $create_detail_call['contact_id'] = $contact_id;
@@ -540,11 +648,12 @@ class CRM_Xcm_MatchingEngine {
       $create_detail_call[$attribute] = $data[$entity];
 
       // some value was submitted -> check if there is already an existing one
-      $existing_entity = civicrm_api3($entity, 'get', array(
+      $existing_entity = civicrm_api3($entity, 'get', [
         $attribute     => $data[$entity],
         'contact_id'   => $contact_id,
         'option.sort'  => $sorting,
-        'option.limit' => 1));
+        'option.limit' => 1,
+      ]);
       if (empty($existing_entity['count'])) {
         // there is none -> create
         // mark as primary if requested
@@ -565,7 +674,8 @@ class CRM_Xcm_MatchingEngine {
             $data_update['phone_numeric'] = $data['phone_numeric'];
           }
         }
-      } else {
+      }
+      else {
         // there already is a detail withe same value...
         if ($as_primary) {
           // ...and config says it should be primary -> make it sure it's primary:
@@ -594,14 +704,21 @@ class CRM_Xcm_MatchingEngine {
    *  Mark the phone as primary
    * @param $data_update
    *  The current contact data
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
-  protected function addPhoneToContact($contact_id, &$data, $attribute='phone', $phone_type_id=null, $as_primary = FALSE, &$data_update = NULL) {
+  protected function addPhoneToContact($contact_id,
+    &$data,
+    $attribute = 'phone',
+    $phone_type_id = NULL,
+    $as_primary = FALSE,
+    &$data_update = NULL
+  ) {
     if (!empty($data[$attribute])) {
       // sort out location type
       if (empty($data['location_type_id'])) {
         $location_type_id = $this->config->defaultLocationType();
-      } else {
+      }
+      else {
         $location_type_id = $data['location_type_id'];
       }
 
@@ -610,8 +727,8 @@ class CRM_Xcm_MatchingEngine {
         'contact_id'   => $contact_id,
         'options' => [
           'sort'  => 'is_primary desc',
-          'limit' => 1
-        ]
+          'limit' => 1,
+        ],
       ];
       if ($phone_type_id) {
         $api_query['phone_type_id'] = $phone_type_id;
@@ -621,10 +738,11 @@ class CRM_Xcm_MatchingEngine {
       $existing_entity = civicrm_api3('Phone', 'get', $api_query);
       if (empty($existing_entity['count'])) {
         // there is none -> create
-        $create_detail_call = array(
+        $create_detail_call = [
           'phone'         => $data[$attribute],
           'contact_id'       => $contact_id,
-          'location_type_id' => $location_type_id);
+          'location_type_id' => $location_type_id,
+        ];
 
         // mark as primary if requested
         if ($as_primary) {
@@ -643,9 +761,10 @@ class CRM_Xcm_MatchingEngine {
 
           // if we're dealing with a phone number, update phone_numeric as well
           // to avoid unnecessary diff activities
-          $data_update[$attribute.'_numeric'] = $data['phone_numeric'];
+          $data_update[$attribute . '_numeric'] = $data['phone_numeric'];
         }
-      } else {
+      }
+      else {
         // there already is a detail withe same value...
         if ($as_primary) {
           // ...and config says it should be primary -> make it sure it's primary:
@@ -654,7 +773,7 @@ class CRM_Xcm_MatchingEngine {
         // also make sure, it doesn't end up in diff:
         unset($data[$attribute]);
         // if we're dealing with phone, also do so for phone_numeric
-        unset($data[$attribute.'_numeric']);
+        unset($data[$attribute . '_numeric']);
       }
     }
   }
@@ -663,13 +782,16 @@ class CRM_Xcm_MatchingEngine {
    * Load the matched contact with all data, including the
    * custom fields in the submitted data
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function loadCurrentContactData($contact_id, $submitted_data) {
+  // phpcs:enable
     // load the contact
-    $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+    $contact = civicrm_api3('Contact', 'getsingle', ['id' => $contact_id]);
     // load the custom fields
-    $custom_value_query = array();
+    $custom_value_query = [];
     foreach ($submitted_data as $key => $value) {
-      if (!isset($contact[$key])) { // i.e. not loaded yet
+      // i.e. not loaded yet
+      if (!isset($contact[$key])) {
         if (preg_match('/^custom_\d+$/', $key)) {
           // this is a custom field...
           $custom_field_id = substr($key, 7);
@@ -683,7 +805,9 @@ class CRM_Xcm_MatchingEngine {
       $custom_value_query['entity_id']    = $contact_id;
       $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
       foreach ($custom_value_query_result['values'] as $entry) {
-        if (empty($entry['id'])) continue;
+        if (empty($entry['id'])) {
+          continue;
+        }
         $contact["custom_{$entry['id']}"] = $entry['latest'];
       }
     }
@@ -694,10 +818,11 @@ class CRM_Xcm_MatchingEngine {
         $phone = civicrm_api3('Phone', 'getvalue', [
           'contact_id' => $contact_id,
           'phone_type_id' => $this->config->secondaryPhoneType(),
-          'return' => 'phone'
+          'return' => 'phone',
         ]);
         $contact['phone2'] = $phone;
-      } catch (CiviCRM_API3_Exception $e) {
+      }
+      catch (CRM_Core_Exception $e) {
         // Do nothing
       }
     }
@@ -707,10 +832,11 @@ class CRM_Xcm_MatchingEngine {
         $phone = civicrm_api3('Phone', 'getvalue', [
           'contact_id' => $contact_id,
           'phone_type_id' => $this->config->tertiaryPhoneType(),
-          'return' => 'phone'
+          'return' => 'phone',
         ]);
         $contact['phone3'] = $phone;
-      } catch (CiviCRM_API3_Exception $e) {
+      }
+      catch (CRM_Core_Exception $e) {
         // Do nothing
       }
     }
@@ -722,40 +848,42 @@ class CRM_Xcm_MatchingEngine {
    * Will fill (e.g. set if not set yet) the given fields in the database
    *  and update the $current_contact_data accordingly
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh, Generic.Metrics.NestingLevel.TooHigh
   protected function fillContactData(&$current_contact_data, $submitted_contact_data, $fields, $fill_multivalue) {
-    $update_query = array();
+  // phpcs:enable
+    $update_query = [];
     foreach ($fields as $key) {
       if (isset($submitted_contact_data[$key])) {
         // Fill field if empty.
-        if (!isset($current_contact_data[$key]) || $current_contact_data[$key]==='') {
+        if (!isset($current_contact_data[$key]) || $current_contact_data[$key] === '') {
           $update_query[$key] = $submitted_contact_data[$key];
           $current_contact_data[$key] = $submitted_contact_data[$key];
         }
         // Fill multi-value field values.
         elseif (!empty($fill_multivalue) && self::fieldIsMultivalue($key)) {
           // Ensure current and submitted field data being an array.
-          foreach (array(
-                     &$current_contact_data[$key],
-                     &$submitted_contact_data[$key],
-                   ) as &$value) {
+          foreach ([
+            &$current_contact_data[$key],
+            &$submitted_contact_data[$key],
+          ] as &$value) {
             if (!is_array($value)) {
               if ($value === '' || $value === NULL) {
-                $value = array();
+                $value = [];
               }
               else {
-                $value = array($value);
+                $value = [$value];
               }
             }
           }
 
           // Retrieve field options for correct ordering.
-          static $field_options = array();
+          static $field_options = [];
           if (empty($field_options[$key])) {
-            $result = civicrm_api3('Contact', 'getfield', array(
+            $result = civicrm_api3('Contact', 'getfield', [
               'name' => $key,
               'action' => 'getsingle',
               'get_options' => 'get',
-            ));
+            ]);
             $field_options[$key] = $result['values']['options'];
           }
           $current_field_options = $field_options[$key];
@@ -800,12 +928,12 @@ class CRM_Xcm_MatchingEngine {
    *  and update the $current_contact_data accordingly
    */
   protected function overrideContactData(&$current_contact_data, $submitted_contact_data, $fields) {
-    $update_query = array();
+    $update_query = [];
     foreach ($fields as $key) {
       if (isset($submitted_contact_data[$key])) {
-        $current_value   = CRM_Utils_Array::value($key, $current_contact_data);
+        $current_value = $current_contact_data[$key] ?? NULL;
         if ($current_value != $submitted_contact_data[$key]) {
-          $update_query[$key]         = $submitted_contact_data[$key];
+          $update_query[$key] = $submitted_contact_data[$key];
           $current_contact_data[$key] = $submitted_contact_data[$key];
         }
       }
@@ -825,7 +953,9 @@ class CRM_Xcm_MatchingEngine {
    * It will only overwrite entities with the same location type,
    *  and not overwrite primary entries, unless $override_details_primary is TRUE
    */
+  // phpcs:disable Generic.Metrics.NestingLevel.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
   protected function overrideContactDetail($entity_type, &$current_contact_data, $submitted_contact_data) {
+  // phpcs:enable
     switch (strtolower($entity_type)) {
       case 'email':
         $has_primary = TRUE;
@@ -853,7 +983,17 @@ class CRM_Xcm_MatchingEngine {
 
       case 'address':
         $has_primary = TRUE;
-        $data_attributes = ['street_address', 'postal_code', 'city', 'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3', 'county_id', 'country_id', 'state_province_id'];
+        $data_attributes = [
+          'street_address',
+          'postal_code',
+          'city',
+          'supplemental_address_1',
+          'supplemental_address_2',
+          'supplemental_address_3',
+          'county_id',
+          'country_id',
+          'state_province_id',
+        ];
         if ($this->isStreetAddressParsingEnabled) {
           $data_attributes[] = 'street_name';
           $data_attributes[] = 'street_number';
@@ -883,20 +1023,22 @@ class CRM_Xcm_MatchingEngine {
     // find current entries and replace the first match
     try {
       $options = $this->config->getOptions();
-      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
-      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      $case_insensitive = $options['case_insensitive'] ?? NULL;
+      $override_details_primary = $options['override_details_primary'] ?? NULL;
       if (empty($submitted_contact_data['location_type_id'])) {
         $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
       }
 
       // query existing entities
       $entity_query_params = [
-          'contact_id'       => $current_contact_data['id'],
-          'option.limit'     => 0];
+        'contact_id'       => $current_contact_data['id'],
+        'option.limit'     => 0,
+      ];
       // add identifying attributes
       foreach ($identifying_attributes as $identifying_attribute) {
-        if (!empty($submitted_contact_data[$identifying_attribute]))
-        $entity_query_params[$identifying_attribute] = $submitted_contact_data[$identifying_attribute];
+        if (!empty($submitted_contact_data[$identifying_attribute])) {
+          $entity_query_params[$identifying_attribute] = $submitted_contact_data[$identifying_attribute];
+        }
       }
       $entity_query = civicrm_api3($entity_type, 'get', $entity_query_params);
 
@@ -927,7 +1069,8 @@ class CRM_Xcm_MatchingEngine {
           }
         }
       }
-    } catch (Exception $ex) {
+    }
+    catch (Exception $ex) {
       // something went wrong
       error_log("de.systopia.xcm: error when trying to override {$entity_type}: " . $ex->getMessage());
     }
@@ -954,8 +1097,8 @@ class CRM_Xcm_MatchingEngine {
     // find current entries and replace the first match
     try {
       $options = $this->config->getOptions();
-      $case_insensitive         = CRM_Utils_Array::value('case_insensitive', $options);
-      $override_details_primary = CRM_Utils_Array::value('override_details_primary', $options);
+      $case_insensitive = $options['case_insensitive'] ?? NULL;
+      $override_details_primary = $options['override_details_primary'] ?? NULL;
       if (empty($submitted_contact_data['location_type_id'])) {
         $submitted_contact_data['location_type_id'] = $this->config->defaultLocationType();
       }
@@ -965,7 +1108,8 @@ class CRM_Xcm_MatchingEngine {
         'contact_id'       => $current_contact_data['id'],
         'location_type_id' => $submitted_contact_data['location_type_id'],
         'phone_type_id'    => $phone_type_id,
-        'option.limit'     => 0];
+        'option.limit'     => 0,
+      ];
       $entity_query = civicrm_api3('Phone', 'get', $entity_query_params);
 
       // find the first matching one, and overwrite
@@ -989,9 +1133,12 @@ class CRM_Xcm_MatchingEngine {
           }
         }
       }
-    } catch (Exception $ex) {
+    }
+    catch (Exception $ex) {
       // something went wrong
-      error_log("de.systopia.xcm: error when trying to override Phone with type ".$phone_type_id.": " . $ex->getMessage());
+      error_log(
+        'de.systopia.xcm: error when trying to override Phone with type ' . $phone_type_id . ': ' . $ex->getMessage()
+      );
     }
   }
 
@@ -1006,10 +1153,10 @@ class CRM_Xcm_MatchingEngine {
   protected function makeExistingDetailPrimary($contact_id, $entity, $attribute, $attribute_value) {
     // find the detail
     $detail = civicrm_api3($entity, 'getsingle', [
-        'contact_id'   => $contact_id,
-        $attribute     => $attribute_value,
-        'option.sort'  => "$attribute desc",
-        'option.limit' => 1,
+      'contact_id'   => $contact_id,
+      $attribute     => $attribute_value,
+      'option.sort'  => "$attribute desc",
+      'option.limit' => 1,
     ]);
     if (empty($detail['is_primary'])) {
       // detail not yet primary -> set it
@@ -1025,15 +1172,15 @@ class CRM_Xcm_MatchingEngine {
    * @return bool
    *   Whether the given field accepts multiple values.
    *
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    *   When an error occurred retrieving a custom field.
    */
   public static function fieldIsMultivalue($key) {
     // Check for multi-value core field.
-    if (in_array($key, array(
+    if (in_array($key, [
       'preferred_communication_method',
       // TODO: Add mulit-value core fields here.
-    ))) {
+    ])) {
       $is_multivalue = TRUE;
     }
 
@@ -1041,35 +1188,36 @@ class CRM_Xcm_MatchingEngine {
     if (strpos($key, 'custom_') === 0) {
       $custom_field_id = explode('custom_', $key)[1];
       // Check whether the field is multi-value, statically cache results.
-      static $custom_field_definitions = array();
+      static $custom_field_definitions = [];
       if (empty($custom_field_definitions)) {
         // see https://github.com/systopia/de.systopia.xcm/issues/68
         if (version_compare(CRM_Utils_System::version(), '5.27', '<')) {
           $custom_field_definitions = civicrm_api3(
               'CustomField',
               'get',
-              array(
-                  'html_type' => array(
-                      'IN' => array(
-                          'CheckBox',
-                          'Multi-Select',
-                          'Multi-Select State/Province',
-                          'Multi-Select Country',
-                      )
-                  ),
-                  'return'    => array('name', 'html_type', 'option_group_id')
-              )
+              [
+                'html_type' => [
+                  'IN' => [
+                    'CheckBox',
+                    'Multi-Select',
+                    'Multi-Select State/Province',
+                    'Multi-Select Country',
+                  ],
+                ],
+                'return'    => ['name', 'html_type', 'option_group_id'],
+              ]
           );
-        } else {
+        }
+        else {
           $custom_field_definitions = civicrm_api3(
               'CustomField',
               'get',
               [
-                  'html_type' => 'Select',
-                  'serialize' => 1,
-                  'return'    => ['name', 'html_type', 'option_group_id']
-             ]
-          );
+                'html_type' => 'Select',
+                'serialize' => 1,
+                'return'    => ['name', 'html_type', 'option_group_id'],
+              ]
+                  );
         }
         if (!empty($custom_field_definitions['values'])) {
           $custom_field_definitions = $custom_field_definitions['values'];
@@ -1095,9 +1243,10 @@ class CRM_Xcm_MatchingEngine {
 
     try {
       $result = civicrm_api3('Contact', 'request_update', $submitted_contact_data);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       // some problem with the creation
-      error_log("de.systopia.xcm: error when trying to create i3val update request: " . $e->getMessage());
+      error_log('de.systopia.xcm: error when trying to create i3val update request: ' . $e->getMessage());
     }
   }
 
@@ -1105,16 +1254,18 @@ class CRM_Xcm_MatchingEngine {
    * Create an activity listing all differences between the matched contact
    * and the data submitted
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function createDiffActivity($contact, $options, $subject, &$contact_data, $location_type_id) {
+  // phpcs:enable
     $options = $this->config->getOptions();
-    $case_insensitive = CRM_Utils_Array::value('case_insensitive', $options);
+    $case_insensitive = $options['case_insensitive'] ?? NULL;
 
     // look up some id fields
     CRM_Xcm_DataNormaliser::labelData($contact);
     CRM_Xcm_DataNormaliser::labelData($contact_data);
 
     // create diff
-    $differing_attributes = array();
+    $differing_attributes = [];
     $all_attributes = array_keys($contact) + array_keys($contact_data);
     foreach ($all_attributes as $attribute) {
       if (isset($contact[$attribute]) && isset($contact_data[$attribute])) {
@@ -1139,7 +1290,13 @@ class CRM_Xcm_MatchingEngine {
     $address_parameters[] = 'supplemental_address_2';
     if (array_intersect($address_parameters, $differing_attributes)) {
       foreach ($address_parameters as $attribute) {
-        if (!in_array($attribute, $differing_attributes) && isset($contact[$attribute]) && isset($contact_data[$attribute])) {
+        if (
+          !in_array(
+            $attribute,
+            $differing_attributes
+          )
+          && isset($contact[$attribute]) && isset($contact_data[$attribute])
+        ) {
           $differing_attributes[] = $attribute;
         }
       }
@@ -1151,12 +1308,24 @@ class CRM_Xcm_MatchingEngine {
         $differing_attributes[] = 'phone';
       }
     }
-    if ($this->config->secondaryPhoneType() && !in_array('phone2', $differing_attributes) && (isset($contact['phone2']) || isset($contact_data['phone2']))) {
+    if (
+      $this->config->secondaryPhoneType() && !in_array(
+        'phone2',
+        $differing_attributes
+      )
+      && (isset($contact['phone2']) || isset($contact_data['phone2']))
+    ) {
       if ($this->attributesDiffer(['phone2'], $contact, $contact_data, $case_insensitive)) {
         $differing_attributes[] = 'phone2';
       }
     }
-    if ($this->config->tertiaryPhoneType() && !in_array('phone3', $differing_attributes) && (isset($contact['phone3']) || isset($contact_data['phone3']))) {
+    if (
+      $this->config->tertiaryPhoneType() && !in_array(
+        'phone3',
+        $differing_attributes
+      )
+      && (isset($contact['phone3']) || isset($contact_data['phone3']))
+    ) {
       if ($this->attributesDiffer(['phone3'], $contact, $contact_data, $case_insensitive)) {
         $differing_attributes[] = 'phone3';
       }
@@ -1166,40 +1335,46 @@ class CRM_Xcm_MatchingEngine {
       // There ARE changes: render the diff activity
 
       // add the location type for clarity
-      $location_types = array();
-      $location_type_name = civicrm_api3('LocationType', 'getvalue', array(
-          'return' => 'display_name',
-          'id'     => $location_type_id));
-      $location_fields = CRM_Xcm_Tools::getAddressFields() + array('phone', 'email');
+      $location_types = [];
+      $location_type_name = civicrm_api3('LocationType', 'getvalue', [
+        'return' => 'display_name',
+        'id'     => $location_type_id,
+      ]);
+      $location_fields = CRM_Xcm_Tools::getAddressFields() + ['phone', 'email'];
       foreach ($location_fields as $fieldname) {
         $location_types[$fieldname] = $location_type_name;
       }
 
       // create activity
-      $data = array(
+      $data = [
         'differing_attributes' => $differing_attributes,
         'fieldlabels'          => CRM_Xcm_Tools::getFieldLabels($differing_attributes, $this->config),
         'existing_contact'     => $contact,
         'location_types'       => $location_types,
-        'submitted_data'       => $contact_data
-        );
+        'submitted_data'       => $contact_data,
+      ];
 
-      $activity_data = array(
-          'activity_type_id'   => $options['diff_activity'],
-          'subject'            => $subject,
-          'status_id'          => !empty($options['diff_activity_status']) ? $options['diff_activity_status'] : $this->config->defaultActivityStatus(),
-          'activity_date_time' => date("YmdHis"),
-          'target_contact_id'  => (int) $contact['id'],
-          'source_contact_id'  => $this->config->getCurrentUserID($contact['id']),
-          'campaign_id'        => CRM_Utils_Array::value('campaign_id', $contact_data),
-          'details'            => $this->renderTemplate('activity/diff.tpl', $data),
-      );
+      // phpcs:disable Drupal.Arrays.Array.ArrayIndentation
+      $activity_data = [
+        'activity_type_id' => $options['diff_activity'],
+        'subject' => $subject,
+        'status_id' => !empty($options['diff_activity_status'])
+          ? $options['diff_activity_status']
+          : $this->config->defaultActivityStatus(),
+        'activity_date_time' => date('YmdHis'),
+        'target_contact_id' => (int) $contact['id'],
+        'source_contact_id' => $this->config->getCurrentUserID((int) $contact['id']),
+        'campaign_id' => $contact_data['campaign_id'] ?? NULL,
+        'details' => $this->renderTemplate('activity/diff.tpl', $data),
+      ];
+      // phpcs:enable
 
       try {
         $activity = CRM_Activity_BAO_Activity::create($activity_data);
-      } catch (Exception $e) {
+      }
+      catch (Exception $e) {
         // some problem with the creation
-        error_log("de.systopia.xcm: error when trying to create diff activity: " . $e->getMessage());
+        error_log('de.systopia.xcm: error when trying to create diff activity: ' . $e->getMessage());
       }
     }
   }
@@ -1222,13 +1397,15 @@ class CRM_Xcm_MatchingEngine {
    * @todo collapse double spaces?
    *
    * @return boolean
-   *    true if any one of these attributes differ
+   *   true if any one of these attributes differ
    */
+  // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function attributesDiffer($data_attributes, $original_values, $submitted_values, $case_insensitive) {
+  // phpcs:enable
     foreach ($data_attributes as $data_attribute) {
       // let's find out if data differs for this particular attribute
-      $original_value  = CRM_Utils_Array::value($data_attribute, $original_values, '');
-      $submitted_value = CRM_Utils_Array::value($data_attribute, $submitted_values, '');
+      $original_value = $original_values[$data_attribute] ?? '';
+      $submitted_value = $submitted_values[$data_attribute] ?? '';
 
       // mitigate api quirk: sometimes a single value is returned as a 1-array
       if (is_array($original_value) && count($original_value) == 1 && is_string($submitted_value)) {
@@ -1237,7 +1414,7 @@ class CRM_Xcm_MatchingEngine {
 
       // trim values first
       if (is_string($original_value)) {
-        $original_value  = trim($original_value);
+        $original_value = trim($original_value);
       }
       if (is_string($submitted_value)) {
         $submitted_value = trim($submitted_value);
@@ -1256,7 +1433,7 @@ class CRM_Xcm_MatchingEngine {
         }
       }
 
-      // case agnostic comparison (if different)
+      // Case agnostic comparison (if different).
       if ($attribute_differs && $case_insensitive && is_string($original_value) && is_string($submitted_value)) {
         $attribute_differs = (strtolower($original_value) != strtolower($submitted_value));
       }
@@ -1274,14 +1451,13 @@ class CRM_Xcm_MatchingEngine {
 
       // if still different after all, we can return the fact that at least one attribute differs (this one)
       if ($attribute_differs) {
-        return true;
+        return TRUE;
       }
     }
 
     // all are equal? good
-    return false;
+    return FALSE;
   }
-
 
   /**
    * sanitise/format input
@@ -1312,7 +1488,7 @@ class CRM_Xcm_MatchingEngine {
 
     // first backup original variables, since smarty instance is a singleton
     $oldVars = $smarty->getTemplateVars();
-    $backupFrame = array();
+    $backupFrame = [];
     foreach ($vars as $key => $value) {
       $key = str_replace(' ', '_', $key);
       $backupFrame[$key] = isset($oldVars[$key]) ? $oldVars[$key] : NULL;
@@ -1325,7 +1501,7 @@ class CRM_Xcm_MatchingEngine {
     }
 
     // create result
-    $result =  $smarty->fetch($template_path);
+    $result = $smarty->fetch($template_path);
 
     // reset smarty variables
     foreach ($backupFrame as $key => $value) {
@@ -1342,11 +1518,12 @@ class CRM_Xcm_MatchingEngine {
   public static function createResultMatched($contact_id, $confidence = 1.0) {
     if (empty($contact_id)) {
       return self::createResultUnmatched();
-    } else {
-      return array(
-          'contact_id' => $contact_id,
-          'confidence' => $confidence
-      );
+    }
+    else {
+      return [
+        'contact_id' => $contact_id,
+        'confidence' => $confidence,
+      ];
     }
   }
 
@@ -1354,8 +1531,9 @@ class CRM_Xcm_MatchingEngine {
    * generate a valid negative reply
    */
   public static function createResultUnmatched($message = 'not matched') {
-    return array(
-        'message' => $message,
-    );
+    return [
+      'message' => $message,
+    ];
   }
+
 }

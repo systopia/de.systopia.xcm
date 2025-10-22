@@ -13,8 +13,12 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on IBAN (CiviBanking or CiviSEPA) + birth day
+ *
  */
 class CRM_Xcm_Matcher_IbanBirthdayMatcher extends CRM_Xcm_Matcher_IbanMatcher {
 

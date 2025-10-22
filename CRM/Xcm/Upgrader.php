@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Xcm_ExtensionUtil as E;
 
 /**
@@ -47,24 +49,30 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
       $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
       $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
       $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
-      $profiles = array(
-          'default' => array(
-              'is_default'     => 1,
-              'options'        => ($options === NULL ? array() : $options),
-              'rules'          => ($rules === NULL ? array() : $rules),
-              'postprocessing' => ($postprocessing === NULL ? array() : $postprocessing),
-          )
-      );
+      $profiles = [
+        'default' => [
+          'is_default'     => 1,
+          'options'        => ($options === NULL ? [] : $options),
+          'rules'          => ($rules === NULL ? [] : $rules),
+          'postprocessing' => ($postprocessing === NULL ? [] : $postprocessing),
+        ],
+      ];
 
       // save and reset the others
-      CRM_Core_BAO_Setting::setItem($profiles, 'de.systopia.xcm', 'xcm_config_profiles');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'xcm_options');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'rules');
-      CRM_Core_BAO_Setting::setItem(NULL, 'de.systopia.xcm', 'postprocessing');
+      Civi::settings()->set('xcm_config_profiles', $profiles);
+      Civi::settings()->set('xcm_options', NULL);
+      Civi::settings()->set('rules', NULL);
+      Civi::settings()->set('postprocessing', NULL);
     }
 
     // also: rebuild menu
-    CRM_Core_Invoke::rebuildMenuAndCaches();
+    if (version_compare(CRM_Utils_System::version(), '6.1.0', '>=')) {
+      Civi::rebuild('*')->execute();
+    }
+    else {
+      // @phpstan-ignore staticMethod.deprecated
+      CRM_Core_Invoke::rebuildMenuAndCaches();
+    }
 
     return TRUE;
   }

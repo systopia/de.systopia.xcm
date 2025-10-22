@@ -13,6 +13,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 namespace Civi\Xcm;
 
 use CRM_Xcm_ExtensionUtil as E;
@@ -30,9 +32,18 @@ class ContainerSpecs implements CompilerPassInterface {
       return;
     }
     $typeFactoryDefinition = $container->getDefinition('action_provider');
-    $typeFactoryDefinition->addMethodCall('addAction', ['XcmGetOrCreate', 'Civi\Xcm\ActionProvider\Action\ContactGetOrCreate', E::ts('Extended Contact Matcher (XCM)'), [
-        \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-        \Civi\ActionProvider\Action\AbstractAction::DATA_RETRIEVAL_TAG
-    ]]);
+    $typeFactoryDefinition->addMethodCall(
+      'addAction',
+      [
+        'XcmGetOrCreate',
+        'Civi\Xcm\ActionProvider\Action\ContactGetOrCreate',
+        E::ts('Extended Contact Matcher (XCM)'),
+        [
+          \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+          \Civi\ActionProvider\Action\AbstractAction::DATA_RETRIEVAL_TAG,
+        ],
+      ]
+    );
   }
+
 }

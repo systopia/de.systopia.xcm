@@ -1,26 +1,36 @@
 <?php
+/*
+ * Copyright (C) 2025 SYSTOPIA GmbH
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published by
+ *  the Free Software Foundation in version 3.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+declare(strict_types = 1);
 
 use CRM_Xcm_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
-use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
  * Some tests to help document how this works, and maybe, even, test it.
  *
- * Tips:
- *  - With HookInterface, you may implement CiviCRM hooks directly in the test class.
- *    Simply create corresponding functions (e.g. "hook_civicrm_post(...)" or similar).
- *  - With TransactionalInterface, any data changes made by setUp() or test****() functions will
- *    rollback automatically -- as long as you don't manipulate schema or truncate tables.
- *    If this test needs to manipulate schema or truncate tables, then either:
- *       a. Do all that using setupHeadless() and Civi\Test.
- *       b. Disable TransactionalInterface, and handle all setup/teardown yourself.
- *
  * @group headless
+ * @coversNothing
+ *  TODO: Document actual coverage.
  */
-class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
-
+// phpcs:disable Generic.Files.LineLength.TooLong
+class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, TransactionalInterface {
+// phpcs:enable
   public $contacts = [];
 
   public function setUpHeadless() {
@@ -31,13 +41,14 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       ->apply();
   }
 
-  public function setUp() {
+  public function setUp(): void {
 
     // Start with the test-default config.
     $this->configureXcm();
 
     parent::setUp();
   }
+
   /**
    * Create a new Individual. Convenience method.
    *
@@ -66,10 +77,11 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     $this->contacts[$contact['id']] = $contact['values'][0];
     return $contact['values'][0];
   }
-  public function tearDown() {
+
+  public function tearDown(): void {
 
     // Delete our contacts.
-    foreach ($this->contacts as $contact_id=>$contact) {
+    foreach ($this->contacts as $contact_id => $contact) {
       civicrm_api3('Contact', 'delete', [
         'id' => $contact_id,
         'skip_undelete' => TRUE,
@@ -77,20 +89,23 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     }
     parent::tearDown();
   }
+
   /**
    * Configure defaults plus given params.
    *
    * @param Array $params
    */
-  public function configureXcm($params=[]) {
+  public function configureXcm($params = []) {
     // Configure XCM.
     $toSet = $params + [
       'fill_address'               => NULL,
       'fill_fields_multivalue'     => NULL,
       'fill_details'               => NULL,
       'fill_details_primary'       => NULL,
-      'default_location_type'      => 1, // Home
-      'picker'                     => 'min', // Oldest contact.
+    // Home
+      'default_location_type'      => 1,
+    // Oldest contact.
+      'picker'                     => 'min',
       'duplicates_activity'        => 0,
       'duplicates_subject'         => NULL,
       'diff_handler'               => 'none',
@@ -103,15 +118,15 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       'case_insensitive'           => 1,
     ];
     $matchers = [
-      "rule_1" => "CRM_Xcm_Matcher_EmailFullNameMatcher",
-      "rule_2" => "CRM_Xcm_Matcher_EmailMatcher",
-      "rule_3" => "0",
-      "rule_4" => "0",
-      "rule_5" => "0",
-      "rule_6" => "0",
-      "rule_7" => "0",
-      "rule_8" => "0",
-      "rule_9" => "0"
+      'rule_1' => 'CRM_Xcm_Matcher_EmailFullNameMatcher',
+      'rule_2' => 'CRM_Xcm_Matcher_EmailMatcher',
+      'rule_3' => '0',
+      'rule_4' => '0',
+      'rule_5' => '0',
+      'rule_6' => '0',
+      'rule_7' => '0',
+      'rule_8' => '0',
+      'rule_9' => '0',
     ];
 
     $config = CRM_Xcm_Configuration::getConfigProfile();
@@ -121,16 +136,19 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     $config->store();
   }
 
-
   /**
    * Test that a new contact is created.
    */
   public function testNewContactCreatedNotRecreated() {
     $n = (int) civicrm_api3('Contact', 'getcount', []);
-    $result = $this->getOrCreate(['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']);
-    $this->assertContactCountIs($n+1);
-    $result = $this->getOrCreate(['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']);
-    $this->assertContactCountIs($n+1);
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']
+    );
+    $this->assertContactCountIs($n + 1);
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']
+    );
+    $this->assertContactCountIs($n + 1);
   }
 
   /**
@@ -144,10 +162,12 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       'city' => 'Caveton',
     ];
     $result = $this->getOrCreate([
-      'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com',
+      'first_name' => 'Wilma',
+      'last_name' => 'Flintstone',
+      'email' => 'wilma@example.com',
     ] + $address);
-    $this->assertContactCountIs($n+1);
-    foreach ($address as $k=>$v) {
+    $this->assertContactCountIs($n + 1);
+    foreach ($address as $k => $v) {
       $this->assertEquals($v, $result[$k]);
     }
   }
@@ -165,7 +185,9 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       'city' => 'Rockton',
     ];
     $result = $this->getOrCreate([
-      'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com',
+      'first_name' => 'Wilma',
+      'last_name' => 'Flintstone',
+      'email' => 'wilma@example.com',
     ] + $address);
     $this->assertContactCountIs($n);
     $original_address = [
@@ -173,7 +195,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
       'supplemental_address_1' => 'Somewhere',
       'city' => 'Caveton',
     ];
-    foreach ($original_address as $k=>$v) {
+    foreach ($original_address as $k => $v) {
       $this->assertEquals($v, $result[$k]);
     }
   }
@@ -185,15 +207,19 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     $this->configureXcm(['fill_address' => 1]);
     // Create without address.
     $n = (int) civicrm_api3('Contact', 'getcount', []);
-    $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]);
-    $this->assertContactCountIs($n+1);
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']
+    );
+    $this->assertContactCountIs($n + 1);
 
     // Same but with address.
-    $address = [ 'street_address' => '1 The Cave', 'supplemental_address_1' => 'Somewhere', 'city' => 'Caveton', ];
-    $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]+$address);
-    $this->assertContactCountIs($n+1);
+    $address = ['street_address' => '1 The Cave', 'supplemental_address_1' => 'Somewhere', 'city' => 'Caveton'];
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com'] + $address
+    );
+    $this->assertContactCountIs($n + 1);
 
-    foreach ($address as $k=>$v) {
+    foreach ($address as $k => $v) {
       $this->assertEquals($v, $result[$k]);
     }
   }
@@ -205,16 +231,20 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
     $this->configureXcm(['fill_address' => 1]);
     // Create without address.
     $n = (int) civicrm_api3('Contact', 'getcount', []);
-    $original_address = [ 'street_address' => '1 The Cave', 'city' => 'Caveton', ];
-    $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]+$original_address);
-    $this->assertContactCountIs($n+1);
+    $original_address = ['street_address' => '1 The Cave', 'city' => 'Caveton'];
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com'] + $original_address
+    );
+    $this->assertContactCountIs($n + 1);
 
     // Different address
-    $address = [ 'street_address' => 'xxxx', 'supplemental_address_1' => 'yyy', 'city' => 'zzz' ];
-    $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]+$address);
-    $this->assertContactCountIs($n+1);
+    $address = ['street_address' => 'xxxx', 'supplemental_address_1' => 'yyy', 'city' => 'zzz'];
+    $result = $this->getOrCreate(
+      ['first_name' => 'Wilma', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com'] + $address
+    );
+    $this->assertContactCountIs($n + 1);
 
-    foreach ($original_address as $k=>$v) {
+    foreach ($original_address as $k => $v) {
       $this->assertEquals($v, $result[$k]);
     }
   }
@@ -225,12 +255,14 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
   public function testNameFill() {
     // Create without last name
     $n = (int) civicrm_api3('Contact', 'getcount', []);
-    $result = $this->getOrCreate([ 'first_name' => 'Wilma', 'email' => 'wilma@example.com' ]);
-    $this->assertContactCountIs($n+1);
+    $result = $this->getOrCreate(['first_name' => 'Wilma', 'email' => 'wilma@example.com']);
+    $this->assertContactCountIs($n + 1);
 
     // Same but with name changes/additions
-    $result = $this->getOrCreate([ 'first_name' => 'Betty', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com' ]);
-    $this->assertContactCountIs($n+1);
+    $result = $this->getOrCreate(
+      ['first_name' => 'Betty', 'last_name' => 'Flintstone', 'email' => 'wilma@example.com']
+    );
+    $this->assertContactCountIs($n + 1);
 
     // First name should not be overwritten, but last name should as it does not exist.
     $this->assertEquals('Wilma', $result['first_name']);
@@ -240,7 +272,7 @@ class CRM_XCMTest extends \PHPUnit\Framework\TestCase implements HeadlessInterfa
   /**
    * count contacts
    *
-   * @param int $expected;
+   * @param int $expected
    */
   public function assertContactCountIs($expected) {
     $result = (int) civicrm_api3('Contact', 'getcount', []);

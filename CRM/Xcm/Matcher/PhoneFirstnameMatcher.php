@@ -13,11 +13,17 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-/*
+declare(strict_types = 1);
+
+/**
+ *
  * Matches on (any) phone and first_name
+ *
  */
 class CRM_Xcm_Matcher_PhoneFirstnameMatcher extends CRM_Xcm_Matcher_PhoneMatcher {
+
   public function __construct() {
-    parent::__construct(array('first_name', 'contact_type'));
+    parent::__construct(['first_name', 'contact_type']);
   }
+
 }
