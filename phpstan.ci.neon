@@ -19,3 +19,6 @@ parameters:
 
 		# Required with civicrm/civicrm-core <6.1.0
 		- '#^Call to an undefined static method Civi::rebuild\(\).$#'
+
+		# Required for PHP <8.2, but CiviCRM has had a polyfill since 5.53.
+		- '#^Function ini_parse_quantity not found.$#'
