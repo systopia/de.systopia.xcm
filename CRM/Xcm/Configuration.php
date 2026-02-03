@@ -227,7 +227,7 @@ class CRM_Xcm_Configuration {
    */
   public function isDefault(): int {
     $profile_data = $this->getConfiguration();
-    return isset($profile_data['is_default']) ? (int) $profile_data['is_default'] : 0;
+    return (int) ($profile_data['is_default'] ?? 0);
   }
 
   /**
