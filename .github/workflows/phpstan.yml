@@ -46,10 +46,16 @@ jobs:
       env:
         COMPOSER_COMPILE: all
       run: |
+        if [ "${{ matrix.prefer }}" = "prefer-lowest" ]; then
+          # Actually test with lowest possible versions.
+          export COMPOSER_NO_SECURITY_BLOCKING=1
+        fi
+
         composer config --no-plugins allow-plugins.civicrm/composer-compile-plugin false
         composer config --no-plugins allow-plugins.civicrm/composer-downloads-plugin true
         composer config --no-plugins allow-plugins.composer/installers true
         composer config --no-plugins allow-plugins.cweagans/composer-patches true
+
         # Run with --no-scripts so ComposerHelper doesn't prevent installation
         # of civicrm packages.
         git clone --depth=1 https://github.com/project60/org.project60.banking.git ../org.project60.banking

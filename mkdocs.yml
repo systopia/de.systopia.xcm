@@ -13,7 +13,7 @@ nav:
 - 'API': api.md
 
 markdown_extensions:
-- attr_list
+  - attr_list
   - admonition
   - def_list
   - codehilite

@@ -31,8 +31,10 @@ parameters:
 		- CRM_Core_Config
 		- CRM_Core_DAO
 	earlyTerminatingMethodCalls:
+		CRM_Utils_System:
+			- civiExit
 		CRM_Queue_Runner:
-		  - runAllViaWeb
+			- runAllViaWeb
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
 	checkUninitializedProperties: true
 	checkMissingCallableSignature: true

@@ -31,12 +31,6 @@ parameters:
 			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
 
 		-
-			message: '#^Cannot call method setTimer\(\) on CRM_Banking_Helpers_Logger\|null\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
-
-		-
 			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
 			identifier: empty.notAllowed
 			count: 4
@@ -846,6 +840,12 @@ parameters:
 
 		-
 			message: '#^Parameter \#2 \$array of function implode expects array, list\<string\|null\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: CRM/Xcm/Form/Import.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<int, list\<string\>\|string\|null\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: CRM/Xcm/Form/Import.php
