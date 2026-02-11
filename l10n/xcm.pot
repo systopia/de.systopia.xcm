@@ -1,904 +1,936 @@
-#: ./CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+#: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
 msgid "Create Contact Analyser (XCM)"
 msgstr ""
 
-#: ./CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+#: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
 msgid "Uses XCM to create a potentially missing contact before reconciliation."
 msgstr ""
 
-#: ./CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+#: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
 msgid "Registered new XCM CiviBanking module 'Create Contact Analyser'"
 msgstr ""
 
-#: ./CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
+#: CRM/Banking/PluginImpl/Matcher/GetOrCreateContactAnalyser.php
 msgid "Registered CiviBanking Module!"
 msgstr ""
 
-#: ./CRM/Xcm/Configuration.php
+#: CRM/Xcm/Configuration.php
 msgid "Profile '%1'"
 msgstr ""
 
-#: ./CRM/Xcm/Configuration.php
+#: CRM/Xcm/Configuration.php
 msgid "Warning! This contact is tagged '%1'."
 msgstr ""
 
-#: ./CRM/Xcm/Configuration.php ./CRM/Xcm/Page/Profiles.php
+#: CRM/Xcm/Configuration.php CRM/Xcm/Page/Profiles.php
 msgid "Warning"
 msgstr ""
 
-#: ./CRM/Xcm/Configuration.php
+#: CRM/Xcm/Configuration.php
 msgid "Warning! The tags couldn't be read."
 msgstr ""
 
-#: ./CRM/Xcm/DataSanitiser.php
+#: CRM/Xcm/DataSanitiser.php
 msgid "None"
 msgstr ""
 
-#: ./CRM/Xcm/DataSanitiser.php
+#: CRM/Xcm/DataSanitiser.php
 msgid "Strip UTF8 4 Byte Characters"
 msgstr ""
 
-#: ./CRM/Xcm/DataSanitiser.php
+#: CRM/Xcm/DataSanitiser.php
 msgid "Replace UTF8 4 Byte Characters with '?'"
 msgstr ""
 
-#: ./CRM/Xcm/DataSanitiser.php
+#: CRM/Xcm/DataSanitiser.php
 msgid "Replace UTF8 4 Byte Characters with '�'"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Import Data File"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "File size should be less than %1 MBytes (%2 bytes)"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Input file must be in CSV format"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "A valid file must be uploaded."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Use Configuration Profile"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Submit"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "No file was uploaded."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Import failure"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Could not read import file %1."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Import file %1 is empty. Please upload a valid file."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Empty or duplicate column names."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Import file format error"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "%1 contact(s) imported."
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Import completed"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "All rows with errors:"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Import.php
+#: CRM/Xcm/Form/Import.php
 msgid "Failed importing record(s)"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Profile ID"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "new_profile_id"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Profile Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Copy of "
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Input Sanitation"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Of multiple matches, pick:"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Default Location Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Primary Phone Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Secondary Phone Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Secondary phone not used"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Tertiary Phone Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Tertiary phone not used"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
+msgid "Default Website Type"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
 msgid "Fill Fields"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Override Fields"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Override Details"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Email"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Phone"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Form/Settings.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Website"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "IM"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Address"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Change Primary Detail?"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Fill multi-value field values"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Fill Details"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Make New Detail Primary"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Fill Address"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Never"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "If contact has no address"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "If contact has no address of that type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Process Differences"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Activity Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
+msgid "Activity Status"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
 msgid "Subject"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Attribute Comparison"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "case-sensitive"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "not case-sensitive"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Diff Processing Helper"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "No"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Yes (beta)"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./templates/CRM/Xcm/Form/Settings.tpl
+#: CRM/Xcm/Form/Settings.php templates/CRM/Xcm/Form/Settings.tpl
 msgid "Location Type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Bump old address to type"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Don't do that"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Match contacts by contact ID"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Matching Rule #%1"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Add to group"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Add to tag"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Add activity"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Status"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Template"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Campaign"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Generate Duplicates Activity"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Activity Subject"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Save"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "A profile ID cannot contain whitespaces or special characters"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "This profile ID is already in use"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "None, thank you"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "No Campaign"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "From Input (campaign_id)"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "No content"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "the oldest contact"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "the newest contact"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "none (create new contact)"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Don't do anything"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
-msgid "Diff Activity"
+#: CRM/Xcm/Form/Settings.php
+msgid "Unresolved Differences"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
+msgid "Contact Value Comparison"
+msgstr ""
+
+#: CRM/Xcm/Form/Settings.php
 msgid "I3Val Handler"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Display Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Household Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Organization Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "First Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Last Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Middle Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Nick Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Legal Name"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Prefix"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Suffix"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Birth Date"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Form/Settings.php CRM/Xcm/Tools.php
 msgid "Gender"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Formal Title"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Job Title"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Do not Email"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Do not Mail"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Do not Phone"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Do not SMS"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Do not Trade"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Opt-Out"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Preferred Language"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Preferred Communication Method"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "Legal Identifier"
 msgstr ""
 
-#: ./CRM/Xcm/Form/Settings.php
+#: CRM/Xcm/Form/Settings.php
 msgid "External Identifier"
 msgstr ""
 
-#: ./CRM/Xcm/Page/Profiles.php
+#: CRM/Xcm/Page/Profiles.php
 msgid "Extended Contact Matcher (XCM) Profiles"
 msgstr ""
 
-#: ./CRM/Xcm/Page/Profiles.php
+#: CRM/Xcm/Page/Profiles.php
 msgid "Unkown action submitted."
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Street Address"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php
+msgid "Street Name"
+msgstr ""
+
+#: CRM/Xcm/Tools.php
+msgid "Street Number"
+msgstr ""
+
+#: CRM/Xcm/Tools.php
+msgid "Street Number Suffix"
+msgstr ""
+
+#: CRM/Xcm/Tools.php
+msgid "Street Unit"
+msgstr ""
+
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "City"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Country"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "State/Province"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "County"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Postal Code"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Supplemental Address 1"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Supplemental Address 2"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: CRM/Xcm/Tools.php Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Supplemental Address 3"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Tools.php
 msgid "Birth date"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Tools.php
 msgid "Phone 2"
 msgstr ""
 
-#: ./CRM/Xcm/Tools.php
+#: CRM/Xcm/Tools.php
 msgid "Phone 3"
 msgstr ""
 
-#: ./CRM/Xcm/Upgrader/Base.php
-msgid "Upgrade %1 to revision %2"
-msgstr ""
-
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-msgid "Individual"
-msgstr ""
-
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-msgid "Organization"
-msgstr ""
-
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-msgid "Household"
-msgstr ""
-
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "XCM Profile"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Default Contact Type"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Custom Parameter #%1 (key)"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Contact Type"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Known Contact ID"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Source"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Primary Phone"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Secondary Phone"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Tertiary Phone"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "IM Handle"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Location Type ID"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Phone Type ID"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "IM Provider ID"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Website Type ID"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+msgid "Street name"
+msgstr ""
+
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+msgid "Street number"
+msgstr ""
+
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+msgid "Street unit"
+msgstr ""
+
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Billing?"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Custom Parameter #%1"
 msgstr ""
 
-#: ./Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
+#: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 msgid "Contact ID"
 msgstr ""
 
-#: ./Civi/Xcm/ContainerSpecs.php ./managed/Navigation__configure_xcm.mgd.php
+#: Civi/Xcm/ContainerSpecs.php managed/Navigation__configure_xcm.mgd.php
 msgid "Extended Contact Matcher (XCM)"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "de.systopia.xcm"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Old Value"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Adopt"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Add"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Add new address"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Completed"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "The previous phone number couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the phone number not possible."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "The previous address couldn't be found. Most likely the contact was modified in the meantime. Automatic update of the address not possible."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "The address data submitted here is insufficient for the creation of a new address."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "The current primary address couldn't be identified, contact was probably modified in the meantime. Automatic processing not possible."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "The previously used primary address couldn't be demoted."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "updated"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "added"
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Attribute updated."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Success."
 msgstr ""
 
-#: ./js/process_diff.js
+#: js/process_diff.js
 msgid "Error"
 msgstr ""
 
-#: ./managed/Navigation__configure_xcm.mgd.php
+#: managed/Navigation__configure_xcm.mgd.php
 msgid "Automation"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Be aware that the settings in this section allow the incoming data to modify your contacts without supervision."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If the source of the incoming data is not trusted, you should think twice about what you enable here."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Please note that most matchers are, by design, case-insensitive. This setting won't change that."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "However, this setting is also applied to the generation of a diff activity."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If a multi-value field is to be filled, should new values be added to the existing ones?"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched and does not yet have the same contact detail, it will be added."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "For example, if somebody submits phone number '12345', but the contact only has '54321' and '12345-6', the submitted number '12345' will be added to the contact as a third entry."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Remark: If you don't normalise your input here, your contacts might end up with multiple instances of the same entity (e.g. phone), all with slightly different spelling."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If a new contact detail (e.g. email) will be created, should it henceforth be the primarily used detail?"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Should the submitted detail already exist, it would still be made primary if this option is enabled."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Warning: If you that match or the detail wasn't correct, you might change the primary means of communication to an incorrect value. This could lead to, for example, a confidential email going out to the wrong person."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If activated, XCM will use a submitted \"id\" parameter to identify the contact - bypassing all configured rules."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If not activated, the \"id\" parameter will be completely ignored."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If no location type is explicitly submitted, this location type will be assumed."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
-msgid "The location type is used for newly created addresses, emails, phones, and websites."
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "The location type is used for newly created addresses, emails, and phones."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "If no website type is explicitly submitted, this website type will be assumed."
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "The phone type is used for newly created phone numbers."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "There are three numbers possible and therefor three phone types."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If no secondary or tertiary phone type is explicitly submitted then the second/tertiary phone is not used."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "This feature enables you to track and process all submitted data when a contact has been identified - but not changed."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "The activity will contain an overview of the differing attributes for contact, and will be linked to that contact."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
+msgid "The handler Contact Value Comparison will record all changes. Whlist the Unresolved Differences handler will only record the unresolved differences which need to be manually applied."
+msgstr ""
+
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "If you enable one or more of the contact detail entities, the following will happen: If the contact has been matched, but already has another detail (e.g. phone number) recorded for the given location type, that record will be overwritten!"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "For security reasons, a <i>primary</i> detail will not be overwritten, unless you enable the \"Change Primary Detail?\" option."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Should this feature be allowed to overwrite primary details?"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Warning: You might change the primary means of communication to an untrusted value. This could lead to e.g. a confidential email going out to the wrong email address."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Remark: This does not apply to websites, where no primary flag is used."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Should the input be sanitised?"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.hlp
+#: templates/CRM/Xcm/Form/Settings.hlp
 msgid "Use this if you're having trouble with incoming data, e.g. UTF8 4-Byte characters that mysql used to have issues with."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "XCM Matching Profile"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "General Options"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Help"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Case Sensitivity"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Update Options - Danger!"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Update Data"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Matching Rules"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Match contact ID"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Matched Contacts"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Created Contacts"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Duplicates Activity"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Difference Handling"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Form/Settings.tpl
+#: templates/CRM/Xcm/Form/Settings.tpl
 msgid "Data Changed Activity"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "The \"Extended Contact Matcher\" allows you to map incoming contact data an existing contact, and even update some of the attributes right away. If the contact doesn't exist, a new contact will be created instead."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "The functionality can be accessed via the <code>Contact.getorcreate</code> API command, with the ContactGetOrCreate action provided, or via the <a href=\"%1\">Contact Importer</a>."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "This is a list of the different XCM configurations. You might be perfectly fine with just the default configuration, but if you're using XCM in multiple contexts, different configuration profiles might come in handy."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "In order to add a new profile, use the \"copy\" link next to an existing profile."
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "Name"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "ID"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "Default?"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "YES"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "NO"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "edit"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "copy"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "delete"
 msgstr ""
 
-#: ./templates/CRM/Xcm/Page/Profiles.tpl
+#: templates/CRM/Xcm/Page/Profiles.tpl
 msgid "set default"
 msgstr ""
 
-#: ./templates/activity/diff.tpl
+#: templates/activity/diff.tpl
 msgid "Differing attributes for contact \"%1\" submitted"
 msgstr ""
 
-#: ./templates/activity/diff.tpl
+#: templates/activity/diff.tpl
 msgid "Attribute"
 msgstr ""
 
-#: ./templates/activity/diff.tpl
+#: templates/activity/diff.tpl
 msgid "Recorded Value"
 msgstr ""
 
-#: ./templates/activity/diff.tpl
+#: templates/activity/diff.tpl
 msgid "Submitted Value"
 msgstr ""
 
-#: ./xcm.php
+#: xcm.php
 msgid "Import contacts (XCM)"
 msgstr ""
 
