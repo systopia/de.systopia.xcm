@@ -137,7 +137,7 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
   }
 
   /**
-   * Add 3 new birthday rules
+   * Adding external identifier matcher
    *
    * @return TRUE on success
    * @throws Exception
