@@ -845,7 +845,7 @@ parameters:
 			path: CRM/Xcm/Form/Import.php
 
 		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<int, list\<string\>\|string\|null\> given\.$#'
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<list\<string\>\|string\|null\> given\.$#'
 			identifier: argument.type
 			count: 1
 			path: CRM/Xcm/Form/Import.php
