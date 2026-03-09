@@ -223,6 +223,16 @@
       "filter": "0",
       "is_reserved": "1",
       "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "CRM_Xcm_Matcher_ExternalIdentifierOnlyMatcher",
+      "value": "CRM_Xcm_Matcher_ExternalIdentifierOnlyMatcher",
+      "label": "External identifier only (exact)",
+      "filter": "0",
+      "is_reserved": "1",
+      "is_active": "1"
     }
   ]
 }

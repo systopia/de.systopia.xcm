@@ -136,4 +136,17 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Adding external identifier matcher
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0210() {
+    $this->ctx->log->info('Adding external identifier matcher.');
+    $customData = new CRM_Xcm_CustomData(E::LONG_NAME);
+    $customData->syncOptionGroup(E::path('/resources/rules_option_group.json'));
+    return TRUE;
+  }
+
 }
