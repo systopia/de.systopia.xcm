@@ -75,7 +75,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
       ->execute();
     $list = [];
     foreach ($dedupeRuleGroups as $dedupeRuleGroup) {
-      $list[$dedupeRuleGroup['id']]
+      $list['DEDUPE_' . $dedupeRuleGroup['id']]
         = "[{$dedupeRuleGroup['contact_type']}|{$dedupeRuleGroup['used']}] {$dedupeRuleGroup['title']}";
     }
     return $list;
