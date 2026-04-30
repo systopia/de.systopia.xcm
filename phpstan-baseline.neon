@@ -217,12 +217,6 @@ parameters:
 			path: CRM/Xcm/Configuration.php
 
 		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 1
-			path: CRM/Xcm/Configuration.php
-
-		-
 			message: '#^Implicit array creation is not allowed \- variable \$constants does not exist\.$#'
 			identifier: variable.implicitArray
 			count: 1
@@ -2252,12 +2246,6 @@ parameters:
 		-
 			message: '#^Only booleans are allowed in an if condition, int\|false given\.$#'
 			identifier: if.condNotBoolean
-			count: 1
-			path: CRM/Xcm/MatchingEngine.php
-
-		-
-			message: '#^Parameter \#1 \$dedupe_group_id of class CRM_Xcm_Matcher_DedupeRule constructor expects int, string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: CRM/Xcm/MatchingEngine.php
 
