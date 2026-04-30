@@ -263,7 +263,7 @@ class CRM_Xcm_MatchingEngine {
       }
       elseif ('DEDUPE_' == substr($rule_name, 0, 7)) {
         // this is a dedupe rule
-        $new_rule = new CRM_Xcm_Matcher_DedupeRule(substr($rule_name, 7));
+        $new_rule = new CRM_Xcm_Matcher_DedupeRule((int) substr($rule_name, 7));
         $new_rule->setConfig($this->config);
         $rule_instances[] = $new_rule;
 
