@@ -65,7 +65,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
   }
 
   /**
-   * @return array<int, string>
+   * @return array<string, string>
    *   A key => title list of existing unsupervised dedupe rules.
    */
   public static function getRuleList(): array {
@@ -75,7 +75,7 @@ class CRM_Xcm_Matcher_DedupeRule extends CRM_Xcm_MatchingRule {
       ->execute();
     $list = [];
     foreach ($dedupeRuleGroups as $dedupeRuleGroup) {
-      $list[$dedupeRuleGroup['id']]
+      $list['DEDUPE_' . $dedupeRuleGroup['id']]
         = "[{$dedupeRuleGroup['contact_type']}|{$dedupeRuleGroup['used']}] {$dedupeRuleGroup['title']}";
     }
     return $list;
