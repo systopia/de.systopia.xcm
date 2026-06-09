@@ -322,6 +322,10 @@ class ContactGetOrCreate extends AbstractAction {
       }
     }
 
+    if (empty($apiParams['contact_type'])) {
+      $apiParams['contact_type'] = 'Individual';
+    }
+
     // add additional (custom) parameters
     for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
       $parameter_name = $this->configuration->getParameter("variable_target_{$number}");
