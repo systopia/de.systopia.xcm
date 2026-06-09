@@ -2627,12 +2627,6 @@ parameters:
 			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 
 		-
-			message: '#^Offset 2 on array\{non\-empty\-string, numeric\-string, string\} in isset\(\) always exists and is not nullable\.$#'
-			identifier: isset.offset
-			count: 1
-			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-
-		-
 			message: '#^Only booleans are allowed in an if condition, Civi\\ActionProvider\\Parameter\\Specification\|null given\.$#'
 			identifier: if.condNotBoolean
 			count: 1

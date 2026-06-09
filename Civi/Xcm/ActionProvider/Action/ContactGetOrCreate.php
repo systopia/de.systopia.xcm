@@ -322,7 +322,7 @@ class ContactGetOrCreate extends AbstractAction {
       }
     }
 
-    if (empty($apiParams['contact_type'])) {
+    if (($apiParams['contact_type'] ?? '') === '') {
       $apiParams['contact_type'] = 'Individual';
     }
 
@@ -350,10 +350,7 @@ class ContactGetOrCreate extends AbstractAction {
       $matches = [];
       if (preg_match('/^(\d+)(.*)$/', $apiParams['street_number'], $matches)) {
         $apiParams['street_number'] = $matches[1];
-        $apiParams['street_number_suffix'] = '';
-        if (isset($matches[2])) {
-          $apiParams['street_number_suffix'] = $matches[2];
-        }
+        $apiParams['street_number_suffix'] = $matches[2];
       }
     }
 
