@@ -71,9 +71,17 @@ abstract class CRM_Xcm_MatchingRule {
    * Default/Fallback is 'Individual'
    */
   public static function getContactType(&$contact_data) {
-    // contact_type set -> all is well
+    // contact_type set -> resolve a contact sub type to its parent contact type
     if (!empty($contact_data['contact_type'])) {
-      return $contact_data['contact_type'];
+      $contact_type = $contact_data['contact_type'];
+      if (!in_array($contact_type, ['Individual', 'Organization', 'Household'], TRUE)) {
+        $contact_data['contact_sub_type'] = $contact_type;
+        return civicrm_api3('ContactType', 'getvalue', [
+          'return' => 'parent_id.name',
+          'name' => $contact_type,
+        ]);
+      }
+      return $contact_type;
     }
 
     // if not, start guessing

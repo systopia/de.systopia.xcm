@@ -322,10 +322,6 @@ class ContactGetOrCreate extends AbstractAction {
       }
     }
 
-    if (($apiParams['contact_type'] ?? '') === '') {
-      $apiParams['contact_type'] = 'Individual';
-    }
-
     // add additional (custom) parameters
     for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
       $parameter_name = $this->configuration->getParameter("variable_target_{$number}");
@@ -336,14 +332,6 @@ class ContactGetOrCreate extends AbstractAction {
       unset($apiParams["variable_value_{$number}"]);
     }
 
-    // Handle Contact Subtypes
-    if (!in_array($apiParams['contact_type'], ['Individual', 'Organization', 'Household'])) {
-      $apiParams['contact_sub_type'] = $apiParams['contact_type'];
-      $apiParams['contact_type'] = civicrm_api3('ContactType', 'getvalue', [
-        'return' => 'parent_id.name',
-        'name' => $apiParams['contact_sub_type'],
-      ]);
-    }
     // Split street number in a numeric value and in street number suffix
     // For example street_number 162A becomes Street number 162 and street number suffix A
     if (isset($apiParams['street_number'])) {

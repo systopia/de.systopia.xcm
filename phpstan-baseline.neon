@@ -2585,12 +2585,6 @@ parameters:
 			path: CRM/Xcm/Upgrader.php
 
 		-
-			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
-			identifier: function.strict
-			count: 1
-			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-
-		-
 			message: '#^Cannot access offset ''id'' on array\|int\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
