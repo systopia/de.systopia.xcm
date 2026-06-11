@@ -332,24 +332,13 @@ class ContactGetOrCreate extends AbstractAction {
       unset($apiParams["variable_value_{$number}"]);
     }
 
-    // Handle Contact Subtypes
-    if (!in_array($apiParams['contact_type'], ['Individual', 'Organization', 'Household'])) {
-      $apiParams['contact_sub_type'] = $apiParams['contact_type'];
-      $apiParams['contact_type'] = civicrm_api3('ContactType', 'getvalue', [
-        'return' => 'parent_id.name',
-        'name' => $apiParams['contact_sub_type'],
-      ]);
-    }
     // Split street number in a numeric value and in street number suffix
     // For example street_number 162A becomes Street number 162 and street number suffix A
     if (isset($apiParams['street_number'])) {
       $matches = [];
       if (preg_match('/^(\d+)(.*)$/', $apiParams['street_number'], $matches)) {
         $apiParams['street_number'] = $matches[1];
-        $apiParams['street_number_suffix'] = '';
-        if (isset($matches[2])) {
-          $apiParams['street_number_suffix'] = $matches[2];
-        }
+        $apiParams['street_number_suffix'] = $matches[2];
       }
     }
 

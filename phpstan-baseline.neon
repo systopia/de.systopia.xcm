@@ -2585,12 +2585,6 @@ parameters:
 			path: CRM/Xcm/Upgrader.php
 
 		-
-			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
-			identifier: function.strict
-			count: 1
-			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-
-		-
 			message: '#^Cannot access offset ''id'' on array\|int\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -2623,12 +2617,6 @@ parameters:
 		-
 			message: '#^Method Civi\\Xcm\\ActionProvider\\Action\\ContactGetOrCreate\:\:getCustomFields\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
-
-		-
-			message: '#^Offset 2 on array\{non\-empty\-string, numeric\-string, string\} in isset\(\) always exists and is not nullable\.$#'
-			identifier: isset.offset
 			count: 1
 			path: Civi/Xcm/ActionProvider/Action/ContactGetOrCreate.php
 
