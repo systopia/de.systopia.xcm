@@ -43,12 +43,12 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
    */
   public function upgrade_0151() {
     $this->ctx->log->info('Introducing configuration profiles.');
-    $profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
+    $profiles = Civi::settings()->get('xcm_config_profiles');
     if ($profiles === NULL) {
       // this seems to be the first time: convert
-      $options        = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_options');
-      $rules          = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'rules');
-      $postprocessing = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'postprocessing');
+      $options        = Civi::settings()->get('xcm_options');
+      $rules          = Civi::settings()->get('rules');
+      $postprocessing = Civi::settings()->get('postprocessing');
       $profiles = [
         'default' => [
           'is_default'     => 1,
@@ -105,7 +105,7 @@ class CRM_Xcm_Upgrader extends CRM_Extension_Upgrader_Base {
 
   public function upgrade_0171() {
     // Change the way how settings are stored.
-    $_all_profiles = CRM_Core_BAO_Setting::getItem('de.systopia.xcm', 'xcm_config_profiles');
+    $_all_profiles = Civi::settings()->get('xcm_config_profiles');
     Civi::settings()->set('xcm_config_profiles', $_all_profiles);
     return TRUE;
   }
