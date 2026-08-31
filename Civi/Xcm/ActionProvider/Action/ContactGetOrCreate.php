@@ -31,7 +31,7 @@ class ContactGetOrCreate extends AbstractAction {
   /**
    * @var int number of arbitrary parameters (where the target names can be defined)
    */
-  private const CUSTOM_PARAMETER_COUNT = 2;
+  static int $customParameterCount = 2;
 
   /**
    * Returns the specification of the configuration options for the actual action.
@@ -70,7 +70,7 @@ class ContactGetOrCreate extends AbstractAction {
     );
 
     // add variable fields
-    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+    for ($number = 1; $number <= static::$customParameterCount; $number++) {
       $configuration[] = new Specification(
         "variable_target_{$number}",
         'String',
@@ -216,7 +216,7 @@ class ContactGetOrCreate extends AbstractAction {
     $detail_specs[] = new Specification('is_billing', 'Integer', E::ts('Billing?'), FALSE, NULL, NULL, NULL, FALSE);
 
     // add variable fields
-    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+    for ($number = 1; $number <= static::$customParameterCount; $number++) {
       $detail_specs[] = new Specification(
         "variable_value_{$number}",
         'String',
@@ -323,7 +323,7 @@ class ContactGetOrCreate extends AbstractAction {
     }
 
     // add additional (custom) parameters
-    for ($number = 1; $number <= self::CUSTOM_PARAMETER_COUNT; $number++) {
+    for ($number = 1; $number <= static::$customParameterCount; $number++) {
       $parameter_name = $this->configuration->getParameter("variable_target_{$number}");
       $parameter_value = $parameters->getParameter("variable_value_{$number}");
       if (!empty($parameter_name)) {
