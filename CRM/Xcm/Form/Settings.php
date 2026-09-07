@@ -652,6 +652,7 @@ class CRM_Xcm_Form_Settings extends CRM_Core_Form {
       'gender_id' => E::ts('Gender'),
       'formal_title' => E::ts('Formal Title'),
       'job_title' => E::ts('Job Title'),
+      'source' => E::ts('Source'),
       'do_not_email' => E::ts('Do not Email'),
       'do_not_mail' => E::ts('Do not Mail'),
       'do_not_phone' => E::ts('Do not Phone'),
