@@ -785,62 +785,70 @@ class CRM_Xcm_MatchingEngine {
   // phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function loadCurrentContactData($contact_id, $submitted_data) {
   // phpcs:enable
-    // load the contact
-    $contact = civicrm_api3('Contact', 'getsingle', ['id' => $contact_id]);
-    // load the custom fields
-    $custom_value_query = [];
-    foreach ($submitted_data as $key => $value) {
-      // i.e. not loaded yet
-      if (!isset($contact[$key])) {
-        if (preg_match('/^custom_\d+$/', $key)) {
-          // this is a custom field...
-          $custom_field_id = substr($key, 7);
-          $custom_value_query["return.custom_{$custom_field_id}"] = 1;
+    try {
+      // load the contact
+      $contact = civicrm_api3('Contact', 'getsingle', ['id' => $contact_id]);
+      // load the custom fields
+      $custom_value_query = [];
+      foreach ($submitted_data as $key => $value) {
+        // i.e. not loaded yet
+        if (!isset($contact[$key])) {
+          if (preg_match('/^custom_\d+$/', $key)) {
+            // this is a custom field...
+            $custom_field_id = substr($key, 7);
+            $custom_value_query["return.custom_{$custom_field_id}"] = 1;
+          }
+        }
+      }
+      if (!empty($custom_value_query)) {
+        // i.e. there are fields that need to be looked up separately
+        $custom_value_query['entity_table'] = 'civicrm_contact';
+        $custom_value_query['entity_id']    = $contact_id;
+        $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
+        foreach ($custom_value_query_result['values'] as $entry) {
+          if (empty($entry['id'])) {
+            continue;
+          }
+          $contact["custom_{$entry['id']}"] = $entry['latest'];
+        }
+      }
+
+      // Load second phone
+      if ($this->config->secondaryPhoneType()) {
+        try {
+          $phone = civicrm_api3('Phone', 'getvalue', [
+            'contact_id' => $contact_id,
+            'phone_type_id' => $this->config->secondaryPhoneType(),
+            'return' => 'phone',
+          ]);
+          $contact['phone2'] = $phone;
+        }
+        catch (CRM_Core_Exception $e) {
+          // Do nothing
+        }
+      }
+      // Load third phone
+      if ($this->config->tertiaryPhoneType()) {
+        try {
+          $phone = civicrm_api3('Phone', 'getvalue', [
+            'contact_id' => $contact_id,
+            'phone_type_id' => $this->config->tertiaryPhoneType(),
+            'return' => 'phone',
+          ]);
+          $contact['phone3'] = $phone;
+        }
+        catch (CRM_Core_Exception $e) {
+          // Do nothing
         }
       }
     }
-    if (!empty($custom_value_query)) {
-      // i.e. there are fields that need to be looked up separately
-      $custom_value_query['entity_table'] = 'civicrm_contact';
-      $custom_value_query['entity_id']    = $contact_id;
-      $custom_value_query_result = civicrm_api3('CustomValue', 'get', $custom_value_query);
-      foreach ($custom_value_query_result['values'] as $entry) {
-        if (empty($entry['id'])) {
-          continue;
-        }
-        $contact["custom_{$entry['id']}"] = $entry['latest'];
-      }
+    catch (CRM_Core_Exception $ex) {
+      Civi::log('de.systopia.xcm.')->error("Unable to get contact with ID "
+        . $contact_id . " in " . __METHOD__ . ", error message from API3 Contact getsingle: "
+        . $ex->getMessage());
+      throw new CRM_Core_Exception("Unable to get contact with ID " . $contact_id . " in "
+        . __METHOD__ . ", check CiviCRM log.");
     }
-
-    // Load second phone
-    if ($this->config->secondaryPhoneType()) {
-      try {
-        $phone = civicrm_api3('Phone', 'getvalue', [
-          'contact_id' => $contact_id,
-          'phone_type_id' => $this->config->secondaryPhoneType(),
-          'return' => 'phone',
-        ]);
-        $contact['phone2'] = $phone;
-      }
-      catch (CRM_Core_Exception $e) {
-        // Do nothing
-      }
-    }
-    // Load third phone
-    if ($this->config->tertiaryPhoneType()) {
-      try {
-        $phone = civicrm_api3('Phone', 'getvalue', [
-          'contact_id' => $contact_id,
-          'phone_type_id' => $this->config->tertiaryPhoneType(),
-          'return' => 'phone',
-        ]);
-        $contact['phone3'] = $phone;
-      }
-      catch (CRM_Core_Exception $e) {
-        // Do nothing
-      }
-    }
-
     return $contact;
   }
 
