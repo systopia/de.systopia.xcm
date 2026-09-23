@@ -13,19 +13,21 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 /*
-* Settings metadata file
-*/
+ * Settings metadata file
+ */
 return [
   'xcm_config_profiles' => [
-      'group_name' => 'de.systopia.xcm',
-      'group' => 'de.systopia.xcm',
-      'name' => 'xcm_config_profiles',
-      'type' => 'Array',
-      'default' => NULL,
-      'add' => '4.6',
-      'is_domain' => 1,
-      'is_contact' => 0,
-      'description' => 'XCM Configuration Profiles'
-  ]
- ];
+    'group_name' => 'de.systopia.xcm',
+    'group' => 'de.systopia.xcm',
+    'name' => 'xcm_config_profiles',
+    'type' => 'Array',
+    'default' => NULL,
+    'add' => '4.6',
+    'is_domain' => 1,
+    'is_contact' => 0,
+    'description' => 'XCM Configuration Profiles',
+  ],
+];
