@@ -2,11 +2,6 @@ includes:
 	- phpstan.neon.dist
 
 parameters:
-	scanDirectories:
-		- vendor/civicrm/civicrm-core/CRM
-		- vendor/civicrm/civicrm-core/Civi
-		- vendor/civicrm/civicrm-core/api
-		- vendor/civicrm/civicrm-packages/HTML
 	bootstrapFiles:
 		- vendor/autoload.php
 	# Because we test with different versions in CI we may have unmatched errors.
@@ -19,6 +14,3 @@ parameters:
 
 		# Required with civicrm/civicrm-core <6.1.0
 		- '#^Call to an undefined static method Civi::rebuild\(\).$#'
-
-		# Required for PHP <8.2, but CiviCRM has had a polyfill since 5.53.
-		- '#^Function ini_parse_quantity not found.$#'
