@@ -16,8 +16,8 @@
 /*
 * Settings metadata file
 */
-return array(
-  'xcm_config_profiles' => array(
+return [
+  'xcm_config_profiles' => [
       'group_name' => 'de.systopia.xcm',
       'group' => 'de.systopia.xcm',
       'name' => 'xcm_config_profiles',
@@ -27,5 +27,5 @@ return array(
       'is_domain' => 1,
       'is_contact' => 0,
       'description' => 'XCM Configuration Profiles'
-  )
- );
+  ]
+ ];
